@@ -1,0 +1,114 @@
+import "../styles/globals.scss";
+import { Provider } from "react-redux";
+import store from "../Store";
+import { StyledEngineProvider } from "@mui/material/styles";
+
+import { HelmetProvider } from "react-helmet-async";
+import { CssBaseline } from "@mui/material";
+import ethersServiceProvider from "../services/ethersServiceProvider";
+import "../web3";
+
+import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import Layout from "../components/resuableComponents/Layout";
+import { CacheProvider } from "@emotion/react";
+import createEmotionCache from "../createEmotionCache";
+import { MoralisProvider } from "react-moralis";
+import Script, { initScriptLoader } from "next/script";
+import Head from "next/head";
+// Wallet Connect
+import { Web3ReactProvider } from "@web3-react/core";
+
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "ignore",
+  },
+  query: {
+    fetchPolicy: "no-cache",
+    errorPolicy: "all",
+  },
+};
+
+export const apolloClient = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_GRAPH_API_URL,
+  cache: new InMemoryCache(),
+  defaultOptions: defaultOptions,
+  connectToDevTools: true,
+});
+
+export const emotionCache = createEmotionCache();
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <Head>
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <link
+          rel="shortcut icon"
+          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+          type="image/x-icon"
+        />
+        <link
+          rel="icon"
+          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+        />
+        <meta name="revisit-after" content="1 days" />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+        />
+      </Head>
+
+      <MoralisProvider
+        appId="wNLVocH4pOa2QP88vQl9DDBDl9XRZyQmNrZSrygD"
+        serverUrl="https://kxndfwxkc6jj.usemoralis.com:2053/server"
+      >
+        <Web3ReactProvider
+          // getLibrary={getLibrary}
+          getLibrary={() => ethersServiceProvider.getProvider()}
+        >
+          <ApolloProvider client={apolloClient}>
+            <Provider store={store}>
+              <CacheProvider value={emotionCache}>
+                <StyledEngineProvider injectFirst>
+                  <ThemeProvider theme={theme}>
+                    <HelmetProvider>
+                      <CssBaseline />
+                      <Layout noContainer>
+                        <Component {...pageProps} />
+                      </Layout>
+                    </HelmetProvider>
+                  </ThemeProvider>
+                </StyledEngineProvider>
+              </CacheProvider>
+            </Provider>
+          </ApolloProvider>
+        </Web3ReactProvider>
+      </MoralisProvider>
+    </>
+  );
+}
+
+export default MyApp;

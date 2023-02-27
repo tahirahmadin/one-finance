@@ -34,6 +34,6 @@ const UiReducer = createSlice({
 
 const { actions } = UiReducer;
 
-export const { changeUserProfile } = actions;
+export const { setMenuIndex, setTokenData } = actions;
 
 export default UiReducer;

@@ -3,16 +3,7 @@ import { Box, useTheme, Typography, Paper, useMediaQuery } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  BarChart,
-  CurrencyExchange,
-  Dashboard,
-  Explore,
-  Group,
-  MonetizationOn,
-  Money,
-  Photo,
-} from "@mui/icons-material";
+import { BarChart, Explore } from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +39,7 @@ const SideBar = ({}) => {
   const theme = useTheme();
 
   const sm = useMediaQuery(theme.breakpoints.down("md"));
-  const { menuTabIndex } = store.ui;
+  const { menuIndex } = store.ui;
 
   return (
     <Box
@@ -80,7 +71,7 @@ const SideBar = ({}) => {
               boxShadow: 0,
 
               bgcolor:
-                menuTabIndex === 0 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                menuIndex === 0 ? `rgba(130, 71, 229, 0.3)` : "transparent",
               py: 2,
               px: 2,
               display: "flex",
@@ -102,7 +93,7 @@ const SideBar = ({}) => {
               boxShadow: 0,
               borderRadius: 2,
               bgcolor:
-                menuTabIndex === 1 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                menuIndex === 1 ? `rgba(130, 71, 229, 0.3)` : "transparent",
               py: 2,
               px: 2,
               display: "flex",

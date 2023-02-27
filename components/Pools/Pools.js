@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@mui/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
-import StakePoolCard from "./StakePoolCard";
+import PoolCard from "./PoolCard";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Stake() {
+export default function Pools() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -53,31 +53,19 @@ export default function Stake() {
     <Box>
       <Box className={classes.background}>
         <h3 variant="h1" className={classes.pageTitle}>
-          Active Pools
+          Pools
         </h3>
 
         <Container>
           <Grid container display={"flex"} justifyContent="center">
             <Grid item md={4}>
-              <StakePoolCard />
+              <PoolCard />
             </Grid>
             <Grid item md={4}>
-              <StakePoolCard />
+              <PoolCard />
             </Grid>
             <Grid item md={4}>
-              <StakePoolCard />
-            </Grid>
-            <Grid item md={4}>
-              <StakePoolCard />
-            </Grid>
-            <Grid item md={4}>
-              <StakePoolCard />
-            </Grid>
-            <Grid item md={4}>
-              <StakePoolCard />
-            </Grid>
-            <Grid item md={4}>
-              <StakePoolCard />
+              <PoolCard />
             </Grid>
           </Grid>
         </Container>

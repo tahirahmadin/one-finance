@@ -4,7 +4,7 @@ import Seo from "../common/Seo";
 const FAQPage = () => {
   return (
     <>
-    <Seo
+      <Seo
         title="FAQ | OneRare Foodverse"
         description="OneRare is the World’s First Metaverse for the Global Food & Beverage Industry. Play Food NFT Games, Enjoy Virtual Restaurant Experiences & Swap NFTs for Real Meals."
         keywords="onerare faq, faq metaverse, faq foodverse, leadership metaverse, onerare faq, nft game, metaverse game, game nft, nft metaverse, nft blockchain, metaverse blockchain, food metaverse, foodverse, food game, nft food, metaverse food game"
@@ -44,7 +44,7 @@ const FAQPage = () => {
         <meta name="twitter:creator" content="" />
         <link rel="icon" type="image/png" href="/static/images/favicon.ico" />
         <link rel="apple-touch-icon" href="/static/images/favicon.ico" />
-        <link rel="stylesheet" href="" />
+
         <meta property="og:image" content="images/OneRare_BG.jpg" />
         <meta name="twitter:image" content="images/OneRare_BG.jpg" />
         <link rel="icon" href="/favicon.ico" />

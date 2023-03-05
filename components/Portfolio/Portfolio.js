@@ -46,9 +46,7 @@ const Portfolio = () => {
   const theme = useTheme();
   return (
     <Box className={classes.background}>
-      <h3 variant="h1" className={classes.pageTitle}>
-        Portfolio
-      </h3>
+      <h3 className={classes.pageTitle}>Portfolio</h3>
 
       <TokenCard />
     </Box>

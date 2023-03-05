@@ -91,29 +91,6 @@ const Header = () => {
     router.push(word);
   };
 
-  useEffect(() => {
-    if (accountSC) {
-      getMaticBalance();
-    }
-  }, [accountSC]);
-
-  useEffect(() => {
-    if (accountSC) {
-      getMaticBalance();
-    }
-  }, [balancesFlag]);
-
-  const getMaticBalance = async () => {
-    try {
-      if (active) {
-        const balance = await ethersServiceProvider.getMaticBalance();
-        dispatch(updateMaticBalance(balance));
-      }
-    } catch (err) {
-      console.log("Info: Get matic balance error: ", err);
-    }
-  };
-
   // To connect the smart contract wallet
   const loginWallet = async () => {
     await connect();

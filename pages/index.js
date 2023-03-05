@@ -6,6 +6,7 @@ import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
 import Pools from "../components/Pools/Pools";
 import Portfolio from "../components/Portfolio/Portfolio";
+import Header from "./../components/resuableComponents/Header";
 
 const useStyles = makeStyles({
   background: {
@@ -59,8 +60,9 @@ export default function Home() {
             <SideBar />
           </Grid>
           <Grid item md={10} style={{ backgroundColor: "black" }}>
-            {menuIndex === 0 && <Portfolio />}
-            {menuIndex === 1 && <Pools />}
+            <Header />
+            {menuIndex === 1 && <Portfolio />}
+            {menuIndex === 0 && <Pools />}
           </Grid>
         </Grid>
       )}

@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#17191A",
     marginTop: 20,
     marginBottom: 20,
-    paddingTop: 20,
+    // paddingTop: 20,
     paddingBottom: 20,
     width: "100%",
     border: "1px solid #414141",
@@ -26,14 +26,13 @@ const useStyles = makeStyles((theme) => ({
   para: {
     fontWeight: 400,
     fontSize: 14,
-
     color: "#f9f9f9",
     textAlign: "center",
   },
   tokenName: {
     fontWeight: 600,
     fontSize: 16,
-
+    letterSpacing: "0.02em",
     color: "#f9f9f9",
     textAlign: "left",
   },
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolCard() {
+export default function PoolCard2() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -60,8 +59,15 @@ export default function PoolCard() {
   }, []);
 
   return (
-    <Box pt={0} px={3} className={classes.card}>
-      <Box>
+    <Box pt={0} className={classes.card}>
+      <Box
+        style={{
+          backgroundColor: "rgba(130, 71, 229, 0.3)",
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+          padding: "4%",
+        }}
+      >
         <Box
           display="flex"
           flexDirection={"row"}
@@ -81,8 +87,8 @@ export default function PoolCard() {
               alignItems="center"
             >
               <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/ethereum-eth-coin-4722965-3917991.png"
-                alt="ETH"
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/polkadot-4897427-4081372.png"
+                alt="PBR"
                 height="24px"
               />{" "}
               <img
@@ -93,24 +99,23 @@ export default function PoolCard() {
               />
             </Box>
             <Box ml={1}>
-              <div className={classes.tokenName}>ETH-USDT</div>
+              <div className={classes.tokenName}>PBR-USDT</div>
             </Box>
           </Box>
           <div className={classes.tokenName} style={{ color: "#24A582" }}>
             30%+
           </div>
         </Box>
-        <Box display={"flex"} justifyContent={"space-around"} mt={3}>
-          <Box>
+        <Box pt={2}>
+          <Box display={"flex"} justifyContent={"space-between"}>
             <Typography
-              variant="h6"
+              variant="body2"
               className={classes.para}
               textAlign="center"
-              fontSize={14}
-              fontWeight={400}
+              fontWeight={700}
               ml={1}
             >
-              Total Deposits
+              Total Value Locked
             </Typography>
             <Typography
               variant="body2"
@@ -122,13 +127,12 @@ export default function PoolCard() {
               $324.4K
             </Typography>
           </Box>
-          <Box>
+          <Box display={"flex"} justifyContent={"space-between"} pt={1}>
             <Typography
-              variant="h6"
+              variant="body2"
               className={classes.para}
               textAlign="center"
-              fontSize={14}
-              fontWeight={400}
+              fontWeight={700}
               ml={1}
             >
               Profit/Loss
@@ -140,13 +144,13 @@ export default function PoolCard() {
               fontWeight={700}
               ml={1}
             >
-              $3,232
+              +$3,243
             </Typography>
           </Box>
         </Box>
       </Box>
 
-      <Box>
+      <Box px={3}>
         <Box
           display={"flex"}
           justifyContent={"space-between"}

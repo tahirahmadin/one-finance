@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
 import PoolCard from "./PoolCard";
+import PoolCard2 from "./PoolCard2";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -13,12 +14,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover,contain",
     height: "100%",
     width: "100%",
-    paddingTop: "5%",
+    paddingTop: "2%",
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
       paddingTop: "10%",
-
       paddingLeft: 15,
       paddingRight: 15,
     },
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
 
   para: {
     fontWeight: 400,
-    fontSize: 16,
-    letterSpacing: "0.02em",
-    color: "#414141",
-    textAlign: "center",
+    fontSize: 15,
+
+    color: "#67686A",
+    textAlign: "left",
   },
 }));
 
@@ -52,17 +52,22 @@ export default function Pools() {
   return (
     <Box>
       <Box className={classes.background}>
-        <h3 variant="h1" className={classes.pageTitle}>
-          Pools
-        </h3>
-
         <Container>
-          <Grid container display={"flex"} justifyContent="center">
+          <h3 className={classes.pageTitle}>Pools</h3>
+          <p className={classes.para}>
+            Invest in the pool and enjoy profit while sleeping
+          </p>
+          <Grid
+            container
+            display={"flex"}
+            justifyContent="space-between"
+            spacing={12}
+          >
             <Grid item md={4}>
               <PoolCard />
             </Grid>
             <Grid item md={4}>
-              <PoolCard />
+              <PoolCard2 />
             </Grid>
             <Grid item md={4}>
               <PoolCard />

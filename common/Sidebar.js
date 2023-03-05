@@ -3,7 +3,7 @@ import { Box, useTheme, Typography, Paper, useMediaQuery } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import { BarChart, Explore } from "@mui/icons-material";
+import { BarChart, Explore, Help, Telegram } from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -104,6 +104,48 @@ const SideBar = ({}) => {
             <BarChart style={{ marginRight: 10, color: "white" }} />
             <Typography variant="title1" className={classes.menuTitle}>
               Porfolio
+            </Typography>
+          </Paper>
+          <Paper
+            onClick={() => dispatch(setMenuIndex(2))}
+            key={0}
+            sx={{
+              boxShadow: 0,
+
+              bgcolor:
+                menuIndex === 2 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+              py: 2,
+              px: 2,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              borderRadius: 2,
+            }}
+          >
+            <Telegram style={{ marginRight: 10, color: "white" }} />
+            <Typography variant="title1" className={classes.menuTitle}>
+              Community
+            </Typography>
+          </Paper>
+          <Paper
+            onClick={() => dispatch(setMenuIndex(3))}
+            key={0}
+            sx={{
+              boxShadow: 0,
+
+              bgcolor:
+                menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+              py: 2,
+              px: 2,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              borderRadius: 2,
+            }}
+          >
+            <Help style={{ marginRight: 10, color: "white" }} />
+            <Typography variant="title1" className={classes.menuTitle}>
+              FAQs
             </Typography>
           </Paper>
         </Box>

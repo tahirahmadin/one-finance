@@ -57,7 +57,7 @@ export const useWeb3Auth = () => {
         await dispatch(setWalletStatus(walletStatus + 1));
       } catch (error) {
         console.error(error);
-        Router.push("/");
+        // Router.push("/");
       }
     };
 

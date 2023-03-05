@@ -8,13 +8,13 @@ let themes = createTheme({
     },
     primary: {
       // light: '#000000',
-      main: "#D1FF1A",
+      main: "rgba(130, 71, 229, 0.3)",
       // dark: '#cccccc',
       contrastText: "#000000",
     },
     secondary: {
       // light: '#ffffff',
-      main: "#000000",
+      main: "#17191A",
       // dark: '#ffffff',
       contrastText: "#ffffff",
     },

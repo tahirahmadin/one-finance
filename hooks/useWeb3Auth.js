@@ -38,6 +38,7 @@ export const useWeb3Auth = () => {
             rpcTarget: "https://polygon-rpc.com/",
           },
         });
+        console.log(web3authInstance);
         await web3authInstance.initModal();
         await ethersServiceProvider.setCurrentWeb3AuthInstance(
           web3authInstance
@@ -129,7 +130,7 @@ export const useWeb3Auth = () => {
     if (accounts) {
       await ethersServiceProvider.setCurrentWeb3AuthInstance(web3AuthInstance);
       await ethersServiceProvider.setCurrentAccount(accounts);
-      await dispatch(setWalletStatus(walletStatus + 1));
+      // await dispatch(setWalletStatus(walletStatus + 1));
       setAddress(accounts);
       setWeb3Auth(web3AuthInstance);
     }

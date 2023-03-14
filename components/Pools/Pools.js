@@ -64,13 +64,13 @@ export default function Pools() {
             spacing={12}
           >
             <Grid item md={4}>
-              <PoolCard />
+              <PoolCard2 />
             </Grid>
             <Grid item md={4}>
               <PoolCard2 />
             </Grid>
             <Grid item md={4}>
-              <PoolCard />
+              <PoolCard2 />
             </Grid>
           </Grid>
         </Container>

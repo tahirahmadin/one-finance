@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { getPoolDetails } from "../../actions/smartActions";
+import StakePopup from "./StakePopup";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -62,7 +64,7 @@ export default function PoolCard2() {
     <Box pt={0} className={classes.card}>
       <Box
         style={{
-          backgroundColor: "rgba(130, 71, 229, 0.3)",
+          backgroundColor: "rgba(130, 71, 229, 0.1)",
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           padding: "4%",
@@ -215,17 +217,18 @@ export default function PoolCard2() {
         </Box>
       </Box>
       <Box px={2} mt={2} className="text-center">
-        <Button
-          onClick={() => setStakePopup(true)}
-          style={{
-            borderRadius: 10,
-            background: "rgba(130, 71, 229, 0.3)",
-            padding: "9px 20px 9px 20px",
-            color: "white",
-          }}
-        >
-          Start Strategy
-        </Button>
+        <Link href="/pool-detail" style={{ textDecoration: "none" }}>
+          <Button
+            style={{
+              borderRadius: 10,
+              background: "rgba(130, 71, 229, 0.3)",
+              padding: "9px 20px 9px 20px",
+              color: "white",
+            }}
+          >
+            View Pool
+          </Button>
+        </Link>
         <Box display="flex" justifyContent="center" alignItems="center">
           <div
             style={{

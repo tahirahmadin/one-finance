@@ -49,21 +49,19 @@ const Error404Page = () => {
             COOKING AGAIN.
           </Typography>
           <Link href="/">
-            <a style={{ textDecoration: "none" }}>
-              <Button
-                style={{
-                  borderRadius: 12,
-                  paddingLeft: theme.spacing(5),
-                  paddingRight: theme.spacing(5),
-                  border: "1px solid black",
-                }}
-                fullWidth={xs && true}
-                variant="outlined"
-                color="secondary"
-              >
-                back to home
-              </Button>
-            </a>
+            <Button
+              style={{
+                borderRadius: 12,
+                paddingLeft: theme.spacing(5),
+                paddingRight: theme.spacing(5),
+                border: "1px solid black",
+              }}
+              fullWidth={xs && true}
+              variant="outlined"
+              color="secondary"
+            >
+              back to home
+            </Button>
           </Link>
         </Grid>
         <Hidden smDown>

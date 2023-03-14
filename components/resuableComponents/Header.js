@@ -70,10 +70,10 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const classes = useStyles();
-  // const { active, accountSC, web3AuthSC, connect } = useWeb3Auth();
-  const accountSC = "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448";
-  const web3AuthSC = true;
-  const active = true;
+  const { active, accountSC, web3AuthSC, connect } = useWeb3Auth();
+  // const accountSC = "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448";
+  // const web3AuthSC = true;
+  // const active = true;
 
   const {
     headerMenuExpanded,
@@ -98,6 +98,9 @@ const Header = () => {
 
   return (
     <Box className={classes.background}>
+      {console.log(web3AuthSC)}
+      {console.log(accountSC)}
+      {console.log(active)}
       <Container>
         <header>
           <Grid
@@ -111,62 +114,56 @@ const Header = () => {
             }}
           >
             <Grid display="flex" alignItems="center">
-              <Link href="/activities">
-                <a style={{ textDecoration: "none" }}>
-                  <Typography
-                    onClick={handleClick}
-                    variant="body2"
-                    color="textSecondary"
-                    className={classes.linkItems}
-                    style={{
-                      color: router.asPath.includes("/activities")
-                        ? theme.palette.cyan.main
-                        : "white",
-                      padding: "3px 25px",
-                      width: "100%",
-                    }}
-                  >
-                    Explorer
-                  </Typography>
-                </a>
+              <Link href="/activities" style={{ textDecoration: "none" }}>
+                <Typography
+                  onClick={handleClick}
+                  variant="body2"
+                  color="textSecondary"
+                  className={classes.linkItems}
+                  style={{
+                    color: router.asPath.includes("/activities")
+                      ? theme.palette.cyan.main
+                      : "white",
+                    padding: "3px 25px",
+                    width: "100%",
+                  }}
+                >
+                  Explorer
+                </Typography>
               </Link>
-              <Link href="/activities">
-                <a style={{ textDecoration: "none" }}>
-                  <Typography
-                    onClick={handleClick}
-                    variant="body2"
-                    color="textSecondary"
-                    className={classes.linkItems}
-                    style={{
-                      color: router.asPath.includes("/activities")
-                        ? theme.palette.cyan.main
-                        : "white",
-                      padding: "3px 25px",
-                      width: "100%",
-                    }}
-                  >
-                    Activities
-                  </Typography>
-                </a>
+              <Link href="/activities" style={{ textDecoration: "none" }}>
+                <Typography
+                  onClick={handleClick}
+                  variant="body2"
+                  color="textSecondary"
+                  className={classes.linkItems}
+                  style={{
+                    color: router.asPath.includes("/activities")
+                      ? theme.palette.cyan.main
+                      : "white",
+                    padding: "3px 25px",
+                    width: "100%",
+                  }}
+                >
+                  Activities
+                </Typography>
               </Link>
-              <Link href="/activities">
-                <a style={{ textDecoration: "none" }}>
-                  <Typography
-                    onClick={handleClick}
-                    variant="body2"
-                    color="textSecondary"
-                    className={classes.linkItems}
-                    style={{
-                      color: router.asPath.includes("/activities")
-                        ? theme.palette.cyan.main
-                        : "white",
-                      padding: "3px 25px",
-                      width: "100%",
-                    }}
-                  >
-                    How It Works
-                  </Typography>
-                </a>
+              <Link href="/activities" style={{ textDecoration: "none" }}>
+                <Typography
+                  onClick={handleClick}
+                  variant="body2"
+                  color="textSecondary"
+                  className={classes.linkItems}
+                  style={{
+                    color: router.asPath.includes("/activities")
+                      ? theme.palette.cyan.main
+                      : "white",
+                    padding: "3px 25px",
+                    width: "100%",
+                  }}
+                >
+                  How It Works
+                </Typography>
               </Link>
               {!accountSC ? (
                 <Box>
@@ -258,70 +255,64 @@ const Header = () => {
 
                   <ListItem classes={{ root: classes.listItem }}>
                     <Link href="/season-2">
-                      <a style={{ textDecoration: "none" }}>
-                        <Typography
-                          onClick={handleClick}
-                          variant="body2"
-                          color="textSecondary"
-                          className={classes.linkItems}
-                          style={{
-                            color: router.asPath.includes("/season-2")
-                              ? theme.palette.cyan.main
-                              : "white",
-                            padding: "3px 25px",
-                            width: 180,
-                          }}
-                        >
-                          SEASON 2
-                        </Typography>
-                      </a>
+                      <Typography
+                        onClick={handleClick}
+                        variant="body2"
+                        color="textSecondary"
+                        className={classes.linkItems}
+                        style={{
+                          color: router.asPath.includes("/season-2")
+                            ? theme.palette.cyan.main
+                            : "white",
+                          padding: "3px 25px",
+                          width: 180,
+                        }}
+                      >
+                        SEASON 2
+                      </Typography>
                     </Link>
                   </ListItem>
 
                   <ListItem classes={{ root: classes.listItem }}>
                     <Link href="/faq">
-                      <a style={{ textDecoration: "none" }}>
-                        <Typography
-                          onClick={handleClick}
-                          variant="body2"
-                          color="textSecondary"
-                          className={classes.linkItems}
-                          style={{
-                            color:
-                              router.asPath === "/faq"
-                                ? theme.palette.cyan.main
-                                : "white",
-                            padding: "3px 25px",
-                            width: 180,
-                          }}
-                        >
-                          FAQs
-                        </Typography>
-                      </a>
+                      <Typography
+                        onClick={handleClick}
+                        variant="body2"
+                        color="textSecondary"
+                        className={classes.linkItems}
+                        style={{
+                          color:
+                            router.asPath === "/faq"
+                              ? theme.palette.cyan.main
+                              : "white",
+                          padding: "3px 25px",
+                          width: 180,
+                        }}
+                      >
+                        FAQs
+                      </Typography>
                     </Link>
                   </ListItem>
 
                   {/* <Hidden mdUp> d*/}
                   <ListItem classes={{ root: classes.listItem }}>
                     <Link href="/dashboard">
-                      <a style={{ textDecoration: "none" }}>
-                        <Typography
-                          onClick={handleClick}
-                          variant="body2"
-                          color="textSecondary"
-                          className={classes.linkItems}
-                          style={{
-                            color:
-                              router.asPath === "/dashboard"
-                                ? theme.palette.cyan.main
-                                : "white",
-                            padding: "3px 25px",
-                            width: 180,
-                          }}
-                        >
-                          VIEW DASHBOARD
-                        </Typography>
-                      </a>
+                      <Typography
+                        onClick={handleClick}
+                        variant="body2"
+                        color="textSecondary"
+                        className={classes.linkItems}
+                        style={{
+                          color:
+                            router.asPath === "/dashboard"
+                              ? theme.palette.cyan.main
+                              : "white",
+                          padding: "3px 25px",
+                          width: 180,
+                        }}
+                      >
+                        VIEW DASHBOARD
+                      </Typography>
                     </Link>
                   </ListItem>
                   {/* </Hidden> */}

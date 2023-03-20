@@ -217,7 +217,7 @@ export default function PoolCard2() {
         </Box>
       </Box>
       <Box px={2} mt={2} className="text-center">
-        <Link href="/pool-detail" style={{ textDecoration: "none" }}>
+        <Link href="/grid-pools" style={{ textDecoration: "none" }}>
           <Button
             style={{
               borderRadius: 10,

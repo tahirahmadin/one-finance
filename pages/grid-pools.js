@@ -6,8 +6,9 @@ import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
 import Pools from "../components/Pools/Pools";
 import Portfolio from "../components/Portfolio/Portfolio";
-import Header from "./../components/resuableComponents/Header";
+import Header from "../components/resuableComponents/Header";
 import PoolDetails from "../components/Pools/PoolDetails/PoolDetails";
+import GridPoolDetails from "../components/Pools/PoolDetails/PoolDetails";
 
 const useStyles = makeStyles({
   background: {
@@ -47,6 +48,11 @@ export default function PoolDetail() {
 
   const { menuIndex } = store.ui;
 
+  const supportedTokens = [
+    { TEST: "0xF13285D6659Aa6895e02EEFe3495408c99f70a86" },
+    { PBR: "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0" },
+    { ORARE: "0xff2382bd52efacef02cc895bcbfc4618608aa56f" },
+  ];
   return (
     <Box>
       <Seo
@@ -62,7 +68,7 @@ export default function PoolDetail() {
           </Grid>
           <Grid item md={10} style={{ backgroundColor: "black" }}>
             <Header />
-            <PoolDetails />
+            <GridPoolDetails supportedTokens={supportedTokens} />
           </Grid>
         </Grid>
       )}

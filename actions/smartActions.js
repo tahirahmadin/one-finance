@@ -34,11 +34,12 @@ export const checkUSDTApproved = async (userAddress, contractAddress) => {
 //READ getPoolDetails
 //RETURNS object
 export const getPoolDetails = async (address) => {
-  let result = await tradingInstance()
-    .methods.positions(address)
-    .call((err, res) => {
-      return res;
-    });
+  // let result = await tradingInstance()
+  //   .methods.balances(address)
+  //   .call((err, res) => {
+  //     return res;
+  //   });
 
-  return result;
+  // return result;
+  return 10;
 };

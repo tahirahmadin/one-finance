@@ -17,6 +17,7 @@ import { useWeb3Auth } from "../../../hooks/useWeb3Auth";
 import TxPopup from "../../../common/TxPopup";
 import ethersServiceProvider from "../../../services/ethersServiceProvider";
 import { tradingInstance } from "../../../contracts";
+import web3 from "../../../web3";
 
 const useStyles = makeStyles((theme) => ({
   spacing: {
@@ -176,7 +177,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolDetails() {
+export default function GridPoolDetails() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -235,6 +236,8 @@ export default function PoolDetails() {
 
   // Write functions
   const handleStake = async () => {
+    console.log("hitting");
+
     if (amount > 0 && percent > 0 && grids > 0) {
       setStakeCase(1);
       let userAddress = accountSC;
@@ -243,12 +246,22 @@ export default function PoolDetails() {
 
       try {
         let estimateGas = await tradeContract.methods
-          .stake(tokenValue)
+          .stake(
+            [50, 75],
+            [100, 200],
+            "100",
+            "0xF13285D6659Aa6895e02EEFe3495408c99f70a86"
+          )
           .estimateGas({ from: userAddress });
 
         let estimateGasPrice = await web3.eth.getGasPrice();
         const response = await tradeContract.methods
-          .stake([50, 75], [100, 200], "100")
+          .stake(
+            [50, 75],
+            [100, 200],
+            "100",
+            "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0"
+          )
           .send(
             {
               from: userAddress,

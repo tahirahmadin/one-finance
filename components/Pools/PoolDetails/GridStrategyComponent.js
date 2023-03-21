@@ -20,6 +20,7 @@ import ethersServiceProvider from "../../../services/ethersServiceProvider";
 import { tradingInstance } from "../../../contracts";
 import web3 from "../../../web3";
 import { ArrowDropDown } from "@mui/icons-material";
+import Web3 from "web3";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -127,7 +128,8 @@ export default function GridStrategyComponent() {
 
   const [amount, setAmount] = useState("");
   const [percent, setPercent] = useState(10);
-  const [grids, setGrids] = useState(5);
+  const [grids, setGrids] = useState(6);
+  const [tokenData, setTokenData] = useState(null);
   const [stakeCase, setStakeCase] = useState(0);
 
   let data = {
@@ -176,11 +178,19 @@ export default function GridStrategyComponent() {
     setPercent(value);
   };
 
+  const calculateOrdersData = async () => {
+    let price = "10";
+    if (amount > 0 && percent > 0 && grids > 0) {
+      let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
+      let buyOrders = parseInt(grids / 2);
+    }
+  };
   // Write functions
   const handleStake = async () => {
     console.log("hitting");
 
     if (amount > 0 && percent > 0 && grids > 0) {
+      let ordersData = calculateOrdersData();
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
@@ -308,7 +318,7 @@ export default function GridStrategyComponent() {
                 <Box className={classes.statsCard}>
                   <Typography
                     variant="body2"
-                    className={classes.statsBoxPara}
+                    className={classes.statsCardPara}
                     fontWeight={300}
                   >
                     Total Invested($)
@@ -322,7 +332,7 @@ export default function GridStrategyComponent() {
                 <Box className={classes.statsCard}>
                   <Typography
                     variant="body2"
-                    className={classes.statsBoxPara}
+                    className={classes.statsCardPara}
                     fontWeight={300}
                   >
                     Profit & Loss
@@ -336,7 +346,7 @@ export default function GridStrategyComponent() {
                 <Box className={classes.statsCard}>
                   <Typography
                     variant="body2"
-                    className={classes.statsBoxPara}
+                    className={classes.statsCardPara}
                     fontWeight={300}
                   >
                     Total Orders
@@ -445,7 +455,7 @@ export default function GridStrategyComponent() {
 
                 <Box mt={2} className={classes.inputWrapper}>
                   <Typography variant="small" textAlign={"left"} lineHeight={1}>
-                    Grids:
+                    No of orders:
                   </Typography>
                   <Input
                     value={grids}

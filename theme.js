@@ -49,58 +49,65 @@ let themes = createTheme({
     h1: {
       fontFamily: "Poppins",
       fontSize: "2.813rem",
+      color: "#f9f9f9",
     },
     h2: {
       fontFamily: "Poppins",
       fontSize: "2.1875rem",
+      color: "#f9f9f9",
     },
     h3: {
       fontFamily: "Poppins",
       fontSize: "1.75rem",
+      color: "#f9f9f9",
     },
     h4: {
       fontFamily: "Poppins",
       fontSize: "1.75rem",
       fontWeight: "bold",
+      color: "#f9f9f9",
     },
     h5: {
       fontFamily: "Poppins",
       fontSize: "1.5rem",
-      fontWeight: "bold",
+      color: "#f9f9f9",
     },
     h6: {
       fontFamily: "Poppins",
       fontSize: "1.375rem",
       fontWeight: "normal",
+      color: "#f9f9f9",
+      lineHeight: 1,
     },
     subtitle1: {
       fontFamily: "Poppins",
       fontSize: "1.25rem",
-      fontWeight: "bold",
+      color: "#bdbdbd",
+      lineHeight: 1,
     },
     body1: {
       fontFamily: "Poppins",
       fontSize: "1.125rem",
+      color: "#bdbdbd",
     },
     body2: {
       fontFamily: "Poppins",
       fontSize: "1rem",
+      color: "#bdbdbd",
     },
     body3: {
       fontFamily: "Poppins",
       fontSize: "1rem",
       wordBreak: "break-word",
+      color: "#bdbdbd",
+      lineHeight: 1,
+    },
+    small: {
+      fontFamily: "Poppins",
+      fontSize: "0.75rem",
+      color: "#bdbdbd",
     },
   },
-  // breakpoints: {
-  //   values: {
-  //     xs: 0,
-  //     sm: 600,
-  //     md: 960,
-  //     lg: 1280,
-  //     xl: 1920,
-  //   },
-  // },
 });
 
 let theme = responsiveFontSizes(themes);

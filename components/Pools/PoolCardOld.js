@@ -2,15 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { getPoolDetails } from "../../actions/smartActions";
-import StakePopup from "./StakePopup";
-import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: "#17191A",
     marginTop: 20,
     marginBottom: 20,
-    // paddingTop: 20,
+    paddingTop: 20,
     paddingBottom: 20,
     width: "100%",
     border: "1px solid #414141",
@@ -28,13 +26,14 @@ const useStyles = makeStyles((theme) => ({
   para: {
     fontWeight: 400,
     fontSize: 14,
+
     color: "#f9f9f9",
     textAlign: "center",
   },
   tokenName: {
     fontWeight: 600,
     fontSize: 16,
-    letterSpacing: "0.02em",
+
     color: "#f9f9f9",
     textAlign: "left",
   },
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolCard2() {
+export default function PoolCard() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -61,15 +60,8 @@ export default function PoolCard2() {
   }, []);
 
   return (
-    <Box pt={0} className={classes.card}>
-      <Box
-        style={{
-          backgroundColor: "rgba(130, 71, 229, 0.1)",
-          borderTopRightRadius: 10,
-          borderTopLeftRadius: 10,
-          padding: "4%",
-        }}
-      >
+    <Box pt={0} px={3} className={classes.card}>
+      <Box>
         <Box
           display="flex"
           flexDirection={"row"}
@@ -89,8 +81,8 @@ export default function PoolCard2() {
               alignItems="center"
             >
               <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/polkadot-4897427-4081372.png"
-                alt="PBR"
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/ethereum-eth-coin-4722965-3917991.png"
+                alt="ETH"
                 height="24px"
               />{" "}
               <img
@@ -101,23 +93,24 @@ export default function PoolCard2() {
               />
             </Box>
             <Box ml={1}>
-              <div className={classes.tokenName}>PBR-USDT</div>
+              <div className={classes.tokenName}>ETH-USDT</div>
             </Box>
           </Box>
           <div className={classes.tokenName} style={{ color: "#24A582" }}>
             30%+
           </div>
         </Box>
-        <Box pt={2}>
-          <Box display={"flex"} justifyContent={"space-between"}>
+        <Box display={"flex"} justifyContent={"space-around"} mt={3}>
+          <Box>
             <Typography
-              variant="body2"
+              variant="h6"
               className={classes.para}
               textAlign="center"
-              fontWeight={700}
+              fontSize={14}
+              fontWeight={400}
               ml={1}
             >
-              Total Value Locked
+              Total Deposits
             </Typography>
             <Typography
               variant="body2"
@@ -129,12 +122,13 @@ export default function PoolCard2() {
               $324.4K
             </Typography>
           </Box>
-          <Box display={"flex"} justifyContent={"space-between"} pt={1}>
+          <Box>
             <Typography
-              variant="body2"
+              variant="h6"
               className={classes.para}
               textAlign="center"
-              fontWeight={700}
+              fontSize={14}
+              fontWeight={400}
               ml={1}
             >
               Profit/Loss
@@ -146,13 +140,13 @@ export default function PoolCard2() {
               fontWeight={700}
               ml={1}
             >
-              +$3,243
+              $3,232
             </Typography>
           </Box>
         </Box>
       </Box>
 
-      <Box px={3}>
+      <Box>
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -217,18 +211,17 @@ export default function PoolCard2() {
         </Box>
       </Box>
       <Box px={2} mt={2} className="text-center">
-        <Link href="/grid-pools" style={{ textDecoration: "none" }}>
-          <Button
-            style={{
-              borderRadius: 10,
-              background: "rgba(130, 71, 229, 0.3)",
-              padding: "9px 20px 9px 20px",
-              color: "white",
-            }}
-          >
-            View Pool
-          </Button>
-        </Link>
+        <Button
+          onClick={() => setStakePopup(true)}
+          style={{
+            borderRadius: 10,
+            background: "rgba(130, 71, 229, 0.3)",
+            padding: "9px 20px 9px 20px",
+            color: "white",
+          }}
+        >
+          Start Strategy
+        </Button>
         <Box display="flex" justifyContent="center" alignItems="center">
           <div
             style={{

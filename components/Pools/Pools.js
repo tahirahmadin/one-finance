@@ -4,7 +4,6 @@ import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
 import PoolCard from "./PoolCard";
-import PoolCard2 from "./PoolCard2";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -25,20 +24,12 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     fontWeight: 600,
-    fontSize: 32,
-    letterSpacing: "0.02em",
     color: "#f9f9f9",
     textAlign: "left",
-    [theme.breakpoints.down("md")]: {
-      fontSize: 24,
-    },
   },
 
-  para: {
-    fontWeight: 400,
-    fontSize: 15,
-
-    color: "#67686A",
+  pageSubtitle: {
+    color: "#bdbdbd",
     textAlign: "left",
   },
 }));
@@ -49,29 +40,42 @@ export default function Pools() {
 
   const { account } = useChain();
 
+  let poolsData = [
+    {
+      title: "Spot Grid Strategy",
+      description:
+        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
+    },
+    {
+      title: "Dollar Cost Averaging(DCA)",
+      description:
+        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+    },
+  ];
   return (
     <Box>
       <Box className={classes.background}>
         <Container>
-          <h3 className={classes.pageTitle}>Pools</h3>
-          <p className={classes.para}>
-            Invest in the pool and enjoy profit while sleeping
-          </p>
+          <Typography variant="h2" className={classes.pageTitle}>
+            Pools
+          </Typography>
+          <Typography variant="body2" className={classes.pageSubtitle}>
+            Place order inside the strategy pools and enjoy high yeilds
+          </Typography>
+
           <Grid
             container
             display={"flex"}
             justifyContent="space-between"
             spacing={12}
           >
-            <Grid item md={4}>
-              <PoolCard2 />
-            </Grid>
-            <Grid item md={4}>
-              <PoolCard2 />
-            </Grid>
-            <Grid item md={4}>
-              <PoolCard2 />
-            </Grid>
+            {poolsData.map((singlePool, index) => (
+              <Grid item md={6}>
+                <PoolCard poolStaticData={singlePool} index={index} />
+              </Grid>
+            ))}
           </Grid>
         </Container>
       </Box>

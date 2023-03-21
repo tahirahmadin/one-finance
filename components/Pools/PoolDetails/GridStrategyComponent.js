@@ -8,6 +8,7 @@ import {
   useTheme,
   Input,
   Slider,
+  Container,
 } from "@mui/material";
 import { getPoolDetails } from "../../../actions/smartActions";
 import Link from "next/link";
@@ -18,13 +19,36 @@ import TxPopup from "../../../common/TxPopup";
 import ethersServiceProvider from "../../../services/ethersServiceProvider";
 import { tradingInstance } from "../../../contracts";
 import web3 from "../../../web3";
+import { ArrowDropDown } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
-  spacing: {
-    padding: "5%",
+  background: {
+    // backgroundImage: 'url("images/network.png")',
+    backgroundPosition: "center center,center center",
+    backgroundRepeat: "no-repeat,no-repeat",
+    backgroundSize: "cover,contain",
+    height: "100%",
+    width: "100%",
+    paddingTop: "2%",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    [theme.breakpoints.down("md")]: {
+      paddingTop: "10%",
+      paddingLeft: 15,
+      paddingRight: 15,
+    },
+  },
+  pageTitle: {
+    fontWeight: 600,
+    color: "#f9f9f9",
+    textAlign: "left",
+  },
+
+  pageSubtitle: {
+    color: "#bdbdbd",
+    textAlign: "left",
   },
   card: {
-    // backgroundColor: "#17191A",
     padding: 20,
     width: "100%",
     border: "1px solid #2d2d32",
@@ -33,14 +57,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       boxShadow: "0px 24px 33px -9px #0000005C",
     },
-
     [theme.breakpoints.down("md")]: {
       height: "100%",
       width: "100%",
     },
   },
-  cardBox: {
-    // backgroundColor: "#17191A",
+  statsCard: {
     padding: 10,
     width: "100%",
     border: "1px solid #2d2d32",
@@ -49,29 +71,26 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       boxShadow: "0px 24px 33px -9px #0000005C",
     },
-
     [theme.breakpoints.down("md")]: {
       height: "100%",
       width: "100%",
     },
   },
-  boxHeading: {
+  statsCardHeading: {
     fontWeight: 600,
-    fontSize: 18,
     color: "#f9f9f9",
     textAlign: "left",
-    paddingTop: 7,
+    fontSize: "1.2rem",
   },
-  boxPara: {
-    color: "#bdbdbd",
-    textAlign: "center",
+  statsBoxPara: {
+    textAlign: "left",
     fontSize: 13,
     fontWeight: 300,
   },
+
   title: {
     fontWeight: 600,
     fontSize: 32,
-
     color: "#f9f9f9",
     textAlign: "left",
   },
@@ -82,102 +101,25 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
   },
   inputWrapper: {
-    padding: 10,
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    border: "1px solid #757575",
-    borderRadius: 18,
-    width: "80%",
-    padding: 6,
-    outline: "none",
-    color: "#212121",
-    textAlign: "left",
-    paddingLeft: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    fontSize: 14,
-    fontFamily: "Karla",
+    border: "1px solid #2d2d32",
+    padding: "6px 20px 6px 20px",
+    borderRadius: 10,
+    backgroundColor: "rgba(106, 85, 234,0.03)",
   },
 
-  para: {
-    color: "#bdbdbd",
-    textAlign: "center",
-    fontSize: 13,
-    fontWeight: 300,
-    paddingTop: 5,
-    [theme.breakpoints.down("md")]: {
-      fontSize: 13,
-      paddingTop: 15,
-    },
-  },
-  activateButton: {
-    width: "fit-content",
-    height: "50px",
-    background: "#FF5AFF",
-    boxSizing: "border-box",
-    borderRadius: "15px",
-    fontSize: 16,
-    lineHeight: "33px",
-    color: "#ffffff",
-    fontWeight: 700,
-
-    padding: "12px 30px 12px 30px",
-    "&:hover": {
-      background: "#FFB469",
-    },
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
-  },
-  connectButton: {
-    width: "fit-content",
-    outline: "none",
-    textDecoration: "none",
-
-    background: theme.palette.primary.main,
-    boxSizing: "border-box",
-    borderRadius: "15px",
-    fontSize: 16,
-    lineHeight: "33px",
-    color: "#ffffff",
+  actionButton: {
+    borderRadius: 10,
+    background: "rgba(130, 71, 229, 0.3)",
+    padding: "12px 20px 12px 20px",
+    color: "white",
+    width: "100%",
+    marginTop: 20,
     fontWeight: 600,
-    marginTop: 20,
-    padding: "10px 40px 10px 40px",
-    fontFamily: "poppins",
-    "&:hover": {
-      background: theme.palette.primary.main,
-    },
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
-  },
-  registerButton: {
-    width: "fit-content",
-    height: "45px",
-    background: "#FF87FF",
-    border: "1px solid #FFFFFF",
-    boxSizing: "border-box",
-    borderRadius: "20px",
     fontSize: 16,
-    lineHeight: "33px",
-    color: "#000000",
-
-    marginTop: 20,
-    padding: "12px 30px 12px 30px",
-    "&:hover": {
-      background: "#FFB469",
-    },
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
   },
 }));
 
-export default function GridPoolDetails() {
+export default function GridStrategyComponent() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -302,304 +244,273 @@ export default function GridPoolDetails() {
     setStakeCase(0);
   };
   return (
-    <Box className={classes.spacing}>
+    <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
-      <Box
-        display="flex"
-        flexDirection={"row"}
-        justifyContent="flex-start"
-        alignItems="center"
-      >
-        <Box
-          display="flex"
-          flexDirection={"row"}
-          justifyContent="flex-start"
-          alignItems="center"
+      <Container>
+        <Typography variant="h2" className={classes.pageTitle}>
+          Spot Grid Strategy
+        </Typography>
+        <Typography variant="body2" className={classes.pageSubtitle}>
+          Place order inside the strategy pools and enjoy high yeilds
+        </Typography>
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          spacing={12}
+          pt={3}
         >
-          <img
-            src="https://cdn3d.iconscout.com/3d/premium/thumb/polkadot-4897427-4081372.png"
-            alt="PBR"
-            height="48px"
-          />{" "}
-          <img
-            src="https://cdn3d.iconscout.com/3d/premium/thumb/tether-usdt-coin-4199895-3478983@0.png"
-            alt="USDT"
-            height="48px"
-            style={{ marginLeft: -10 }}
-          />
-        </Box>
-        <Box ml={1}>
-          <div className={classes.title}>PBR-USDT</div>
-        </Box>
-      </Box>
-      <Grid
-        container
-        display={"flex"}
-        justifyContent="space-between"
-        spacing={12}
-        pt={3}
-      >
-        <Grid item md={7}>
-          <Grid container spacing={2}>
-            <Grid item md={4}>
-              <Box className={classes.cardBox}>
-                <Typography
-                  variant="body"
-                  className={classes.boxPara}
-                  fontWeight={300}
-                >
-                  Total Value Deposited
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className={classes.boxHeading}
-                  fontWeight={700}
-                >
-                  $ 13.43K
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item md={4}>
-              <Box className={classes.cardBox}>
-                <Typography
-                  variant="body"
-                  className={classes.boxPara}
-                  fontWeight={300}
-                >
-                  Profit & Loss
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className={classes.boxHeading}
-                  fontWeight={700}
-                >
-                  $1,343
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item md={4}>
-              <Box className={classes.cardBox}>
-                <Typography
-                  variant="body"
-                  className={classes.boxPara}
-                  fontWeight={300}
-                >
-                  Total Orders
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className={classes.boxHeading}
-                  fontWeight={700}
-                >
-                  2,343
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          {/* <Box className={classes.card} mt={2}>
-            <div>
-              <Typography
-                variant="h4"
-                className={classes.heading}
-                fontWeight={700}
-              >
-                Total Orders
-              </Typography>
-              <Typography
-                variant="body"
-                className={classes.para}
-                fontWeight={300}
-              >
-                Deposit USDT and place orders and let strategy work for you
-              </Typography>
-            </div>
-          </Box> */}
-          <Box className={classes.card} mt={2}>
-            <div>
-              <Typography
-                variant="h4"
-                className={classes.heading}
-                fontWeight={700}
-              >
-                Orders chart
-              </Typography>
-              <Typography
-                variant="body"
-                className={classes.para}
-                fontWeight={300}
-              >
-                Visualise your orders in real-time
-              </Typography>
-            </div>
-            <div id="chart">
-              <ApexCharts
-                options={data.options}
-                series={data.series}
-                type="line"
-                height={350}
-              />
-            </div>
-          </Box>
-        </Grid>
-        <Grid item md={5}>
-          <Box className={classes.card}>
-            <div className="d-flex flex-column justify-content-around">
-              <div>
-                <Typography
-                  variant="h4"
-                  className={classes.heading}
-                  fontWeight={700}
-                >
-                  Stake
-                </Typography>
-                <Typography
-                  variant="body"
-                  className={classes.para}
-                  fontWeight={300}
-                >
-                  Deposit USDT and place orders and let strategy work for you
-                </Typography>
-              </div>
-
+          <Grid item md={6}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="space-between"
+              alignItems="center"
+              style={{
+                border: "1px solid #2d2d32",
+                padding: "10px 10px 10px 10px",
+                borderRadius: 10,
+              }}
+            >
               <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                mt={2}
-                style={{
-                  border: "1px solid rgba(106, 85, 234,0.2)",
-                  padding: "6px 20px 6px 20px",
-                  borderRadius: 10,
-                  backgroundColor: "rgba(106, 85, 234,0.03)",
-                }}
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="flex-start"
+                alignItems="center"
               >
-                <Box>
+                <img
+                  src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
+                  alt="PBR"
+                  height="42px"
+                />
+                <Box ml={1}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={600}
+                    color={"#f9f9f9"}
+                    noWrap
+                  >
+                    PBR
+                  </Typography>
+                  <Typography variant="small" noWrap>
+                    PolkaBridge
+                  </Typography>
+                </Box>
+              </Box>
+              <Box>
+                <ArrowDropDown style={{ color: "white" }} />
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item md={6}>
+            <Grid container spacing={2}>
+              <Grid item md={4}>
+                <Box className={classes.statsCard}>
                   <Typography
                     variant="body2"
-                    textAlign={"left"}
-                    fontWeight={500}
-                    fontSize={12}
-                    color={"#bdbdbd"}
+                    className={classes.statsBoxPara}
+                    fontWeight={300}
                   >
-                    Amount:
+                    Total Invested($)
+                  </Typography>
+                  <Typography variant="h5" className={classes.statsCardHeading}>
+                    $ 13.43K
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item md={4}>
+                <Box className={classes.statsCard}>
+                  <Typography
+                    variant="body2"
+                    className={classes.statsBoxPara}
+                    fontWeight={300}
+                  >
+                    Profit & Loss
+                  </Typography>
+                  <Typography variant="h5" className={classes.statsCardHeading}>
+                    $1,343
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item md={4}>
+                <Box className={classes.statsCard}>
+                  <Typography
+                    variant="body2"
+                    className={classes.statsBoxPara}
+                    fontWeight={300}
+                  >
+                    Total Orders
+                  </Typography>
+                  <Typography variant="h5" className={classes.statsCardHeading}>
+                    2,343
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          display={"flex"}
+          justifyContent="space-between"
+          spacing={12}
+          pt={3}
+        >
+          <Grid item md={6}>
+            <Box className={classes.card}>
+              <div className="d-flex flex-column justify-content-around">
+                <div>
+                  <Typography variant="h5" fontWeight={600} lineHeight={1}>
+                    Create strategy
+                  </Typography>
+                  <Typography variant="small" lineHeight={1}>
+                    Put your orders and let strategy work for you
+                  </Typography>
+                </div>
+
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  mt={2}
+                  className={classes.inputWrapper}
+                >
+                  <Box>
+                    <Typography
+                      variant="small"
+                      textAlign={"left"}
+                      lineHeight={1}
+                    >
+                      Amount:
+                    </Typography>
+                    <Input
+                      value={amount}
+                      onInput={(event) => setAmount(event.target.value)}
+                      fullWidth
+                      placeholder="0"
+                      disableUnderline
+                      style={{
+                        fontSize: 24,
+                        fontWeight: 600,
+                        color: "#f9f9f9",
+                      }}
+                    />
+                  </Box>
+                  <Box
+                    display={"flex"}
+                    flexDirection="column"
+                    alignItems="flex-end"
+                    justifyContent={"center"}
+                  >
+                    <Typography
+                      variant="small"
+                      textAlign={"right"}
+                      style={{
+                        width: 100,
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      Available: 21
+                    </Typography>
+                    <Box
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <Box
+                        display="flex"
+                        flexDirection={"row"}
+                        justifyContent="flex-start"
+                        alignItems="center"
+                      >
+                        <img
+                          src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
+                          alt="USDT"
+                          height="30px"
+                        />
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        className={classes.para}
+                        fontSize={20}
+                        textAlign="left"
+                        fontWeight={600}
+                      >
+                        USDT
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box mt={2} className={classes.inputWrapper}>
+                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
+                    Grids:
                   </Typography>
                   <Input
-                    value={amount}
-                    onInput={(event) => setAmount(event.target.value)}
+                    value={grids}
+                    onInput={(event) => setGrids(event.target.value)}
                     fullWidth
-                    placeholder="0"
+                    placeholder="Enter grid count here"
                     disableUnderline
                     style={{ fontSize: 24, fontWeight: 600 }}
                   />
                 </Box>
-                <Box>
-                  <Typography
-                    variant="body2"
-                    textAlign={"right"}
-                    fontWeight={500}
-                    fontSize={12}
-                    color={"#bdbdbd"}
-                    style={{ minWidth: 120 }}
-                  >
-                    Available: 21
+
+                <Box mt={2} className={classes.inputWrapper}>
+                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
+                    Trigger Percent:
                   </Typography>
-                  <Box
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="flex-end"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection={"row"}
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <img
-                        src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
-                        alt="USDT"
-                        height="30px"
-                      />{" "}
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      className={classes.para}
-                      fontSize={20}
-                      textAlign="left"
-                      fontWeight={600}
-                      ml={1}
-                    >
-                      USDT
-                    </Typography>
-                  </Box>
+                  <Input
+                    type="number"
+                    disableUnderline
+                    value={percent}
+                    fullWidth
+                    placeholder="10"
+                    onChange={(e) => handlePercentage(e)}
+                    style={{ fontSize: 22, fontWeight: 600 }}
+                  />
                 </Box>
-              </Box>
 
-              <Box
-                mt={2}
-                style={{
-                  border: "1px solid rgba(106, 85, 234,0.2)",
-                  padding: "6px 20px 6px 20px",
-                  borderRadius: 10,
-                  backgroundColor: "rgba(106, 85, 234,0.03)",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  textAlign={"left"}
-                  fontWeight={500}
-                  fontSize={12}
-                  color={"#bdbdbd"}
-                >
-                  Grids:
-                </Typography>
-                <Input
-                  value={grids}
-                  onInput={(event) => setGrids(event.target.value)}
-                  fullWidth
-                  placeholder="Enter grid count here"
-                  disableUnderline
-                  style={{ fontSize: 24, fontWeight: 600 }}
-                />
-              </Box>
-
-              <Box
-                mt={2}
-                style={{
-                  border: "1px solid rgba(106, 85, 234,0.2)",
-                  padding: "6px 20px 6px 20px",
-                  borderRadius: 10,
-                  backgroundColor: "rgba(106, 85, 234,0.03)",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  textAlign={"left"}
-                  fontWeight={500}
-                  fontSize={12}
-                  color={"#bdbdbd"}
-                >
-                  Trigger Percent:
-                </Typography>
-                <Input
-                  type="number"
-                  disableUnderline
-                  value={percent}
-                  fullWidth
-                  placeholder="10"
-                  onChange={(e) => handlePercentage(e)}
-                  style={{ fontSize: 22, fontWeight: 600 }}
-                />
-              </Box>
-
-              <div className="text-center">
-                <Button className={classes.connectButton} onClick={handleStake}>
-                  STAKE NOW
-                </Button>
+                <div className="text-center">
+                  <Button
+                    className={classes.actionButton}
+                    onClick={handleStake}
+                  >
+                    Start Strategy
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Box>
+            </Box>
+          </Grid>
+          <Grid item md={6}>
+            <Box className={classes.card}>
+              <div>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight={600}
+                  color={"#f9f9f9"}
+                  noWrap
+                >
+                  Orders chart
+                </Typography>
+                <Typography variant="small" noWrap>
+                  Visualise your orders in real-time
+                </Typography>
+              </div>
+              <div id="chart">
+                <ApexCharts
+                  options={data.options}
+                  series={data.series}
+                  type="line"
+                  height={350}
+                />
+              </div>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
+
       <Box mt={4}>
         <div>
           <Typography variant="h4" className={classes.heading} fontWeight={700}>

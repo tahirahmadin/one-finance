@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { getPoolDetails } from "../../actions/smartActions";
+import StakePopup from "./StakePopup";
 import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
@@ -9,10 +10,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#17191A",
     marginTop: 20,
     marginBottom: 20,
-    paddingTop: 20,
+    // paddingTop: 20,
     paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
     width: "100%",
     border: "1px solid #414141",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
@@ -26,40 +25,18 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
-  title: {
+  para: {
+    fontWeight: 400,
+    fontSize: 14,
+    color: "#f9f9f9",
+    textAlign: "center",
+  },
+  tokenName: {
     fontWeight: 600,
+    fontSize: 16,
+    letterSpacing: "0.02em",
     color: "#f9f9f9",
     textAlign: "left",
-  },
-  description: {
-    fontWeight: 400,
-    color: "#bdbdbd",
-    textAlign: "left",
-    lineHeight: 1.5,
-    paddingTop: 5,
-  },
-  field: {
-    fontWeight: 400,
-    color: "#bdbdbd",
-    textAlign: "left",
-  },
-  value: {
-    fontWeight: 600,
-    color: "#f9f9f9",
-    textAlign: "left",
-    lineHeight: 1.5,
-    paddingTop: 5,
-  },
-  infoCard: {
-    backgroundColor: "rgba(130, 71, 229, 0.1)",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
-    padding: "4%",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
   },
   tokenDescription: {
     fontWeight: 400,
@@ -69,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolCard({ poolStaticData, index }) {
+export default function PoolPlain() {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -86,31 +63,96 @@ export default function PoolCard({ poolStaticData, index }) {
   return (
     <Box pt={0} className={classes.card}>
       <Box
-        display="flex"
-        flexDirection={"row"}
-        justifyContent="space-between"
-        alignItems="center"
+        style={{
+          backgroundColor: "rgba(130, 71, 229, 0.1)",
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+          padding: "4%",
+        }}
       >
         <Box
           display="flex"
           flexDirection={"row"}
-          justifyContent="flex-start"
+          justifyContent="space-between"
           alignItems="center"
         >
-          <img src={poolStaticData.icon} alt="Grid" height="42px" />
-          <Box ml={1}>
-            <Typography variant="h5" className={classes.title}>
-              {poolStaticData.title}
+          <Box
+            display="flex"
+            flexDirection={"row"}
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <img
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/polkadot-4897427-4081372.png"
+                alt="PBR"
+                height="24px"
+              />{" "}
+              <img
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/tether-usdt-coin-4199895-3478983@0.png"
+                alt="USDT"
+                height="24px"
+                style={{ marginLeft: -10 }}
+              />
+            </Box>
+            <Box ml={1}>
+              <div className={classes.tokenName}>PBR-USDT</div>
+            </Box>
+          </Box>
+          <div className={classes.tokenName} style={{ color: "#24A582" }}>
+            30%+
+          </div>
+        </Box>
+        <Box pt={2}>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography
+              variant="body2"
+              className={classes.para}
+              textAlign="center"
+              fontWeight={700}
+              ml={1}
+            >
+              Total Value Locked
+            </Typography>
+            <Typography
+              variant="body2"
+              className={classes.para}
+              textAlign="center"
+              fontWeight={700}
+              ml={1}
+            >
+              $324.4K
+            </Typography>
+          </Box>
+          <Box display={"flex"} justifyContent={"space-between"} pt={1}>
+            <Typography
+              variant="body2"
+              className={classes.para}
+              textAlign="center"
+              fontWeight={700}
+              ml={1}
+            >
+              Profit/Loss
+            </Typography>
+            <Typography
+              variant="body2"
+              className={classes.para}
+              textAlign="center"
+              fontWeight={700}
+              ml={1}
+            >
+              +$3,243
             </Typography>
           </Box>
         </Box>
-        <div style={{ color: "#24A582" }}>#{index + 1}</div>
       </Box>
-      <Typography variant="small" className={classes.description} paragraph>
-        {poolStaticData.description}
-      </Typography>
 
-      <Box px={1}>
+      <Box px={3}>
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -122,12 +164,19 @@ export default function PoolCard({ poolStaticData, index }) {
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
         >
-          <Typography variant="body2" className={classes.field} ml={1}>
+          <Typography
+            variant="h6"
+            className={classes.para}
+            textAlign="center"
+            fontSize={14}
+            fontWeight={400}
+            ml={1}
+          >
             Your stake
           </Typography>
           <Typography
             variant="body2"
-            className={classes.value}
+            className={classes.para}
             textAlign="center"
             fontWeight={700}
             ml={1}
@@ -146,8 +195,15 @@ export default function PoolCard({ poolStaticData, index }) {
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
         >
-          <Typography variant="body2" className={classes.field} ml={1}>
-            Your Earning
+          <Typography
+            variant="h6"
+            className={classes.para}
+            textAlign="center"
+            fontSize={14}
+            fontWeight={400}
+            ml={1}
+          >
+            Earning
           </Typography>
           <Typography
             variant="body2"
@@ -160,40 +216,14 @@ export default function PoolCard({ poolStaticData, index }) {
           </Typography>
         </Box>
       </Box>
-      <Box
-        display="flex"
-        flexDirection={"row"}
-        justifyContent="space-between"
-        alignItems="center"
-        gap={2}
-        py={2}
-      >
-        <Box className={classes.infoCard}>
-          <Typography variant="small" className={classes.field}>
-            Total Invested($)
-          </Typography>
-          <Typography variant="body1" className={classes.value}>
-            $324.4K
-          </Typography>
-        </Box>
-        <Box className={classes.infoCard}>
-          <Typography variant="small" className={classes.field}>
-            Total PnL($)
-          </Typography>
-          <Typography variant="body1" className={classes.value}>
-            +$34,434
-          </Typography>
-        </Box>
-      </Box>
-      <Box className="text-center">
-        <Link href="/grid-strategy" style={{ textDecoration: "none" }}>
+      <Box px={2} mt={2} className="text-center">
+        <Link href="/grid-pools" style={{ textDecoration: "none" }}>
           <Button
             style={{
               borderRadius: 10,
               background: "rgba(130, 71, 229, 0.3)",
-              padding: "12px 20px 12px 20px",
+              padding: "9px 20px 9px 20px",
               color: "white",
-              width: "100%",
             }}
           >
             View Pool

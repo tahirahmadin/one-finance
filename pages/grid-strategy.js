@@ -4,11 +4,8 @@ import { Box, Grid, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
-import Pools from "../components/Pools/Pools";
-import Portfolio from "../components/Portfolio/Portfolio";
 import Header from "../components/resuableComponents/Header";
-import PoolDetails from "../components/Pools/PoolDetails/PoolDetails";
-import GridPoolDetails from "../components/Pools/PoolDetails/PoolDetails";
+import GridStrategyComponent from "../components/Pools/PoolDetails/GridStrategyComponent";
 
 const useStyles = makeStyles({
   background: {
@@ -39,7 +36,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PoolDetail() {
+export default function GridStrategy() {
   const classes = useStyles();
   const theme = useTheme();
   const store = useSelector((state) => state);
@@ -68,7 +65,7 @@ export default function PoolDetail() {
           </Grid>
           <Grid item md={10} style={{ backgroundColor: "black" }}>
             <Header />
-            <GridPoolDetails supportedTokens={supportedTokens} />
+            <GridStrategyComponent supportedTokens={supportedTokens} />
           </Grid>
         </Grid>
       )}

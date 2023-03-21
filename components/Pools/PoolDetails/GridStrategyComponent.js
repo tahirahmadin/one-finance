@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     fontSize: "1.2rem",
   },
-  statsBoxPara: {
+  statsCardPara: {
     textAlign: "left",
     fontSize: 13,
     fontWeight: 300,

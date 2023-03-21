@@ -72,7 +72,7 @@ export default function Pools() {
             spacing={12}
           >
             {poolsData.map((singlePool, index) => (
-              <Grid item md={6}>
+              <Grid item md={6} key={index}>
                 <PoolCard poolStaticData={singlePool} index={index} />
               </Grid>
             ))}

@@ -29,13 +29,13 @@ export const useWeb3Auth = () => {
             theme: "light",
             loginMethodsOrder: ["google", "facebook", "twitter", "apple"],
             appLogo:
-              "https://icodrops.com/wp-content/uploads/2021/11/OneRare_logo.jpeg",
+              "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
           },
           modalZIndex: "9999",
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x89",
-            rpcTarget: "https://polygon-rpc.com/",
+            chainId: "0x13881",
+            rpcTarget: "https://rpc-mumbai.maticvigil.com/",
           },
         });
         console.log(web3authInstance);

@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     fontSize: 13,
     fontWeight: 300,
-    paddingTop: 5,
+    paddingTop: 15,
     [theme.breakpoints.down("md")]: {
       fontSize: 13,
       paddingTop: 15,
@@ -251,6 +251,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                       textAlign="center"
                       fontWeight={400}
                       fontSize={14}
+                      pt={3}
                     >
                       Confirm the transaction in Metamask to make <br />
                       strategy working.

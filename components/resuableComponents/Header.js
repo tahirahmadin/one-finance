@@ -98,8 +98,9 @@ const Header = () => {
 
   return (
     <Box className={classes.background}>
-      {console.log(web3AuthSC)}
+      {console.log("accountSC")}
       {console.log(accountSC)}
+      {console.log(web3AuthSC)}
       {console.log(active)}
       <Container>
         <header>
@@ -165,6 +166,7 @@ const Header = () => {
                   How It Works
                 </Typography>
               </Link>
+
               {!accountSC ? (
                 <Box>
                   {web3AuthSC ? (

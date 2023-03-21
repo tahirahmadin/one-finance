@@ -179,10 +179,28 @@ export default function GridStrategyComponent() {
   };
 
   const calculateOrdersData = async () => {
-    let price = "10";
+    let price = 10;
+    let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
     if (amount > 0 && percent > 0 && grids > 0) {
       let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      let buyOrders = parseInt(grids / 2);
+      let oneGridOrdersCount = parseInt(grids / 2);
+      let orderValueForBuy = price;
+      let buyOrders = [...Array(oneGridOrdersCount)].map((ele, index) => {
+        orderValueForBuy = (orderValueForBuy * (100 - percent)) / 100;
+        return Web3.utils.toWei(orderValueForBuy.toString(), "ether");
+      });
+      let orderValueForSell = price;
+      let sellOrders = [...Array(oneGridOrdersCount)].map((ele, index) => {
+        orderValueForSell = (orderValueForSell * (100 + percent)) / 100;
+        return Web3.utils.toWei(orderValueForSell.toString(), "ether");
+      });
+      let orderObj = {
+        buyOrders,
+        sellOrders,
+        fiatAmount,
+        selectedTokenAddress,
+      };
+      return orderObj;
     }
   };
   // Write functions
@@ -190,62 +208,64 @@ export default function GridStrategyComponent() {
     console.log("hitting");
 
     if (amount > 0 && percent > 0 && grids > 0) {
-      let ordersData = calculateOrdersData();
+      let ordersData = await calculateOrdersData();
+      console.log(ordersData);
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
+      console.log(provider);
       let tradeContract = tradingInstance(provider.provider);
+      if (ordersData) {
+        try {
+          let estimateGas = await tradeContract.methods
+            .stake(
+              ordersData.buyOrders,
+              ordersData.sellOrders,
+              ordersData.fiatAmount,
+              ordersData.selectedTokenAddress
+            )
+            .estimateGas({ from: userAddress });
 
-      try {
-        let estimateGas = await tradeContract.methods
-          .stake(
-            [50, 75],
-            [100, 200],
-            "100",
-            "0xF13285D6659Aa6895e02EEFe3495408c99f70a86"
-          )
-          .estimateGas({ from: userAddress });
-
-        let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await tradeContract.methods
-          .stake(
-            [50, 75],
-            [100, 200],
-            "100",
-            "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0"
-          )
-          .send(
-            {
-              from: userAddress,
-              maxPriorityFeePerGas: "50000000000",
-              gasPrice: parseInt(
-                (parseInt(estimateGasPrice) * 10) / 9
-              ).toString(),
-              gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
-            },
-            async function (error, transactionHash) {
-              if (transactionHash) {
-                setStakeCase(2);
+          let estimateGasPrice = await web3.eth.getGasPrice();
+          const response = await tradeContract.methods
+            .stake(
+              ordersData.buyOrders,
+              ordersData.sellOrders,
+              ordersData.fiatAmount,
+              ordersData.selectedTokenAddress
+            )
+            .send(
+              {
+                from: userAddress,
+                maxPriorityFeePerGas: "50000000000",
+                gasPrice: parseInt(
+                  (parseInt(estimateGasPrice) * 10) / 9
+                ).toString(),
+                gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+              },
+              async function (error, transactionHash) {
+                if (transactionHash) {
+                  setStakeCase(2);
+                } else {
+                  setStakeCase(4);
+                }
+              }
+            )
+            .on("receipt", async function (receipt) {
+              setStakeCase(3);
+              setResetFlag(resetFlag + 1);
+            })
+            .on("error", async function (error) {
+              if (error?.code === 4001) {
+                setStakeCase(4);
               } else {
                 setStakeCase(4);
               }
-            }
-          )
-          .on("receipt", async function (receipt) {
-            setStakeCase(3);
-            setResetFlag(resetFlag + 1);
-          })
-          .on("error", async function (error) {
-            if (error?.code === 4001) {
-              setStakeCase(4);
-            } else {
-              setStakeCase(4);
-            }
-          });
-        // dispatch(setBalancesFlag(balancesFlag + 1));
-      } catch (err) {
-        console.log(err);
-        setStakeCase(4);
+            });
+        } catch (err) {
+          console.log(err);
+          setStakeCase(4);
+        }
       }
     }
   };

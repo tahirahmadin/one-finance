@@ -70,7 +70,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { active, accountSC, web3AuthSC, connect } = useWeb3Auth();
+  const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
   // const accountSC = "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448";
   // const web3AuthSC = true;
   // const active = true;
@@ -102,6 +102,7 @@ const Header = () => {
       {console.log(accountSC)}
       {console.log(web3AuthSC)}
       {console.log(active)}
+      {console.log(wallet)}
       <Container>
         <header>
           <Grid

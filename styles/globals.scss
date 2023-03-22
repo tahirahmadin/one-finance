@@ -44,3 +44,25 @@ object {
 p {
   color: "white";
 }
+
+.blink_me {
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  25% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+}

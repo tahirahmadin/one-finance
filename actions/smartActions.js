@@ -1,8 +1,5 @@
 import { tokenInstance, tradingInstance } from "../contracts";
 import web3 from "../web3";
-import constants from "../utils/constants";
-import ethersServiceProvider from "../services/ethersServiceProvider";
-import Web3 from "web3";
 
 // ***************** ERC20 Token Contract *************** //
 //READ BalanceOf Orare
@@ -23,11 +20,13 @@ export const getUserUSDTBalance = async (userAddress) => {
 //READ approved
 //RETURNS number
 export const checkUSDTApproved = async (userAddress, contractAddress) => {
-  return await tokenInstance()
-    .methods.allowance(userAddress, contractAddress)
+  let tokenContract = await tokenInstance();
+  let result = tokenContract.methods
+    .allowance(userAddress, contractAddress)
     .call((err, response) => {
       return response;
     });
+  return result;
 };
 // ***************** Trading Contract *************** //
 

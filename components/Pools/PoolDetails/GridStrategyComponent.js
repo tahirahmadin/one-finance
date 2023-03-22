@@ -10,17 +10,21 @@ import {
   Slider,
   Container,
 } from "@mui/material";
-import { getPoolDetails } from "../../../actions/smartActions";
+import {
+  checkUSDTApproved,
+  getPoolDetails,
+} from "../../../actions/smartActions";
 import Link from "next/link";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 import dynamic from "next/dynamic";
 import { useWeb3Auth } from "../../../hooks/useWeb3Auth";
 import TxPopup from "../../../common/TxPopup";
 import ethersServiceProvider from "../../../services/ethersServiceProvider";
-import { tradingInstance } from "../../../contracts";
+import { tokenInstance, tradingInstance } from "../../../contracts";
 import web3 from "../../../web3";
 import { ArrowDropDown } from "@mui/icons-material";
 import Web3 from "web3";
+import { getTokenPriceStats } from "../../../actions/serverActions";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -131,6 +135,10 @@ export default function GridStrategyComponent() {
   const [grids, setGrids] = useState(6);
   const [tokenData, setTokenData] = useState(null);
   const [stakeCase, setStakeCase] = useState(0);
+  const [isApproved, setIsApproved] = useState(false);
+  const [resetFlag, setResetFlag] = useState(0);
+  const [orderPrices, setOrderPrices] = useState(null);
+  const [tokenPriceData, setTokenPriceData] = useState(null);
 
   let data = {
     options: {
@@ -138,23 +146,19 @@ export default function GridStrategyComponent() {
         id: "apexchart-example",
       },
       xaxis: {
-        categories: [
-          "BUY",
-          "BUY",
-          "BUY",
-          "BUY",
-          "SELL",
-          "SELL",
-          "SELL",
-          "SELL",
-          "SELL",
-        ],
+        categories:
+          grids > 1
+            ? [
+                ...[...Array(grids / 2)].map((ele) => "BUY"),
+                ...[...Array(grids / 2)].map((ele) => "SELL"),
+              ]
+            : [],
       },
     },
     series: [
       {
         name: "Price",
-        data: [0.1, 0.11, 0.13, 0.16, 0.2, 0.24, 0.27, 0.32, 0.36],
+        data: orderPrices ? [...orderPrices] : [],
       },
     ],
   };
@@ -167,19 +171,35 @@ export default function GridStrategyComponent() {
       console.log(res);
     }
     asyncFn();
-  }, []);
+  }, [resetFlag, accountSC]);
 
-  const handlePercentage = (event) => {
-    let { value } = event.target;
-    let min = 1;
-    let max = 99;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+  useEffect(() => {
+    async function asyncFn() {
+      let res = await getTokenPriceStats();
+      if (res) {
+        setTokenPriceData(res.polkabridge);
+        console.log(res);
+      }
+    }
+    asyncFn();
+  }, [resetFlag, accountSC]);
 
-    setPercent(value);
-  };
+  // Check isApproved
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let trading_contract = process.env.NEXT_PUBLIC_TRADING_CONTRACT;
+        let res = await checkUSDTApproved(accountSC, trading_contract);
 
-  const calculateOrdersData = async () => {
-    let price = 10;
+        setIsApproved(parseInt(res) > 0);
+      }
+      asyncFn();
+    }
+  }, [accountSC, resetFlag]);
+
+  const calculateOrdersData = useMemo(async () => {
+    let price = tokenPriceData ? tokenPriceData.usd : 0;
+    let pricesArr = [];
     let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
     if (amount > 0 && percent > 0 && grids > 0) {
       let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
@@ -187,11 +207,13 @@ export default function GridStrategyComponent() {
       let orderValueForBuy = price;
       let buyOrders = [...Array(oneGridOrdersCount)].map((ele, index) => {
         orderValueForBuy = (orderValueForBuy * (100 - percent)) / 100;
+        pricesArr.push(orderValueForBuy.toFixed(2));
         return Web3.utils.toWei(orderValueForBuy.toString(), "ether");
       });
       let orderValueForSell = price;
       let sellOrders = [...Array(oneGridOrdersCount)].map((ele, index) => {
         orderValueForSell = (orderValueForSell * (100 + percent)) / 100;
+        pricesArr.push(orderValueForSell.toFixed(2));
         return Web3.utils.toWei(orderValueForSell.toString(), "ether");
       });
       let orderObj = {
@@ -200,20 +222,81 @@ export default function GridStrategyComponent() {
         fiatAmount,
         selectedTokenAddress,
       };
+      console.log(pricesArr);
+      setOrderPrices(pricesArr);
       return orderObj;
     }
+  }, [amount, grids, percent, resetFlag]);
+
+  const handlePercentage = (event) => {
+    let { value } = event.target;
+    let min = 1;
+    let max = 50;
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+
+    setPercent(value);
   };
+
+  // Approve token
+  const handleApprove = async () => {
+    setStakeCase(1);
+
+    let userAddress = accountSC;
+    let trading_contract = process.env.NEXT_PUBLIC_TRADING_CONTRACT;
+    let provider = ethersServiceProvider.web3AuthInstance;
+
+    let tokenContract = tokenInstance(provider.provider);
+    try {
+      let estimateGas = await tokenContract.methods
+        .approve(trading_contract, "100000000000000000000000000")
+        .estimateGas({ from: userAddress });
+
+      let estimateGasPrice = await web3.eth.getGasPrice();
+      const response = await tokenContract.methods
+        .approve(trading_contract, "100000000000000000000000000")
+        .send(
+          {
+            from: userAddress,
+            maxPriorityFeePerGas: "50000000000",
+            gasPrice: parseInt(
+              (parseInt(estimateGasPrice) * 10) / 9
+            ).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setStakeCase(2);
+            } else {
+              setStakeCase(4);
+            }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setStakeCase(3);
+          setResetFlag(resetFlag + 1);
+        })
+        .on("error", async function (error) {
+          if (error?.code === 4001) {
+            setStakeCase(4);
+          } else {
+            setStakeCase(4);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+      setStakeCase(4);
+    }
+  };
+
   // Write functions
   const handleStake = async () => {
-    console.log("hitting");
-
     if (amount > 0 && percent > 0 && grids > 0) {
-      let ordersData = await calculateOrdersData();
+      let ordersData = await calculateOrdersData;
       console.log(ordersData);
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
-      console.log(provider);
+
       let tradeContract = tradingInstance(provider.provider);
       if (ordersData) {
         try {
@@ -320,7 +403,15 @@ export default function GridStrategyComponent() {
                     color={"#f9f9f9"}
                     noWrap
                   >
-                    PBR
+                    PBR{" "}
+                    {tokenPriceData && (
+                      <small
+                        className="blink_me"
+                        style={{ color: "green", fontSize: 12 }}
+                      >
+                        ${tokenPriceData.usd.toFixed(3)}
+                      </small>
+                    )}
                   </Typography>
                   <Typography variant="small" noWrap>
                     PolkaBridge
@@ -505,9 +596,9 @@ export default function GridStrategyComponent() {
                 <div className="text-center">
                   <Button
                     className={classes.actionButton}
-                    onClick={handleStake}
+                    onClick={isApproved ? handleStake : handleApprove}
                   >
-                    Start Strategy
+                    {isApproved ? "Create Strategy" : "Approve Strategy"}
                   </Button>
                 </div>
               </div>

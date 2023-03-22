@@ -97,6 +97,31 @@ export const useWeb3Auth = () => {
       return false;
     }
   }, [walletStatus]);
+  const _wallet = useMemo(() => {
+    let instance = web3Auth;
+
+    if (instance) {
+      if (instance.status === "connected") {
+        return 2;
+      } else if (instance.status === "ready") {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      let instanceFromEthers = ethersServiceProvider.web3AuthInstance;
+      if (instanceFromEthers) {
+        if (instanceFromEthers.status === "connected") {
+          return 2;
+        } else if (instanceFromEthers.status === "ready") {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+      return 0;
+    }
+  }, [walletStatus]);
 
   const _disconnect = async () => {
     let instance = ethersServiceProvider.web3AuthInstance;
@@ -141,5 +166,6 @@ export const useWeb3Auth = () => {
     active: _active,
     connect: _connect,
     disconnect: _disconnect,
+    wallet: _wallet,
   };
 };

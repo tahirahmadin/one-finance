@@ -8,6 +8,7 @@ import { GetTokenData } from "../queries/graphQueries";
 const initialState = {
   tokenData: [],
   menuIndex: 0,
+  walletStatus: 0,
 };
 
 export const getTokensData = createAsyncThunk("getTokensData", async () => {
@@ -29,11 +30,14 @@ const UiReducer = createSlice({
     setTokenData(state, action) {
       state.tokenData = [...action.payload];
     },
+    setWalletStatus(state, action) {
+      state.walletStatus = action.payload;
+    },
   },
 });
 
 const { actions } = UiReducer;
 
-export const { setMenuIndex, setTokenData } = actions;
+export const { setMenuIndex, setTokenData, setWalletStatus } = actions;
 
 export default UiReducer;

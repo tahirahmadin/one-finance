@@ -17,7 +17,7 @@ export const useWeb3Auth = () => {
   const { walletStatus } = store.ui;
 
   const clientId =
-    "BIOMhgpLCKLpoPjcz0uLHvI8Uul1AknA2CT6gvCbR7vF3cl4ryN6Sm8RJ3Hxp3gnKLlmM06N4XGqXRDuKR697eQ"; // get from https://dashboard.web3auth.io
+    "BF-Vb6eMYerVcyETBN9HoPetpMHe9MX9kg7phAWCnQPCn8d7IPLR4-PnbC4bPxuZurexRKvrgi_2XzBgUYlAObE"; // get from https://dashboard.web3auth.io
 
   useEffect(() => {
     const init = async () => {

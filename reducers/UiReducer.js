@@ -15,7 +15,7 @@ export const getPoolDataById = createAsyncThunk(
     console.log(contractAddress);
     const { loading, data, error } = await apolloClient.query({
       query: GetPoolDataById,
-      variables: { address: contractAddress.toString() },
+      variables: { address: contractAddress },
     });
     if (!loading && !error) {
       return data;

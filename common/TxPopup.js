@@ -270,7 +270,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer" }} />
+                  <Close style={{ cursor: "pointer", color: "black" }} />
                 </div>
                 <div>
                   <div className="text-center">
@@ -315,7 +315,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer" }} />
+                  <Close style={{ cursor: "pointer", color: "black" }} />
                 </div>
                 <div>
                   <div className="text-center">

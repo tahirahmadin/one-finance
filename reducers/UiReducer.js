@@ -1,24 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apolloClient } from "../pages/_app";
-import { axiosInstance } from "../Axios";
-import ethersServiceProvider from "../services/ethersServiceProvider";
-import stakingService from "../services/stakingService";
-import { GetTokenData } from "../queries/graphQueries";
+import { GetPoolDataById } from "../queries/graphQueries";
 
 const initialState = {
   tokenData: [],
   menuIndex: 0,
   walletStatus: 0,
+  accumulationPoolData: null,
 };
 
-export const getTokensData = createAsyncThunk("getTokensData", async () => {
-  const { loading, data, error } = await apolloClient.query({
-    query: GetTokenData,
-  });
-  if (!loading && !error) {
-    return data;
+export const getPoolDataById = createAsyncThunk(
+  "getPoolDataById",
+  async (contractAddress) => {
+    console.log(contractAddress);
+    const { loading, data, error } = await apolloClient.query({
+      query: GetPoolDataById,
+      variables: { address: contractAddress.toString() },
+    });
+    if (!loading && !error) {
+      return data;
+    }
   }
-});
+);
 
 const UiReducer = createSlice({
   name: "ui",
@@ -33,6 +36,15 @@ const UiReducer = createSlice({
     setWalletStatus(state, action) {
       state.walletStatus = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getPoolDataById.fulfilled, (state, action) => {
+      const response = action.payload;
+      console.log(response);
+      if (response && response.pool) {
+        state.accumulationPoolData = response.pool;
+      }
+    });
   },
 });
 

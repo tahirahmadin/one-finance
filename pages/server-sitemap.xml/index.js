@@ -15,10 +15,6 @@ export const getServerSideProps = async (ctx) => {
     loc: `https://play.onerare.io/farmersmarket/${ingredient.tokenId}`,
     lastmod: new Date().toDateString(),
   }));
-  const dishes = getDishesData.map((dish) => ({
-    loc: `https://play.onerare.io/recipes/${dish.tokenId}`,
-    lastmod: new Date().toDateString(),
-  }));
 
   const fields = [...dishes, ...orderBooks];
 

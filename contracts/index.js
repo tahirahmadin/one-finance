@@ -1,6 +1,7 @@
 import Web3 from "web3";
 import ERC20RG from "../abi/ERC20RG.json";
 import TradingContractABI from "../abi/ERC20Trading.json";
+import AccumulationContractABI from "../abi/AccumulationABI.json";
 import constants from "../utils/constants";
 
 const web3Instance = (provider) => {
@@ -38,6 +39,21 @@ export const tradingInstance = (provider = "unavailable") => {
       contract_address
     );
     return tradingContract;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const accumulationInstance = (provider = "unavailable") => {
+  let contract_address = process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT;
+  try {
+    var web3 = web3Instance(provider);
+    var accumulationContract = new web3.eth.Contract(
+      AccumulationContractABI,
+      contract_address
+    );
+    return accumulationContract;
   } catch (err) {
     console.log(err);
     return null;

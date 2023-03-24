@@ -42,16 +42,18 @@ export default function Pools() {
 
   let poolsData = [
     {
+      title: "Accumulation Strategy",
+      description:
+        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+      url: "accumulation",
+    },
+    {
       title: "Spot Grid Strategy",
       description:
         "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
-    },
-    {
-      title: "Dollar Cost Averaging(DCA)",
-      description:
-        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
-      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+      url: "grid-strategy",
     },
   ];
   return (

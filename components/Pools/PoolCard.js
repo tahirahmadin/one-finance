@@ -186,7 +186,7 @@ export default function PoolCard({ poolStaticData, index }) {
         </Box>
       </Box>
       <Box className="text-center">
-        <Link href="/grid-strategy" style={{ textDecoration: "none" }}>
+        <Link href={poolStaticData.url} style={{ textDecoration: "none" }}>
           <Button
             style={{
               borderRadius: 10,

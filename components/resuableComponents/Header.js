@@ -98,11 +98,6 @@ const Header = () => {
 
   return (
     <Box className={classes.background}>
-      {console.log("accountSC")}
-      {console.log(accountSC)}
-      {console.log(web3AuthSC)}
-      {console.log(active)}
-      {console.log(wallet)}
       <Container>
         <header>
           <Grid

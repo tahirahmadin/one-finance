@@ -75,11 +75,7 @@ const Header = () => {
   // const web3AuthSC = true;
   // const active = true;
 
-  const {
-    headerMenuExpanded,
-
-    balancesFlag,
-  } = store.ui;
+  const { headerMenuExpanded } = store.ui;
   const router = useRouter();
   const matches = useMediaQuery("(min-width:1153px)");
   const md = useMediaQuery("md");

@@ -21,7 +21,7 @@ import {
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { Wallet } from "@mui/icons-material";
+import { Redeem, Wallet } from "@mui/icons-material";
 import { Container } from "@mui/system";
 
 const useStyles = makeStyles((theme) => ({
@@ -125,38 +125,30 @@ const Header = () => {
                 </Typography>
               </Link>
               <Link href="/activities" style={{ textDecoration: "none" }}>
-                <Typography
-                  onClick={handleClick}
-                  variant="body2"
-                  color="textSecondary"
-                  className={classes.linkItems}
-                  style={{
-                    color: router.asPath.includes("/activities")
-                      ? theme.palette.cyan.main
-                      : "white",
-                    padding: "3px 25px",
-                    width: "100%",
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+
+                    height: 40,
+                    border: "2px solid" + theme.palette.secondary.main,
+                    borderRadius: "20px",
+                    marginRight: 1,
+                    fontWeight: 500,
+                    color: "white",
+                    fontSize: 12,
                   }}
                 >
-                  Activities
-                </Typography>
-              </Link>
-              <Link href="/activities" style={{ textDecoration: "none" }}>
-                <Typography
-                  onClick={handleClick}
-                  variant="body2"
-                  color="textSecondary"
-                  className={classes.linkItems}
-                  style={{
-                    color: router.asPath.includes("/activities")
-                      ? theme.palette.cyan.main
-                      : "white",
-                    padding: "3px 25px",
-                    width: "100%",
-                  }}
-                >
-                  How It Works
-                </Typography>
+                  <span style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    {/* <img
+                      src="https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-6438383-5307752.png"
+                      style={{ color: "yellow", height: 24, marginRight: 4 }}
+                    /> */}
+                    <Redeem style={{ color: "yellow", height: 18 }} /> Claim 32
+                    SLEEP
+                  </span>
+                </Box>
               </Link>
 
               {!accountSC ? (
@@ -245,26 +237,6 @@ const Header = () => {
                     <KeyboardArrowRightIcon
                       style={{ color: "#fff", fontSize: 26 }}
                     />
-                  </ListItem>
-
-                  <ListItem classes={{ root: classes.listItem }}>
-                    <Link href="/season-2">
-                      <Typography
-                        onClick={handleClick}
-                        variant="body2"
-                        color="textSecondary"
-                        className={classes.linkItems}
-                        style={{
-                          color: router.asPath.includes("/season-2")
-                            ? theme.palette.cyan.main
-                            : "white",
-                          padding: "3px 25px",
-                          width: 180,
-                        }}
-                      >
-                        SEASON 2
-                      </Typography>
-                    </Link>
                   </ListItem>
 
                   <ListItem classes={{ root: classes.listItem }}>

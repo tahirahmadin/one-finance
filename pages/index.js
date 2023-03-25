@@ -7,6 +7,9 @@ import Seo from "../common/Seo";
 import Pools from "../components/Pools/Pools";
 import Portfolio from "../components/Portfolio/Portfolio";
 import Header from "./../components/resuableComponents/Header";
+import Rewards from "../components/Rewards";
+import Leaderboard from "../components/Leaderboard";
+import Activities from "../components/Activities";
 
 const useStyles = makeStyles({
   background: {
@@ -62,7 +65,10 @@ export default function Home() {
           <Grid item md={10}>
             <Header />
             {menuIndex === 0 && <Pools />}
-            {menuIndex === 1 && <Portfolio />}
+            {menuIndex === 1 && <Rewards />}
+            {menuIndex === 2 && <Leaderboard />}
+            {menuIndex === 3 && <Portfolio />}
+            {menuIndex === 4 && <Activities />}
           </Grid>
         </Grid>
       )}

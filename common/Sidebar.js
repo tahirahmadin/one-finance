@@ -3,7 +3,16 @@ import { Box, useTheme, Typography, Paper, useMediaQuery } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import { BarChart, Explore, Help, Logout, Telegram } from "@mui/icons-material";
+import {
+  BarChart,
+  EmojiEvents,
+  Explore,
+  Help,
+  Logout,
+  Telegram,
+  Timeline,
+  Wallet,
+} from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -85,7 +94,6 @@ const SideBar = ({}) => {
               Pools
             </Typography>
           </Paper>
-
           <Paper
             onClick={() => dispatch(setMenuIndex(1))}
             key={1}
@@ -101,19 +109,79 @@ const SideBar = ({}) => {
               cursor: "pointer",
             }}
           >
+            <EmojiEvents style={{ marginRight: 10, color: "white" }} />
+            <Typography variant="title1" className={classes.menuTitle}>
+              Rewards
+            </Typography>
+          </Paper>
+          <Paper
+            onClick={() => dispatch(setMenuIndex(2))}
+            key={1}
+            sx={{
+              boxShadow: 0,
+              borderRadius: 2,
+              bgcolor:
+                menuIndex === 2 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+              py: 2,
+              px: 2,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
             <BarChart style={{ marginRight: 10, color: "white" }} />
+            <Typography variant="title1" className={classes.menuTitle}>
+              Leaderboard
+            </Typography>
+          </Paper>
+          <Paper
+            onClick={() => dispatch(setMenuIndex(3))}
+            key={1}
+            sx={{
+              boxShadow: 0,
+              borderRadius: 2,
+              bgcolor:
+                menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+              py: 2,
+              px: 2,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <Wallet style={{ marginRight: 10, color: "white" }} />
             <Typography variant="title1" className={classes.menuTitle}>
               Porfolio
             </Typography>
           </Paper>
           <Paper
-            onClick={() => dispatch(setMenuIndex(2))}
+            onClick={() => dispatch(setMenuIndex(4))}
+            key={1}
+            sx={{
+              boxShadow: 0,
+              borderRadius: 2,
+              bgcolor:
+                menuIndex === 4 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+              py: 2,
+              px: 2,
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <Timeline style={{ marginRight: 10, color: "white" }} />
+            <Typography variant="title1" className={classes.menuTitle}>
+              My Activities
+            </Typography>
+          </Paper>
+          <Paper
+            onClick={() => dispatch(setMenuIndex(5))}
             key={0}
             sx={{
               boxShadow: 0,
 
               bgcolor:
-                menuIndex === 2 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                menuIndex === 5 ? `rgba(130, 71, 229, 0.3)` : "transparent",
               py: 2,
               px: 2,
               display: "flex",
@@ -122,19 +190,21 @@ const SideBar = ({}) => {
               borderRadius: 2,
             }}
           >
-            <Telegram style={{ marginRight: 10, color: "white" }} />
+            <Telegram
+              style={{ marginRight: 10, color: "white", color: "#229ED9" }}
+            />
             <Typography variant="title1" className={classes.menuTitle}>
               Community
             </Typography>
           </Paper>
           <Paper
-            onClick={() => dispatch(setMenuIndex(3))}
+            onClick={() => dispatch(setMenuIndex(6))}
             key={0}
             sx={{
               boxShadow: 0,
 
               bgcolor:
-                menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                menuIndex === 6 ? `rgba(130, 71, 229, 0.3)` : "transparent",
               py: 2,
               px: 2,
               display: "flex",
@@ -145,17 +215,17 @@ const SideBar = ({}) => {
           >
             <Help style={{ marginRight: 10, color: "white" }} />
             <Typography variant="title1" className={classes.menuTitle}>
-              FAQs
+              How To Use
             </Typography>
           </Paper>
           <Paper
-            onClick={() => dispatch(setMenuIndex(3))}
+            onClick={() => dispatch(setMenuIndex(7))}
             key={0}
             sx={{
               boxShadow: 0,
 
               bgcolor:
-                menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                menuIndex === 7 ? `rgba(130, 71, 229, 0.3)` : "transparent",
               py: 2,
               px: 2,
               display: "flex",

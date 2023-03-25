@@ -226,7 +226,7 @@ export default function GridStrategyComponent() {
       setOrderPrices(pricesArr);
       return orderObj;
     }
-  }, [amount, grids, percent, resetFlag]);
+  }, [amount, grids, percent, resetFlag, tokenPriceData]);
 
   const handlePercentage = (event) => {
     let { value } = event.target;

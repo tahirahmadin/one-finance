@@ -167,7 +167,7 @@ export default function AccumulationComponent() {
       variables: { address: process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT },
       pollInterval: 5000,
     });
-  }, [resetFlag]);
+  }, [resetFlag, getPoolDataQuery]);
 
   useEffect(() => {
     if (accountSC) {
@@ -176,7 +176,7 @@ export default function AccumulationComponent() {
         pollInterval: 5000,
       });
     }
-  }, [resetFlag, accountSC]);
+  }, [resetFlag, accountSC, getPoolUserActivityQuery]);
 
   // Get USDT Balance in account
   useEffect(() => {
@@ -187,7 +187,7 @@ export default function AccumulationComponent() {
       }
       asyncFn();
     }
-  }, [accountSC]);
+  }, [accountSC, dispatch]);
   // Get pool data
   useEffect(() => {
     if (data) {
@@ -260,7 +260,7 @@ export default function AccumulationComponent() {
       console.log(tokenReceiveArr);
       return orderObj;
     }
-  }, [amount, grids, percent, resetFlag, loaded]);
+  }, [amount, grids, percent, resetFlag, loaded, tokenPriceData]);
 
   const handlePercentage = (event) => {
     let { value } = event.target;
@@ -706,12 +706,13 @@ export default function AccumulationComponent() {
         </div>
         <Box className={classes.boxCard}>
           {activitiesGraphData &&
-            activitiesGraphData.map((singleActivity) => {
+            activitiesGraphData.map((singleActivity, index) => {
               return (
                 <Grid
                   container
                   p={2}
                   style={{ borderBottom: "0.5px solid #212121" }}
+                  key={index}
                 >
                   <Grid item md={1}>
                     <img

@@ -100,7 +100,7 @@ export default function PoolCard({ poolStaticData, index }) {
         },
       });
     }
-  }, [poolStaticData]);
+  }, [poolStaticData, getPoolDataQuery]);
 
   useEffect(() => {
     if (poolStaticData && accountSC) {
@@ -112,7 +112,7 @@ export default function PoolCard({ poolStaticData, index }) {
         // pollInterval: 5000,
       });
     }
-  }, [poolStaticData, accountSC]);
+  }, [poolStaticData, accountSC, getUserDataQueryByPool]);
 
   useEffect(() => {
     if (data) {

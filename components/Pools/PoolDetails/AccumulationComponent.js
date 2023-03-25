@@ -232,7 +232,7 @@ export default function AccumulationComponent() {
   }, [accountSC, resetFlag]);
 
   const calculateOrdersData = useMemo(async () => {
-    let price = tokenPriceData ? tokenPriceData.usd : 0;
+    let price = tokenPriceData ? tokenPriceData.usd : 0.113;
     let pricesArr = [];
     let tokenReceiveArr = [];
     let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";

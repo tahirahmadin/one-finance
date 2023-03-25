@@ -14,7 +14,7 @@ export const getUserUSDTBalance = async (userAddress) => {
 
   let finalAmount = web3.utils.fromWei(result.toString(), "ether");
 
-  return finalAmount;
+  return parseFloat(finalAmount).toFixed(2);
 };
 
 //READ approved

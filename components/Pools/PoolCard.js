@@ -1,8 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Typography, useTheme } from "@mui/material";
-import { getPoolDetails } from "../../actions/smartActions";
 import Link from "next/link";
+import { useLazyQuery } from "@apollo/client";
+import {
+  GetPoolDataById,
+  GetUserDataQueryByPool,
+} from "./../../queries/graphQueries";
+import Web3 from "web3";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -73,15 +79,57 @@ export default function PoolCard({ poolStaticData, index }) {
   const classes = useStyles();
   const theme = useTheme();
 
+  const [poolGraphData, setPoolGraphData] = useState(null);
+  const [poolUserGraphData, setPoolUserGraphData] = useState(null);
+
+  const { accountSC } = useWeb3Auth();
+
+  const [getPoolDataQuery, { data, loading, error }] =
+    useLazyQuery(GetPoolDataById);
+
+  const [getUserDataQueryByPool, { data: userData }] = useLazyQuery(
+    GetUserDataQueryByPool
+  );
+
   useEffect(() => {
-    async function asyncFn() {
-      let res = await getPoolDetails(
-        "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448"
-      );
-      console.log(res);
+    if (poolStaticData) {
+      getPoolDataQuery({
+        variables: {
+          address: poolStaticData.contractAddress,
+          type: poolStaticData.type,
+        },
+      });
     }
-    asyncFn();
-  }, []);
+  }, [poolStaticData]);
+
+  useEffect(() => {
+    if (poolStaticData && accountSC) {
+      getUserDataQueryByPool({
+        variables: {
+          user: accountSC,
+          type: poolStaticData.type,
+        },
+        // pollInterval: 5000,
+      });
+    }
+  }, [poolStaticData, accountSC]);
+
+  useEffect(() => {
+    if (data) {
+      let poolData = data.pool;
+      setPoolGraphData(poolData);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (userData) {
+      console.log(userData);
+      let userGraphData = userData.userEntities;
+      if (userData.userEntities.length > 0) {
+        setPoolUserGraphData(userGraphData[0]);
+      }
+    }
+  }, [userData]);
 
   return (
     <Box pt={0} className={classes.card}>
@@ -132,7 +180,9 @@ export default function PoolCard({ poolStaticData, index }) {
             fontWeight={700}
             ml={1}
           >
-            $200
+            $
+            {poolUserGraphData &&
+              Web3.utils.fromWei(poolUserGraphData.deposit.toString(), "ether")}
           </Typography>
         </Box>
         <Box
@@ -147,7 +197,7 @@ export default function PoolCard({ poolStaticData, index }) {
           }}
         >
           <Typography variant="body2" className={classes.field} ml={1}>
-            Your Earning
+            In order
           </Typography>
           <Typography
             variant="body2"
@@ -156,7 +206,12 @@ export default function PoolCard({ poolStaticData, index }) {
             fontWeight={700}
             ml={1}
           >
-            +$32
+            $
+            {poolUserGraphData &&
+              Web3.utils.fromWei(
+                poolUserGraphData.fiatBalance.toString(),
+                "ether"
+              )}
           </Typography>
         </Box>
       </Box>
@@ -173,15 +228,17 @@ export default function PoolCard({ poolStaticData, index }) {
             Total Invested($)
           </Typography>
           <Typography variant="body1" className={classes.value}>
-            $324.4K
+            ${" "}
+            {poolGraphData &&
+              Web3.utils.fromWei(poolGraphData.deposit, "ether")}
           </Typography>
         </Box>
         <Box className={classes.infoCard}>
           <Typography variant="small" className={classes.field}>
-            Total PnL($)
+            Participants
           </Typography>
           <Typography variant="body1" className={classes.value}>
-            +$34,434
+            {poolGraphData && poolGraphData.ordersCount}
           </Typography>
         </Box>
       </Box>

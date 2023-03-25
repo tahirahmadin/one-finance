@@ -13,9 +13,8 @@ import {
 import {
   checkUSDTApproved,
   getPoolDetails,
+  getUserUSDTBalance,
 } from "../../../actions/smartActions";
-const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
-import dynamic from "next/dynamic";
 import { useWeb3Auth } from "../../../hooks/useWeb3Auth";
 import TxPopup from "../../../common/TxPopup";
 import ethersServiceProvider from "../../../services/ethersServiceProvider";
@@ -24,8 +23,15 @@ import web3 from "../../../web3";
 import { ArrowDropDown } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../../actions/serverActions";
-import { getPoolDataById } from "../../../reducers/UiReducer";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  GetPoolDataById,
+  GetPoolUserActivityQuery,
+} from "../../../queries/graphQueries";
+import { useLazyQuery } from "@apollo/client";
+import LineChart from "../../Charts/LineChart";
+import TimeAgo from "timeago-react";
+import { setUsdtBalanceOfUser } from "../../../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -130,46 +136,76 @@ export default function AccumulationComponent() {
   const theme = useTheme();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { accumulationPoolData } = store.ui;
 
-  const { active, accountSC, web3AuthSC, connect } = useWeb3Auth();
+  const { accountSC } = useWeb3Auth();
 
-  const [amount, setAmount] = useState("");
+  const { usdtBalance } = store.ui;
+
+  const [amount, setAmount] = useState(1000);
   const [percent, setPercent] = useState(10);
-  const [grids, setGrids] = useState(6);
+  const [grids, setGrids] = useState(4);
   const [stakeCase, setStakeCase] = useState(0);
   const [isApproved, setIsApproved] = useState(false);
   const [resetFlag, setResetFlag] = useState(0);
-  const [orderPrices, setOrderPrices] = useState(null);
+  const [orderPrices, setOrderPrices] = useState([]);
+  const [orderTokenReceived, setOrderTokenReceived] = useState([]);
   const [tokenPriceData, setTokenPriceData] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
-  let data = {
-    options: {
-      chart: {
-        id: "apexchart-example",
-      },
-      xaxis: {
-        categories: grids > 1 ? [...[...Array(grids)].map((ele) => "BUY")] : [],
-      },
-    },
-    series: [
-      {
-        name: "Price",
-        data: orderPrices ? [...orderPrices] : [],
-      },
-    ],
-  };
+  const [poolGraphData, setPoolGraphData] = useState(null);
+  const [activitiesGraphData, setActivitiesGraphData] = useState(null);
+
+  const [getPoolDataQuery, { data, loading, error }] =
+    useLazyQuery(GetPoolDataById);
+
+  const [getPoolUserActivityQuery, { data: activityData }] = useLazyQuery(
+    GetPoolUserActivityQuery
+  );
 
   useEffect(() => {
-    (async () => {
-      console.log("hitting");
-      let data = await dispatch(
-        getPoolDataById(process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT)
-      );
-      console.log(data);
-    })();
+    getPoolDataQuery({
+      variables: { address: process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT },
+      pollInterval: 5000,
+    });
   }, [resetFlag]);
 
+  useEffect(() => {
+    if (accountSC) {
+      getPoolUserActivityQuery({
+        variables: { user: accountSC, type: "ACCUMULATION" },
+        pollInterval: 5000,
+      });
+    }
+  }, [resetFlag, accountSC]);
+
+  // Get USDT Balance in account
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let res = await getUserUSDTBalance(accountSC);
+        await dispatch(setUsdtBalanceOfUser(res));
+      }
+      asyncFn();
+    }
+  }, [accountSC]);
+  // Get pool data
+  useEffect(() => {
+    if (data) {
+      let poolData = data.pool;
+      setPoolGraphData(poolData);
+      setLoaded(true);
+    }
+  }, [data]);
+
+  // Get user pool data
+  useEffect(() => {
+    if (activityData) {
+      console.log(activityData.userActivities);
+      setActivitiesGraphData(activityData.userActivities);
+    }
+  }, [activityData]);
+
+  // Check price of token
   useEffect(() => {
     async function asyncFn() {
       let res = await getTokenPriceStats();
@@ -198,15 +234,18 @@ export default function AccumulationComponent() {
   const calculateOrdersData = useMemo(async () => {
     let price = tokenPriceData ? tokenPriceData.usd : 0;
     let pricesArr = [];
+    let tokenReceiveArr = [];
     let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
+
     if (amount > 0 && percent > 0 && grids > 0) {
       let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      let orderValueForBuy = price;
+      let orderPriceForBuy = price;
 
       let buyOrders = [...Array(grids)].map((ele, index) => {
-        orderValueForBuy = (orderValueForBuy * (100 - percent)) / 100;
-        pricesArr.push(orderValueForBuy.toFixed(2));
-        return Web3.utils.toWei(orderValueForBuy.toString(), "ether");
+        orderPriceForBuy = (orderPriceForBuy * (100 - percent)) / 100;
+        pricesArr.push(orderPriceForBuy.toFixed(3));
+        tokenReceiveArr.push((amount / grids / orderPriceForBuy).toFixed(2));
+        return Web3.utils.toWei(orderPriceForBuy.toString(), "ether");
       });
 
       let orderObj = {
@@ -214,15 +253,18 @@ export default function AccumulationComponent() {
         fiatAmount,
         selectedTokenAddress,
       };
-      console.log(pricesArr);
+
       setOrderPrices(pricesArr);
+      setOrderTokenReceived(tokenReceiveArr);
+      console.log(pricesArr);
+      console.log(tokenReceiveArr);
       return orderObj;
     }
-  }, [amount, grids, percent, resetFlag]);
+  }, [amount, grids, percent, resetFlag, loaded]);
 
   const handlePercentage = (event) => {
     let { value } = event.target;
-    let min = 1;
+    let min = 0;
     let max = 50;
     value = Math.max(Number(min), Math.min(Number(max), Number(value)));
 
@@ -355,17 +397,23 @@ export default function AccumulationComponent() {
   };
 
   const getFiatSpent = () => {
-    let deposit = Web3.utils.fromWei(accumulationPoolData.deposit, "ether");
-    let currentBalance = Web3.utils.fromWei(
-      accumulationPoolData.fiatBalance,
-      "ether"
-    );
+    let deposit = Web3.utils.fromWei(poolGraphData.deposit, "ether");
+    let currentBalance = Web3.utils.fromWei(poolGraphData.fiatBalance, "ether");
     let spent = parseInt(deposit) - parseInt(currentBalance);
     return spent;
   };
+
+  const getActivityActionName = (action) => {
+    if (action === "EXECUTE_BUY_ORDER") {
+      return "BUY";
+    } else if (action === "EXECUTE_SELL_ORDER") {
+      return "SeLL";
+    } else {
+      return action;
+    }
+  };
   return (
     <Box className={classes.background}>
-      {console.log(accumulationPoolData)}
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
       <Container>
         <Typography variant="h2" className={classes.pageTitle}>
@@ -432,7 +480,7 @@ export default function AccumulationComponent() {
             </Box>
           </Grid>
           <Grid item md={6}>
-            {accumulationPoolData && (
+            {poolGraphData && (
               <Grid container spacing={2}>
                 <Grid item md={4}>
                   <Box className={classes.statsCard}>
@@ -447,11 +495,7 @@ export default function AccumulationComponent() {
                       variant="h5"
                       className={classes.statsCardHeading}
                     >
-                      $
-                      {Web3.utils.fromWei(
-                        accumulationPoolData.deposit,
-                        "ether"
-                      )}
+                      ${Web3.utils.fromWei(poolGraphData.deposit, "ether")}
                     </Typography>
                   </Box>
                 </Grid>
@@ -485,7 +529,7 @@ export default function AccumulationComponent() {
                       variant="h5"
                       className={classes.statsCardHeading}
                     >
-                      {accumulationPoolData.ordersCount}
+                      {poolGraphData.ordersCount}
                     </Typography>
                   </Box>
                 </Grid>
@@ -537,6 +581,7 @@ export default function AccumulationComponent() {
                         fontWeight: 600,
                         color: "#f9f9f9",
                       }}
+                      type="number"
                     />
                   </Box>
                   <Box
@@ -549,12 +594,12 @@ export default function AccumulationComponent() {
                       variant="small"
                       textAlign={"right"}
                       style={{
-                        width: 100,
+                        width: 200,
                         display: "flex",
                         justifyContent: "flex-end",
                       }}
                     >
-                      Available: 21
+                      Available: {usdtBalance}
                     </Typography>
                     <Box
                       display="flex"
@@ -593,7 +638,8 @@ export default function AccumulationComponent() {
                   </Typography>
                   <Input
                     value={grids}
-                    onInput={(event) => setGrids(event.target.value)}
+                    type="number"
+                    onInput={(event) => setGrids(parseInt(event.target.value))}
                     fullWidth
                     placeholder="Enter grid count here"
                     disableUnderline
@@ -642,14 +688,11 @@ export default function AccumulationComponent() {
                   Visualise your orders in real-time
                 </Typography>
               </div>
-              <div id="chart">
-                <ApexCharts
-                  options={data.options}
-                  series={data.series}
-                  type="line"
-                  height={350}
-                />
-              </div>
+              <LineChart
+                xaxis={orderPrices}
+                yaxis={orderTokenReceived}
+                yaxisMax={parseFloat(orderPrices[0]) * 1.2}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -662,399 +705,151 @@ export default function AccumulationComponent() {
           </Typography>
         </div>
         <Box className={classes.boxCard}>
-          <Grid container p={2} style={{ borderBottom: "0.5px solid #212121" }}>
-            <Grid item md={1}>
-              <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/ethereum-eth-coin-4722965-3917991.png"
-                alt="ETH"
-                height="36px"
-              />
-            </Grid>
-            <Grid
-              item
-              md={1}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={600}
-                  color={"green"}
+          {activitiesGraphData &&
+            activitiesGraphData.map((singleActivity) => {
+              return (
+                <Grid
+                  container
+                  p={2}
+                  style={{ borderBottom: "0.5px solid #212121" }}
                 >
-                  BUY
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box>
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $0.32
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="center"
-                alignItems="flex-start"
-              >
-                <Box>
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={14}
+                  <Grid item md={1}>
+                    <img
+                      src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
+                      alt="ETH"
+                      height="36px"
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    md={1}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    234 PBR
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $71
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  32 mins ago
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid container p={2} style={{ borderBottom: "0.5px solid #212121" }}>
-            <Grid item md={1}>
-              <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/ethereum-eth-coin-4722965-3917991.png"
-                alt="ETH"
-                height="36px"
-              />
-            </Grid>
-            <Grid
-              item
-              md={1}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={600}
-                  color={"green"}
-                >
-                  BUY
-                </Typography>
-              </Box>
-            </Grid>
+                    <Box
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="flex-start"
+                      alignItems="flex-start"
+                    >
+                      <Typography
+                        variant="body2"
+                        textAlign="left"
+                        fontWeight={600}
+                        color={"green"}
+                      >
+                        {getActivityActionName(singleActivity.action)}
+                      </Typography>
+                    </Box>
+                  </Grid>
 
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box>
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $0.32
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="center"
-                alignItems="flex-start"
-              >
-                <Box>
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={14}
+                  <Grid
+                    item
+                    md={2}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    234 PBR
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $71
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  32 mins ago
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid container p={2} style={{ borderBottom: "0.5px solid #212121" }}>
-            <Grid item md={1}>
-              <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/ethereum-eth-coin-4722965-3917991.png"
-                alt="ETH"
-                height="36px"
-              />
-            </Grid>
-            <Grid
-              item
-              md={1}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={600}
-                  color={"red"}
-                >
-                  SELL
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box>
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $0.32
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="center"
-                alignItems="flex-start"
-              >
-                <Box>
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={14}
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        textAlign="left"
+                        fontWeight={400}
+                        color={"#bdbdbd"}
+                        fontSize={14}
+                      >
+                        $ {singleActivity.price}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    md={2}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="center"
+                    alignItems="center"
                   >
-                    234 PBR
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  $71
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              md={2}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="flex-start"
-                alignItems="flex-start"
-              >
-                <Typography
-                  variant="body2"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#bdbdbd"}
-                  fontSize={14}
-                >
-                  32 mins ago
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
+                    <Box
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="center"
+                      alignItems="flex-start"
+                    >
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          textAlign="left"
+                          fontWeight={400}
+                          color={"#bdbdbd"}
+                          fontSize={14}
+                        >
+                          {parseFloat(
+                            Web3.utils.fromWei(singleActivity.token, "ether")
+                          ).toFixed(2)}{" "}
+                          PBR
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    md={2}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Box
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="flex-start"
+                      alignItems="flex-start"
+                    >
+                      <Typography
+                        variant="body2"
+                        textAlign="left"
+                        fontWeight={400}
+                        color={"#bdbdbd"}
+                        fontSize={14}
+                      >
+                        ${Web3.utils.fromWei(singleActivity.fiat, "ether")}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    md={2}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Box
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="flex-start"
+                      alignItems="flex-start"
+                    >
+                      <Typography
+                        variant="body2"
+                        textAlign="left"
+                        fontWeight={400}
+                        color={"#bdbdbd"}
+                        fontSize={14}
+                      >
+                        <TimeAgo
+                          datetime={parseInt(singleActivity.timestamp) * 1000}
+                        />
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
+              );
+            })}
         </Box>
       </Box>
     </Box>

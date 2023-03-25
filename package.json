@@ -63,6 +63,7 @@
     "sass": "^1.54.2",
     "stream-browserify": "^3.0.0",
     "swiper": "^8.4.5",
+    "timeago-react": "^3.0.6",
     "use-subscription": "^1.8.0",
     "util": "^0.12.5",
     "web3": "1.7.4"

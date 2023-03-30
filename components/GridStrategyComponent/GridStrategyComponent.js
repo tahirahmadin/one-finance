@@ -10,21 +10,18 @@ import {
   Slider,
   Container,
 } from "@mui/material";
-import {
-  checkUSDTApproved,
-  getPoolDetails,
-} from "../../../actions/smartActions";
+import { checkUSDTApproved, getPoolDetails } from "../../actions/smartActions";
 import Link from "next/link";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 import dynamic from "next/dynamic";
-import { useWeb3Auth } from "../../../hooks/useWeb3Auth";
-import TxPopup from "../../../common/TxPopup";
-import ethersServiceProvider from "../../../services/ethersServiceProvider";
-import { tokenInstance, tradingInstance } from "../../../contracts";
-import web3 from "../../../web3";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import TxPopup from "../../common/TxPopup";
+import ethersServiceProvider from "../../services/ethersServiceProvider";
+import { tokenInstance, tradingInstance } from "../../contracts";
+import web3 from "../../web3";
 import { ArrowDropDown } from "@mui/icons-material";
 import Web3 from "web3";
-import { getTokenPriceStats } from "../../../actions/serverActions";
+import { getTokenPriceStats } from "../../actions/serverActions";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -360,10 +357,10 @@ export default function GridStrategyComponent() {
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
       <Container>
-        <Typography variant="h2" className={classes.pageTitle}>
+        <Typography variant="h3" className={classes.pageTitle}>
           Spot Grid Strategy
         </Typography>
-        <Typography variant="body2" className={classes.pageSubtitle}>
+        <Typography variant="small" className={classes.pageSubtitle}>
           Place order inside the strategy pools and enjoy high yeilds
         </Typography>
         <Grid

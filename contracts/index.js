@@ -46,7 +46,7 @@ export const tradingInstance = (provider = "unavailable") => {
 };
 
 export const accumulationInstance = (provider = "unavailable") => {
-  let contract_address = process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT;
+  let contract_address = constants.contracts.accumulation;
   try {
     var web3 = web3Instance(provider);
     var accumulationContract = new web3.eth.Contract(

@@ -29,11 +29,12 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 400,
     maxWidth: 540,
     position: "relative",
-    background: "#fff",
-    border: "15px solid #6A55EA",
+    background: "#000000",
+    border: "2px solid #bdbdbd",
     display: "flex",
     alignItems: "center",
     zIndex: 11,
+    borderRadius: 10,
     [theme.breakpoints.down("md")]: {
       border: "10px solid #D1FE1D",
       width: "100%",
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     height: 22,
     width: 22,
     cursor: "pointer",
+    color: "white",
     [theme.breakpoints.down("md")]: {
       top: 5,
       right: 5,
@@ -58,140 +60,29 @@ const useStyles = makeStyles((theme) => ({
       width: 18,
     },
   },
-  inputWrapper: {
-    padding: 10,
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    border: "1px solid #757575",
-    borderRadius: 18,
-    width: "80%",
-    padding: 6,
-    outline: "none",
-    color: "#212121",
-    textAlign: "left",
-    paddingLeft: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    fontSize: 14,
-    fontFamily: "Karla",
-  },
+
   heading: {
-    color: "#000000",
+    color: "#f9f9f9",
     textAlign: "center",
     fontSize: 30,
-    lineHeight: "20%",
+    lineHeight: 1,
+    paddingTop: 5,
     [theme.breakpoints.down("md")]: {
       fontSize: 24,
     },
   },
 
   para: {
-    color: "#212121",
+    color: "#bdbdbd",
     textAlign: "center",
     fontSize: 13,
     fontWeight: 300,
-    paddingTop: 15,
+    paddingTop: 5,
+
     [theme.breakpoints.down("md")]: {
       fontSize: 13,
       paddingTop: 15,
     },
-  },
-  activateButton: {
-    width: "fit-content",
-    height: "50px",
-    background: "#FF5AFF",
-    boxSizing: "border-box",
-    borderRadius: "15px",
-    fontSize: 16,
-    lineHeight: "33px",
-    color: "#ffffff",
-    fontWeight: 700,
-
-    padding: "12px 30px 12px 30px",
-    "&:hover": {
-      background: "#FFB469",
-    },
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
-  },
-  explorerButton: {
-    width: "fit-content",
-
-    background: "transparent",
-    border: "1px solid #FFFFFF",
-    boxSizing: "border-box",
-    borderRadius: "15px",
-    fontSize: 16,
-    lineHeight: "33px",
-    color: theme.palette.primary.main,
-    fontWeight: 500,
-    marginTop: 20,
-    padding: "10px 40px 10px 40px",
-
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
-  },
-  registerButton: {
-    width: "fit-content",
-    height: "45px",
-    background: "#FF87FF",
-    border: "1px solid #FFFFFF",
-    boxSizing: "border-box",
-    borderRadius: "20px",
-    fontSize: 16,
-    lineHeight: "33px",
-    color: "#000000",
-
-    marginTop: 20,
-    padding: "12px 30px 12px 30px",
-    "&:hover": {
-      background: "#FFB469",
-    },
-    [theme.breakpoints.down("md")]: {
-      padding: "12px 20px 12px 20px",
-      fontSize: 18,
-    },
-  },
-
-  svgImage: {
-    width: 100,
-    [theme.breakpoints.down("md")]: {
-      width: 70,
-    },
-  },
-  spoon1Image: {
-    width: 40,
-    height: "fit-content",
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  },
-  spoon2Image: {
-    width: 30,
-    height: "fit-content",
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  },
-  iconWrapper: {
-    marginRight: 10,
-    backgroundColor: "#FF87FF",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: 42,
-    height: 42,
-  },
-  icon: {
-    width: 25,
-    height: 25,
-    color: "white",
   },
 }));
 
@@ -224,12 +115,12 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end align-items-start"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer", color: "black" }} />
+                  <Close style={{ cursor: "pointer", color: "white" }} />
                 </div>
                 <div>
                   <div className="text-center">
                     <img
-                      src="https://cdn3d.iconscout.com/3d/premium/thumb/hourglass-4029229-3337928.png"
+                      src="https://cdn3d.iconscout.com/3d/premium/thumb/time-is-money-5374083-4492219.png"
                       alt="Waiting"
                       height="150px"
                     />
@@ -270,7 +161,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer", color: "black" }} />
+                  <Close style={{ cursor: "pointer", color: "white" }} />
                 </div>
                 <div>
                   <div className="text-center">
@@ -315,12 +206,12 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer", color: "black" }} />
+                  <Close style={{ cursor: "pointer", color: "white" }} />
                 </div>
                 <div>
                   <div className="text-center">
                     <img
-                      src="https://cliply.co/wp-content/uploads/2020/06/422006060_BALLOONS_3D_ICON_400px.gif"
+                      src="https://cdn3d.iconscout.com/3d/premium/thumb/success-5825150-4874092.png"
                       alt="success"
                       height="150px"
                     />
@@ -360,12 +251,12 @@ const TxPopup = ({ txCase, resetPopup }) => {
                   className="d-flex justify-content-end"
                   onClick={resetPopup}
                 >
-                  <Close style={{ cursor: "pointer", color: "black" }} />
+                  <Close style={{ cursor: "pointer", color: "white" }} />
                 </div>
                 <div>
                   <div className="text-center">
                     <img
-                      src="https://cdn3d.iconscout.com/3d/premium/thumb/no-security-4128252-3580506.png"
+                      src="https://cdn3d.iconscout.com/3d/premium/thumb/expired-time-warning-5342745-4468817.png"
                       alt="failed"
                       height="150px"
                     />

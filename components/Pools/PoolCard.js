@@ -181,8 +181,12 @@ export default function PoolCard({ poolStaticData, index }) {
             ml={1}
           >
             $
-            {poolUserGraphData &&
-              Web3.utils.fromWei(poolUserGraphData.deposit.toString(), "ether")}
+            {poolUserGraphData
+              ? Web3.utils.fromWei(
+                  poolUserGraphData.deposit.toString(),
+                  "ether"
+                )
+              : "0"}
           </Typography>
         </Box>
         <Box
@@ -207,11 +211,12 @@ export default function PoolCard({ poolStaticData, index }) {
             ml={1}
           >
             $
-            {poolUserGraphData &&
-              Web3.utils.fromWei(
-                poolUserGraphData.fiatBalance.toString(),
-                "ether"
-              )}
+            {poolUserGraphData
+              ? Web3.utils.fromWei(
+                  poolUserGraphData.fiatBalance.toString(),
+                  "ether"
+                )
+              : "0"}
           </Typography>
         </Box>
       </Box>
@@ -230,7 +235,9 @@ export default function PoolCard({ poolStaticData, index }) {
           <Typography variant="body1" className={classes.value}>
             ${" "}
             {poolGraphData &&
-              Web3.utils.fromWei(poolGraphData.deposit, "ether")}
+              parseFloat(
+                Web3.utils.fromWei(poolGraphData.deposit, "ether")
+              ).toFixed(2)}
           </Typography>
         </Box>
         <Box className={classes.infoCard}>

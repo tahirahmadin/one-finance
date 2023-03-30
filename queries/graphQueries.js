@@ -16,9 +16,7 @@ export const GetPoolDataById = gql`
 
 export const GetPoolUserActivityQuery = gql`
   query getPoolUserActivityQuery($user: String, $type: String) {
-    userActivities(
-      where: { user: $user, action_not: INVESTED, strategyType: $type }
-    ) {
+    userActivities(where: { user: $user, strategyType: $type }) {
       user
       token
       timestamp

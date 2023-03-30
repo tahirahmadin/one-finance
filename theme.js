@@ -48,46 +48,47 @@ let themes = createTheme({
     fontFamily: "Poppins, Roboto, sans-serif",
     h1: {
       fontFamily: "Poppins",
-      fontSize: "2.813rem",
+      fontSize: "2.2rem",
       color: "#f9f9f9",
     },
     h2: {
       fontFamily: "Poppins",
-      fontSize: "2.1875rem",
+      fontSize: "1.8rem",
       color: "#f9f9f9",
     },
     h3: {
       fontFamily: "Poppins",
-      fontSize: "1.75rem",
+      fontSize: "1.5rem",
       color: "#f9f9f9",
     },
     h4: {
       fontFamily: "Poppins",
-      fontSize: "1.75rem",
+      fontSize: "1.4rem",
       fontWeight: "bold",
       color: "#f9f9f9",
     },
     h5: {
       fontFamily: "Poppins",
-      fontSize: "1.5rem",
+      fontSize: "1.3rem",
       color: "#f9f9f9",
     },
     h6: {
       fontFamily: "Poppins",
-      fontSize: "1.375rem",
+      fontSize: "1.1rem",
       fontWeight: "normal",
       color: "#f9f9f9",
       lineHeight: 1,
     },
+
     subtitle1: {
       fontFamily: "Poppins",
-      fontSize: "1.25rem",
+      fontSize: "1.1rem",
       color: "#bdbdbd",
       lineHeight: 1,
     },
     body1: {
       fontFamily: "Poppins",
-      fontSize: "1.125rem",
+      fontSize: "1.05rem",
       color: "#bdbdbd",
     },
     body2: {
@@ -97,7 +98,7 @@ let themes = createTheme({
     },
     body3: {
       fontFamily: "Poppins",
-      fontSize: "1rem",
+      fontSize: "0.9rem",
       wordBreak: "break-word",
       color: "#bdbdbd",
       lineHeight: 1,

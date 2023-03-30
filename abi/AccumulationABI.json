@@ -6,8 +6,7 @@
         "internalType": "contract ISwapRouter",
         "name": "_swapRouter",
         "type": "address"
-      },
-      { "internalType": "address", "name": "_manager", "type": "address" }
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -225,9 +224,9 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "manager",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "managers",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },

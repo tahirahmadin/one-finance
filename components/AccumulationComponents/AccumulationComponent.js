@@ -14,24 +14,26 @@ import {
   checkUSDTApproved,
   getPoolDetails,
   getUserUSDTBalance,
-} from "../../../actions/smartActions";
-import { useWeb3Auth } from "../../../hooks/useWeb3Auth";
-import TxPopup from "../../../common/TxPopup";
-import ethersServiceProvider from "../../../services/ethersServiceProvider";
-import { accumulationInstance, tokenInstance } from "../../../contracts";
-import web3 from "../../../web3";
+} from "../../actions/smartActions";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import TxPopup from "../../common/TxPopup";
+import ethersServiceProvider from "../../services/ethersServiceProvider";
+import { accumulationInstance, tokenInstance } from "../../contracts";
+import web3 from "../../web3";
 import { ArrowDropDown } from "@mui/icons-material";
 import Web3 from "web3";
-import { getTokenPriceStats } from "../../../actions/serverActions";
+import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
 import {
   GetPoolDataById,
   GetPoolUserActivityQuery,
-} from "../../../queries/graphQueries";
+} from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
-import LineChart from "../../Charts/LineChart";
+import LineChart from "../../common/Charts/LineChart";
 import TimeAgo from "timeago-react";
-import { setUsdtBalanceOfUser } from "../../../reducers/UiReducer";
+import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
+import constants from "../../utils/constants";
+import PoolActivities from "../resuableComponents/PoolActivities";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -92,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     color: "#f9f9f9",
     textAlign: "left",
-    fontSize: "1.2rem",
   },
   statsCardPara: {
     textAlign: "left",
@@ -108,13 +109,12 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     fontWeight: 600,
-    fontSize: 22,
     color: "#f9f9f9",
     textAlign: "left",
   },
   inputWrapper: {
     border: "1px solid #2d2d32",
-    padding: "6px 20px 6px 20px",
+    padding: "2px 20px 2px 20px",
     borderRadius: 10,
     backgroundColor: "rgba(106, 85, 234,0.03)",
   },
@@ -164,7 +164,7 @@ export default function AccumulationComponent() {
 
   useEffect(() => {
     getPoolDataQuery({
-      variables: { address: process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT },
+      variables: { address: constants.contracts.accumulation },
       pollInterval: 5000,
     });
   }, [resetFlag, getPoolDataQuery]);
@@ -221,8 +221,7 @@ export default function AccumulationComponent() {
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
-        let accumulation_contract =
-          process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT;
+        let accumulation_contract = constants.contracts.accumulation;
         let res = await checkUSDTApproved(accountSC, accumulation_contract);
 
         setIsApproved(parseInt(res) > 0);
@@ -232,33 +231,43 @@ export default function AccumulationComponent() {
   }, [accountSC, resetFlag]);
 
   const calculateOrdersData = useMemo(async () => {
-    let price = tokenPriceData ? tokenPriceData.usd : 0.113;
-    let pricesArr = [];
-    let tokenReceiveArr = [];
-    let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
+    if (tokenPriceData) {
+      let price = tokenPriceData ? tokenPriceData.usd : 0.113;
+      let priceInWei = Web3.utils.toWei(tokenPriceData.usd.toString(), "ether");
+      let pricesArr = [];
+      let tokenReceiveArr = [];
+      let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
 
-    if (amount > 0 && percent > 0 && grids > 0) {
-      let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      let orderPriceForBuy = price;
+      if (amount > 0 && percent > 0 && grids > 0) {
+        let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
+        let orderPriceForBuy = priceInWei;
 
-      let buyOrders = [...Array(grids)].map((ele, index) => {
-        orderPriceForBuy = (orderPriceForBuy * (100 - percent)) / 100;
-        pricesArr.push(orderPriceForBuy.toFixed(3));
-        tokenReceiveArr.push((amount / grids / orderPriceForBuy).toFixed(2));
-        return Web3.utils.toWei(orderPriceForBuy.toString(), "ether");
-      });
+        let buyOrders = [...Array(grids)].map((ele, index) => {
+          orderPriceForBuy = (orderPriceForBuy * (100 - percent)) / 100;
+          console.log(orderPriceForBuy);
+          let orderPriceInUsd = parseFloat(
+            Web3.utils.fromWei(orderPriceForBuy.toString(), "ether")
+          ).toFixed(3);
+          console.log(orderPriceForBuy);
+          console.log(orderPriceInUsd);
+          pricesArr.push(orderPriceInUsd);
+          tokenReceiveArr.push((amount / grids / orderPriceInUsd).toFixed(2));
+          return Web3.utils.toWei(orderPriceForBuy.toString(), "ether");
+        });
 
-      let orderObj = {
-        buyOrders,
-        fiatAmount,
-        selectedTokenAddress,
-      };
+        let orderObj = {
+          buyOrders,
+          fiatAmount,
+          selectedTokenAddress,
+        };
 
-      setOrderPrices(pricesArr);
-      setOrderTokenReceived(tokenReceiveArr);
-      console.log(pricesArr);
-      console.log(tokenReceiveArr);
-      return orderObj;
+        setOrderPrices(pricesArr);
+        setOrderTokenReceived(tokenReceiveArr);
+        console.log(pricesArr);
+        console.log(tokenReceiveArr);
+        console.log(orderObj);
+        return orderObj;
+      }
     }
   }, [amount, grids, percent, resetFlag, loaded, tokenPriceData]);
 
@@ -276,7 +285,7 @@ export default function AccumulationComponent() {
     setStakeCase(1);
 
     let userAddress = accountSC;
-    let accumulation_contract = process.env.NEXT_PUBLIC_ACCUMULATION_CONTRACT;
+    let accumulation_contract = constants.contracts.accumulation;
     let provider = ethersServiceProvider.web3AuthInstance;
 
     let tokenContract = tokenInstance(provider.provider);
@@ -403,23 +412,14 @@ export default function AccumulationComponent() {
     return spent;
   };
 
-  const getActivityActionName = (action) => {
-    if (action === "EXECUTE_BUY_ORDER") {
-      return "BUY";
-    } else if (action === "EXECUTE_SELL_ORDER") {
-      return "SeLL";
-    } else {
-      return action;
-    }
-  };
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
       <Container>
-        <Typography variant="h2" className={classes.pageTitle}>
+        <Typography variant="h3" className={classes.pageTitle}>
           Accumulate - Eat The Dip
         </Typography>
-        <Typography variant="body2" className={classes.pageSubtitle}>
+        <Typography variant="small" className={classes.pageSubtitle}>
           Start the strategy and eat every dip automatically without hassle
         </Typography>
         <Grid
@@ -427,57 +427,66 @@ export default function AccumulationComponent() {
           display={"flex"}
           justifyContent="space-between"
           spacing={12}
-          pt={3}
+          pt={1}
         >
           <Grid item md={6}>
-            <Box
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="space-between"
-              alignItems="center"
-              style={{
-                border: "1px solid #2d2d32",
-                padding: "10px 10px 10px 10px",
-                borderRadius: 10,
-              }}
-            >
-              <Box
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                <img
-                  src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
-                  alt="PBR"
-                  height="42px"
-                />
-                <Box ml={1}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight={600}
-                    color={"#f9f9f9"}
-                    noWrap
-                  >
-                    PBR{" "}
-                    {tokenPriceData && (
-                      <small
-                        className="blink_me"
-                        style={{ color: "green", fontSize: 12 }}
-                      >
-                        ${tokenPriceData.usd.toFixed(3)}
-                      </small>
-                    )}
-                  </Typography>
-                  <Typography variant="small" noWrap>
-                    PolkaBridge
-                  </Typography>
-                </Box>
-              </Box>
-              <Box>
-                <ArrowDropDown style={{ color: "white" }} />
-              </Box>
-            </Box>
+            {poolGraphData && (
+              <Grid container spacing={2}>
+                <Grid item md={5}>
+                  <Box className={classes.statsCard}>
+                    <Typography
+                      variant="body2"
+                      className={classes.statsCardPara}
+                      fontWeight={300}
+                    >
+                      Total Invested($) :{" "}
+                      <strong style={{ fontWeight: 600 }}>
+                        $
+                        {parseFloat(
+                          Web3.utils.fromWei(poolGraphData.deposit, "ether")
+                        ).toFixed(2)}
+                      </strong>
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item md={3}>
+                  <Box className={classes.statsCard}>
+                    <Typography
+                      variant="body2"
+                      className={classes.statsCardPara}
+                      fontWeight={300}
+                    >
+                      Fiat Spent:{" "}
+                      <strong style={{ fontWeight: 600 }}>
+                        ${getFiatSpent()}
+                      </strong>
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      className={classes.statsCardHeading}
+                    ></Typography>
+                  </Box>
+                </Grid>
+                <Grid item md={4}>
+                  <Box className={classes.statsCard}>
+                    <Typography
+                      variant="body2"
+                      className={classes.statsCardPara}
+                      fontWeight={300}
+                    >
+                      Total Orders:{" "}
+                      <strong style={{ fontWeight: 600 }}>
+                        {poolGraphData.ordersCount}
+                      </strong>
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      className={classes.statsCardHeading}
+                    ></Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
           </Grid>
           <Grid item md={6}>
             {poolGraphData && (
@@ -489,13 +498,17 @@ export default function AccumulationComponent() {
                       className={classes.statsCardPara}
                       fontWeight={300}
                     >
-                      Total Invested($)
+                      Your Deposits($)
                     </Typography>
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       className={classes.statsCardHeading}
+                      style={{ paddingTop: 3 }}
                     >
-                      ${Web3.utils.fromWei(poolGraphData.deposit, "ether")}
+                      $
+                      {parseFloat(
+                        Web3.utils.fromWei(poolGraphData.deposit, "ether")
+                      ).toFixed(2)}
                     </Typography>
                   </Box>
                 </Grid>
@@ -506,10 +519,11 @@ export default function AccumulationComponent() {
                       className={classes.statsCardPara}
                       fontWeight={300}
                     >
-                      Fiat Spent
+                      Your Fiat Spent
                     </Typography>
                     <Typography
-                      variant="h5"
+                      variant="h6"
+                      style={{ paddingTop: 3 }}
                       className={classes.statsCardHeading}
                     >
                       ${getFiatSpent()}
@@ -523,10 +537,11 @@ export default function AccumulationComponent() {
                       className={classes.statsCardPara}
                       fontWeight={300}
                     >
-                      Total Orders
+                      Your Orders
                     </Typography>
                     <Typography
-                      variant="h5"
+                      variant="h6"
+                      style={{ paddingTop: 3 }}
                       className={classes.statsCardHeading}
                     >
                       {poolGraphData.ordersCount}
@@ -548,7 +563,7 @@ export default function AccumulationComponent() {
             <Box className={classes.card}>
               <div className="d-flex flex-column justify-content-around">
                 <div>
-                  <Typography variant="h5" fontWeight={600} lineHeight={1}>
+                  <Typography variant="h6" fontWeight={600} lineHeight={1}>
                     Create strategy
                   </Typography>
                   <Typography variant="small" lineHeight={1}>
@@ -557,9 +572,68 @@ export default function AccumulationComponent() {
                 </div>
 
                 <Box
+                  mt={2}
+                  display="flex"
+                  flexDirection={"row"}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  style={{
+                    border: "1px solid #2d2d32",
+                    padding: "10px 10px 10px 10px",
+                    borderRadius: 10,
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <img
+                      src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
+                      alt="PBR"
+                      height="28px"
+                    />
+                    <Box ml={1}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        color={"#f9f9f9"}
+                        lineHeight={1}
+                        padding={0}
+                        noWrap
+                        margin={0}
+                        spacing={0}
+                        gutterBottom={0}
+                      >
+                        PBR{" "}
+                        {tokenPriceData && (
+                          <small
+                            className="blink_me"
+                            style={{ color: "green", fontSize: 11 }}
+                          >
+                            ${tokenPriceData.usd.toFixed(3)}
+                          </small>
+                        )}
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        lineHeight={1}
+                        noWrap
+                        style={{ fontSize: 10 }}
+                      >
+                        PolkaBridge
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <ArrowDropDown style={{ color: "white" }} />
+                  </Box>
+                </Box>
+                <Box
                   display={"flex"}
                   justifyContent={"space-between"}
-                  mt={2}
+                  mt={1}
                   className={classes.inputWrapper}
                 >
                   <Box>
@@ -577,7 +651,7 @@ export default function AccumulationComponent() {
                       placeholder="0"
                       disableUnderline
                       style={{
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: 600,
                         color: "#f9f9f9",
                       }}
@@ -616,13 +690,13 @@ export default function AccumulationComponent() {
                         <img
                           src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
                           alt="USDT"
-                          height="30px"
+                          height="28px"
                         />
                       </Box>
                       <Typography
                         variant="body2"
                         className={classes.para}
-                        fontSize={20}
+                        fontSize={16}
                         textAlign="left"
                         fontWeight={600}
                       >
@@ -632,7 +706,7 @@ export default function AccumulationComponent() {
                   </Box>
                 </Box>
 
-                <Box mt={2} className={classes.inputWrapper}>
+                <Box mt={1} className={classes.inputWrapper}>
                   <Typography variant="small" textAlign={"left"} lineHeight={1}>
                     No of orders:
                   </Typography>
@@ -643,11 +717,11 @@ export default function AccumulationComponent() {
                     fullWidth
                     placeholder="Enter grid count here"
                     disableUnderline
-                    style={{ fontSize: 24, fontWeight: 600 }}
+                    style={{ fontSize: 20, fontWeight: 600 }}
                   />
                 </Box>
 
-                <Box mt={2} className={classes.inputWrapper}>
+                <Box mt={1} className={classes.inputWrapper}>
                   <Typography variant="small" textAlign={"left"} lineHeight={1}>
                     Trigger Percent:
                   </Typography>
@@ -658,7 +732,7 @@ export default function AccumulationComponent() {
                     fullWidth
                     placeholder="10"
                     onChange={(e) => handlePercentage(e)}
-                    style={{ fontSize: 22, fontWeight: 600 }}
+                    style={{ fontSize: 20, fontWeight: 600 }}
                   />
                 </Box>
 
@@ -676,12 +750,7 @@ export default function AccumulationComponent() {
           <Grid item md={6}>
             <Box className={classes.card}>
               <div>
-                <Typography
-                  variant="subtitle1"
-                  fontWeight={600}
-                  color={"#f9f9f9"}
-                  noWrap
-                >
+                <Typography variant="h6" fontWeight={600} noWrap>
                   Orders chart
                 </Typography>
                 <Typography variant="small" noWrap>
@@ -696,163 +765,21 @@ export default function AccumulationComponent() {
             </Box>
           </Grid>
         </Grid>
-      </Container>
-
-      <Box mt={4}>
-        <div>
-          <Typography variant="h4" className={classes.heading} fontWeight={700}>
-            Your Trades
-          </Typography>
-        </div>
-        <Box className={classes.boxCard}>
-          {activitiesGraphData &&
-            activitiesGraphData.map((singleActivity, index) => {
-              return (
-                <Grid
-                  container
-                  p={2}
-                  style={{ borderBottom: "0.5px solid #212121" }}
-                  key={index}
-                >
-                  <Grid item md={1}>
-                    <img
-                      src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
-                      alt="ETH"
-                      height="36px"
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    md={1}
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection={"column"}
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Typography
-                        variant="body2"
-                        textAlign="left"
-                        fontWeight={600}
-                        color={"green"}
-                      >
-                        {getActivityActionName(singleActivity.action)}
-                      </Typography>
-                    </Box>
-                  </Grid>
-
-                  <Grid
-                    item
-                    md={2}
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#bdbdbd"}
-                        fontSize={14}
-                      >
-                        $ {singleActivity.price}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    md={2}
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection={"column"}
-                      justifyContent="center"
-                      alignItems="flex-start"
-                    >
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          textAlign="left"
-                          fontWeight={400}
-                          color={"#bdbdbd"}
-                          fontSize={14}
-                        >
-                          {parseFloat(
-                            Web3.utils.fromWei(singleActivity.token, "ether")
-                          ).toFixed(2)}{" "}
-                          PBR
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    md={2}
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection={"column"}
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Typography
-                        variant="body2"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#bdbdbd"}
-                        fontSize={14}
-                      >
-                        ${Web3.utils.fromWei(singleActivity.fiat, "ether")}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    md={2}
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection={"column"}
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Typography
-                        variant="body2"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#bdbdbd"}
-                        fontSize={14}
-                      >
-                        <TimeAgo
-                          datetime={parseInt(singleActivity.timestamp) * 1000}
-                        />
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-              );
-            })}
+        <Box mt={5}>
+          <div>
+            <Typography
+              variant="h6"
+              className={classes.heading}
+              fontWeight={700}
+            >
+              Your Trades
+            </Typography>
+            {activitiesGraphData && (
+              <PoolActivities activities={activitiesGraphData} />
+            )}
+          </div>
         </Box>
-      </Box>
+      </Container>
     </Box>
   );
 }

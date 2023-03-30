@@ -58,8 +58,9 @@ const useStyles = makeStyles((theme) => ({
   },
   infoCard: {
     backgroundColor: "rgba(130, 71, 229, 0.1)",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    // borderTopLeftRadius: 10,
+    borderRadius: 10,
     padding: "4%",
     width: "100%",
     display: "flex",
@@ -147,18 +148,18 @@ export default function PoolCard({ poolStaticData, index }) {
         >
           <img src={poolStaticData.icon} alt="Grid" height="42px" />
           <Box ml={1}>
-            <Typography variant="h5" className={classes.title}>
+            <Typography variant="h6" className={classes.title}>
               {poolStaticData.title}
             </Typography>
           </Box>
         </Box>
         <div style={{ color: "#24A582" }}>#{index + 1}</div>
       </Box>
-      <Typography variant="small" className={classes.description} paragraph>
+      <Typography variant="verysmall" className={classes.description} paragraph>
         {poolStaticData.description}
       </Typography>
 
-      <Box px={1}>
+      <Box>
         <Box
           display={"flex"}
           justifyContent={"space-between"}

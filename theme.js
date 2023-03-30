@@ -93,12 +93,12 @@ let themes = createTheme({
     },
     body2: {
       fontFamily: "Poppins",
-      fontSize: "1rem",
+      fontSize: "0.9rem",
       color: "#bdbdbd",
     },
     body3: {
       fontFamily: "Poppins",
-      fontSize: "0.9rem",
+      fontSize: "0.8rem",
       wordBreak: "break-word",
       color: "#bdbdbd",
       lineHeight: 1,
@@ -106,6 +106,11 @@ let themes = createTheme({
     small: {
       fontFamily: "Poppins",
       fontSize: "0.75rem",
+      color: "#bdbdbd",
+    },
+    verysmall: {
+      fontFamily: "Poppins",
+      fontSize: "0.7rem",
       color: "#bdbdbd",
     },
   },

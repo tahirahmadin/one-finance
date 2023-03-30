@@ -44,11 +44,20 @@ export default function Pools() {
     {
       title: "Accumulation Strategy",
       description:
-        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool.",
+        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool instantly.",
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
       url: "accumulation",
       contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
       type: "ACCUMULATION",
+    },
+    {
+      title: "Spot Grid Strategy",
+      description:
+        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
+      url: "grid-strategy",
+      contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
+      type: "GRID",
     },
     {
       title: "Spot Grid Strategy",
@@ -76,10 +85,10 @@ export default function Pools() {
             container
             display={"flex"}
             justifyContent="space-between"
-            spacing={12}
+            spacing={6}
           >
             {poolsData.map((singlePool, index) => (
-              <Grid item md={6} key={index}>
+              <Grid item md={4} key={index}>
                 <PoolCard poolStaticData={singlePool} index={index} />
               </Grid>
             ))}

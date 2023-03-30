@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
 import Header from "../components/resuableComponents/Header";
-import GridStrategyComponent from "../components/Pools/PoolDetails/GridStrategyComponent";
+import GridStrategyComponent from "../components/GridStrategyComponent/GridStrategyComponent";
 
 const useStyles = makeStyles({
   background: {

@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import {
   checkUSDTApproved,
-  getPoolDetails,
   getUserUSDTBalance,
 } from "../../actions/smartActions";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
@@ -35,6 +34,7 @@ import TimeAgo from "timeago-react";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import constants from "../../utils/constants";
 import PoolActivities from "../resuableComponents/PoolActivities";
+import { SelectTokenDialog } from "../resuableComponents/SelectToken";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -152,10 +152,18 @@ export default function AccumulationComponent() {
   const [orderTokenReceived, setOrderTokenReceived] = useState([]);
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [loaded, setLoaded] = useState(false);
-
   const [poolGraphData, setPoolGraphData] = useState(null);
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
   const [activitiesGraphData, setActivitiesGraphData] = useState(null);
+  const [selectTokenPopup, setSelectTokenPopup] = useState(false);
+  const [selectedToken, setSelectedToken] = useState({
+    name: "Polkabridge",
+    symbol: "PBR",
+    address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
+    decimals: 18,
+    logoURI:
+      "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
+  });
 
   const [getPoolDataQuery, { data, loading, error }] =
     useLazyQuery(GetPoolDataById);
@@ -229,14 +237,14 @@ export default function AccumulationComponent() {
   // Check price of token
   useEffect(() => {
     async function asyncFn() {
-      let res = await getTokenPriceStats();
+      let res = await getTokenPriceStats(selectedToken.name);
       if (res) {
-        setTokenPriceData(res.polkabridge);
+        setTokenPriceData(res[selectedToken.name.toLowerCase()]);
         console.log(res);
       }
     }
     asyncFn();
-  }, [resetFlag, accountSC]);
+  }, [resetFlag, accountSC, selectedToken]);
 
   // Check isApproved
   useEffect(() => {
@@ -433,9 +441,18 @@ export default function AccumulationComponent() {
     return spent;
   };
 
+  const handleClose = () => {
+    console.log("hitting");
+    setSelectTokenPopup(false);
+  };
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
+      <SelectTokenDialog
+        selectTokenPopup={selectTokenPopup}
+        handleClose={handleClose}
+        setSelectedToken={setSelectedToken}
+      />
       <Container>
         <Typography variant="h3" className={classes.pageTitle}>
           Accumulate - Eat The Dip
@@ -607,6 +624,7 @@ export default function AccumulationComponent() {
                     padding: "10px 10px 10px 10px",
                     borderRadius: 10,
                   }}
+                  onClick={() => setSelectTokenPopup(true)}
                 >
                   <Box
                     display="flex"
@@ -615,8 +633,8 @@ export default function AccumulationComponent() {
                     alignItems="center"
                   >
                     <img
-                      src="https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png"
-                      alt="PBR"
+                      src={selectedToken.logoURI}
+                      alt={"TokenLogo"}
                       height="28px"
                     />
                     <Box ml={1}>
@@ -631,7 +649,7 @@ export default function AccumulationComponent() {
                         spacing={0}
                         gutterBottom={0}
                       >
-                        PBR{" "}
+                        {selectedToken.symbol}{" "}
                         {tokenPriceData && (
                           <small
                             className="blink_me"
@@ -647,7 +665,7 @@ export default function AccumulationComponent() {
                         noWrap
                         style={{ fontSize: 10 }}
                       >
-                        PolkaBridge
+                        {selectedToken.name}
                       </Typography>
                     </Box>
                   </Box>
@@ -786,6 +804,7 @@ export default function AccumulationComponent() {
                 xaxis={orderPrices}
                 yaxis={orderTokenReceived}
                 yaxisMax={parseFloat(orderPrices[0]) * 1.2}
+                selectedToken={selectedToken}
               />
             </Box>
           </Grid>

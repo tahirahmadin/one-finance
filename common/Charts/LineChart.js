@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LineChart({ xaxis, yaxis, yaxisMax }) {
+export default function LineChart({ xaxis, yaxis, yaxisMax, selectedToken }) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -81,7 +81,7 @@ export default function LineChart({ xaxis, yaxis, yaxisMax }) {
       xaxis: {
         categories: yaxis,
         title: {
-          text: "Expected tokens received after order execution ($PBR)",
+          text: `Expected tokens received after order execution ($${selectedToken.name})`,
           style: {
             color: "#f9f9f9",
             fontSize: "12px",

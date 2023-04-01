@@ -32,9 +32,8 @@ export const updateUserData = async (userData) => {
 };
 
 // Price of Orare
-export const getTokenPriceStats = async () => {
-  let url =
-    "https://api.coingecko.com/api/v3/simple/price?ids=polkabridge&vs_currencies=usd&include_market_cap=true&include_24hr_change=true";
+export const getTokenPriceStats = async (name) => {
+  let url = `https://api.coingecko.com/api/v3/simple/price?ids=${name.toLowerCase()}&vs_currencies=usd`;
   let response = await axios.get(url);
 
   return response.data;

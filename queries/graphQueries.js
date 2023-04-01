@@ -1,22 +1,22 @@
 import { gql } from "@apollo/client";
 
 export const GetPoolDataById = gql`
-  query GetPoolDataById($address: String) {
-    pool(id: "0xef8bfb001801dfee3dc421ab31398c2d1fdb2bd4") {
+  query GetPoolDataById($type: String) {
+    pools(where: { strategyType: $type }) {
+      id
+      strategyType
+      usersCount
+      ordersCount
       deposit
       fiatBalance
-      id
-      ordersCount
-      strategyType
       tokenBalance
-      usersCount
     }
   }
 `;
 
 export const GetPoolUserDataByAddress = gql`
-  query GetPoolUserDataByAddress($user: String) {
-    poolUsers(where: { user: $user }) {
+  query GetPoolUserDataByAddress($user: String, $type: String) {
+    poolUsers(where: { user: $user, strategyType: $type }) {
       tokenBalance
       strategyType
       ordersCount

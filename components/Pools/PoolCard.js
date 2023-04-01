@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLazyQuery } from "@apollo/client";
 import {
   GetPoolDataById,
-  GetUserDataQueryByPool,
+  GetPoolUserDataByAddress,
 } from "./../../queries/graphQueries";
 import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
@@ -88,8 +88,8 @@ export default function PoolCard({ poolStaticData, index }) {
   const [getPoolDataQuery, { data, loading, error }] =
     useLazyQuery(GetPoolDataById);
 
-  const [getUserDataQueryByPool, { data: userData }] = useLazyQuery(
-    GetUserDataQueryByPool
+  const [getPoolUserDataByAddress, { data: userPoolData }] = useLazyQuery(
+    GetPoolUserDataByAddress
   );
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function PoolCard({ poolStaticData, index }) {
 
   useEffect(() => {
     if (poolStaticData && accountSC) {
-      getUserDataQueryByPool({
+      getPoolUserDataByAddress({
         variables: {
           user: accountSC,
           type: poolStaticData.type,
@@ -113,24 +113,27 @@ export default function PoolCard({ poolStaticData, index }) {
         // pollInterval: 5000,
       });
     }
-  }, [poolStaticData, accountSC, getUserDataQueryByPool]);
+  }, [poolStaticData, accountSC, getPoolUserDataByAddress]);
 
   useEffect(() => {
     if (data) {
-      let poolData = data.pool;
-      setPoolGraphData(poolData);
+      console.log(data);
+      let poolGraphData = data.pools;
+      if (poolGraphData.length > 0) {
+        setPoolGraphData(poolGraphData[0]);
+      }
     }
   }, [data]);
 
   useEffect(() => {
-    if (userData) {
-      console.log(userData);
-      let userGraphData = userData.userEntities;
-      if (userData.userEntities.length > 0) {
-        setPoolUserGraphData(userGraphData[0]);
+    if (userPoolData) {
+      console.log(userPoolData);
+      let userPoolGraphData = userPoolData.poolUsers;
+      if (userPoolGraphData.length > 0) {
+        setPoolUserGraphData(userPoolGraphData[0]);
       }
     }
-  }, [userData]);
+  }, [userPoolData]);
 
   return (
     <Box pt={0} className={classes.card}>
@@ -246,7 +249,7 @@ export default function PoolCard({ poolStaticData, index }) {
             Participants
           </Typography>
           <Typography variant="body1" className={classes.value}>
-            {poolGraphData && poolGraphData.ordersCount}
+            {poolGraphData ? poolGraphData.ordersCount : "-"}
           </Typography>
         </Box>
       </Box>

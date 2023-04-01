@@ -226,7 +226,11 @@ export default function PoolActivities({ activities }) {
                       color={"#bdbdbd"}
                       fontSize={14}
                     >
-                      $ {singleActivity.price}
+                      ${" "}
+                      {Web3.utils.fromWei(
+                        singleActivity.price.toString(),
+                        "ether"
+                      )}
                     </Typography>
                   </Box>
                 </Grid>

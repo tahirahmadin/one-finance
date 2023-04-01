@@ -14,6 +14,19 @@ export const GetPoolDataById = gql`
   }
 `;
 
+export const GetPoolUserDataByAddress = gql`
+  query GetPoolUserDataByAddress($user: String) {
+    poolUsers(where: { user: $user }) {
+      tokenBalance
+      strategyType
+      ordersCount
+      id
+      fiatBalance
+      deposit
+      user
+    }
+  }
+`;
 export const GetPoolUserActivityQuery = gql`
   query getPoolUserActivityQuery($user: String, $type: String) {
     userActivities(where: { user: $user, strategyType: $type }) {
@@ -28,19 +41,6 @@ export const GetPoolUserActivityQuery = gql`
       action
       strategyType
       tokenAddress
-    }
-  }
-`;
-
-export const GetUserDataQueryByPool = gql`
-  query getUserDataQueryByPool($user: String, $type: String) {
-    userEntities(where: { user: $user, strategyType: $type }) {
-      id
-      deposit
-      fiatBalance
-      tokenAddress
-      tokenBalance
-      strategyType
     }
   }
 `;

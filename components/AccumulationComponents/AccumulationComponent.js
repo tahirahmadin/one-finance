@@ -27,6 +27,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   GetPoolDataById,
   GetPoolUserActivityQuery,
+  GetPoolUserDataByAddress,
 } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import LineChart from "../../common/Charts/LineChart";
@@ -153,15 +154,20 @@ export default function AccumulationComponent() {
   const [loaded, setLoaded] = useState(false);
 
   const [poolGraphData, setPoolGraphData] = useState(null);
+  const [poolUserGraphData, setPoolUserGraphData] = useState(null);
   const [activitiesGraphData, setActivitiesGraphData] = useState(null);
 
   const [getPoolDataQuery, { data, loading, error }] =
     useLazyQuery(GetPoolDataById);
+  const [getPoolUserDataQuery, { data: poolUserData }] = useLazyQuery(
+    GetPoolUserDataByAddress
+  );
 
   const [getPoolUserActivityQuery, { data: activityData }] = useLazyQuery(
     GetPoolUserActivityQuery
   );
 
+  // Get Pool Graph Data
   useEffect(() => {
     getPoolDataQuery({
       variables: { address: constants.contracts.accumulation },
@@ -169,14 +175,20 @@ export default function AccumulationComponent() {
     });
   }, [resetFlag, getPoolDataQuery]);
 
+  // Get Pool User Graph Data
+
   useEffect(() => {
     if (accountSC) {
       getPoolUserActivityQuery({
         variables: { user: accountSC, type: "ACCUMULATION" },
         pollInterval: 5000,
       });
+      getPoolUserDataQuery({
+        variables: { user: accountSC },
+        pollInterval: 5000,
+      });
     }
-  }, [resetFlag, accountSC, getPoolUserActivityQuery]);
+  }, [resetFlag, accountSC, getPoolUserActivityQuery, getPoolUserDataQuery]);
 
   // Get USDT Balance in account
   useEffect(() => {
@@ -188,6 +200,7 @@ export default function AccumulationComponent() {
       asyncFn();
     }
   }, [accountSC, dispatch]);
+
   // Get pool data
   useEffect(() => {
     if (data) {
@@ -197,7 +210,15 @@ export default function AccumulationComponent() {
     }
   }, [data]);
 
-  // Get user pool data
+  // Get pool user data
+  useEffect(() => {
+    if (poolUserData && poolUserData.poolUsers.length > 0) {
+      console.log(poolUserData.poolUsers[0]);
+      setPoolUserGraphData(poolUserData.poolUsers[0]);
+    }
+  }, [poolUserData]);
+
+  // Get user pool activities
   useEffect(() => {
     if (activityData) {
       console.log(activityData.userActivities);
@@ -489,7 +510,7 @@ export default function AccumulationComponent() {
             )}
           </Grid>
           <Grid item md={6}>
-            {poolGraphData && (
+            {poolUserGraphData && (
               <Grid container spacing={2}>
                 <Grid item md={4}>
                   <Box className={classes.statsCard}>
@@ -507,7 +528,7 @@ export default function AccumulationComponent() {
                     >
                       $
                       {parseFloat(
-                        Web3.utils.fromWei(poolGraphData.deposit, "ether")
+                        Web3.utils.fromWei(poolUserGraphData.deposit, "ether")
                       ).toFixed(2)}
                     </Typography>
                   </Box>
@@ -519,14 +540,18 @@ export default function AccumulationComponent() {
                       className={classes.statsCardPara}
                       fontWeight={300}
                     >
-                      Your Fiat Spent
+                      Remaining balance
                     </Typography>
                     <Typography
                       variant="h6"
                       style={{ paddingTop: 3 }}
                       className={classes.statsCardHeading}
                     >
-                      ${getFiatSpent()}
+                      $
+                      {Web3.utils.fromWei(
+                        poolUserGraphData.fiatBalance,
+                        "ether"
+                      )}
                     </Typography>
                   </Box>
                 </Grid>
@@ -544,7 +569,7 @@ export default function AccumulationComponent() {
                       style={{ paddingTop: 3 }}
                       className={classes.statsCardHeading}
                     >
-                      {poolGraphData.ordersCount}
+                      {poolUserGraphData.ordersCount}
                     </Typography>
                   </Box>
                 </Grid>

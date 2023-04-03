@@ -226,11 +226,7 @@ export default function PoolActivities({ activities }) {
                       color={"#bdbdbd"}
                       fontSize={14}
                     >
-                      ${" "}
-                      {Web3.utils.fromWei(
-                        singleActivity.price.toString(),
-                        "ether"
-                      )}
+                      $ {parseInt(singleActivity.price) / 100000000}
                     </Typography>
                   </Box>
                 </Grid>

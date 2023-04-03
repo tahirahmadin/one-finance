@@ -261,7 +261,6 @@ export default function AccumulationComponent() {
 
   const calculateOrdersData = useMemo(async () => {
     if (tokenPriceData) {
-      let price = tokenPriceData ? tokenPriceData.usd : 0.113;
       let priceInWei = Web3.utils.toWei(tokenPriceData.usd.toString(), "ether");
       let pricesArr = [];
       let tokenReceiveArr = [];

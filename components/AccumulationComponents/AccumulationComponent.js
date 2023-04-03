@@ -362,12 +362,11 @@ export default function AccumulationComponent() {
 
   // Write functions
   const handleStake = async () => {
-    let price = tokenPriceData
-      ? Web3.utils.toWei(tokenPriceData.usd.toString(), "ether")
-      : 0;
+    let price = tokenPriceData ? parseFloat(tokenPriceData.usd) * 100000000 : 0; // Making it 8 decimal price
     if (amount > 0 && percent > 0 && grids > 0) {
       let ordersData = await calculateOrdersData;
       console.log(ordersData);
+      console.log(price);
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;

@@ -9,6 +9,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #000000;
 }
+::-webkit-scrollbar {
+  width: 0px; /* width of vertical scrollbar */
+}
+
 link {
   text-decoration: none;
 }

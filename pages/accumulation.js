@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Grid, useTheme } from "@mui/material";
+import { Box, Grid, Hidden, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
@@ -43,11 +43,6 @@ export default function Acculumation() {
   const [pageLoaded, setPageLoaded] = useState(false);
   useEffect(() => setPageLoaded(true), []);
 
-  const supportedTokens = [
-    { TEST: "0xF13285D6659Aa6895e02EEFe3495408c99f70a86" },
-    { PBR: "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0" },
-    { ORARE: "0xff2382bd52efacef02cc895bcbfc4618608aa56f" },
-  ];
   return (
     <Box>
       <Seo
@@ -58,12 +53,14 @@ export default function Acculumation() {
       />
       {pageLoaded && (
         <Grid container>
-          <Grid item md={2}>
-            <SideBar />
-          </Grid>
+          <Hidden mdDown>
+            <Grid item md={2}>
+              <SideBar />
+            </Grid>
+          </Hidden>
           <Grid item md={10} style={{ backgroundColor: "black" }}>
             <Header />
-            <AccumulationComponent supportedTokens={supportedTokens} />
+            <AccumulationComponent />
           </Grid>
         </Grid>
       )}

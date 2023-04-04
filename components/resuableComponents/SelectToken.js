@@ -1,10 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { makeStyles } from "@mui/styles";
 import {
   IconButton,
   Dialog,
-  Button,
-  Divider,
   List,
   ListItemAvatar,
   ListItemText,
@@ -13,7 +11,6 @@ import {
   Slide,
   Typography,
   Box,
-  Input,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
@@ -41,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     paddingTop: 20,
     paddingBottom: 20,
+    minHeight: 400,
     maxHeight: 700,
     maxWidth: 400,
     position: "relative",
@@ -50,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     zIndex: 11,
     borderRadius: 10,
+    overflowX: "none",
     [theme.breakpoints.down("md")]: {
       border: "1px solid #bdbdbd",
       width: "100%",
@@ -111,9 +110,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   list: {
+    paddingLeft: 20,
     minHeight: 400,
     maxHeight: 550,
-    overflowX: "scroll",
+    overflowY: "auto",
   },
   input: {
     fontSize: 14,
@@ -123,172 +123,96 @@ const useStyles = makeStyles((theme) => ({
 
 let tokenList = [
   {
+    name: "MATIC",
+    symbol: "MATIC",
+    id: "matic-network",
+    address: "0x0000000000000000000000000000000000001010",
+    decimals: 18,
+    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png",
+  },
+  {
     name: "Polkabridge",
     symbol: "PBR",
-    address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
+    id: "polkabridge",
+    address: "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0",
     decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
+    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/8320.png",
   },
   {
-    name: "OneRare",
-    symbol: "ORARE",
-    address: "0xff2382bd52efacef02cc895bcbfc4618608aa56f",
+    name: "ChainLink",
+    symbol: "LINK",
+    id: "chainlink",
+    address: "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39",
+    decimals: 18,
+    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png",
+  },
+  {
+    name: "The Graph",
+    symbol: "GRT",
+    id: "the-graph",
+    address: "0x5fe2b58c013d7601147dcdd68c143a77499f5531",
     decimals: 18,
     logoURI:
-      "https://assets.coingecko.com/coins/images/19696/small/Thumbnail_-_500_px_-_Black.png?1635751681",
+      "https://assets.coingecko.com/coins/images/13397/small/Graph_Token.png?1608145566",
   },
-
   {
-    name: "Ethereum",
-    symbol: "ETH",
-    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    name: "Decentraland",
+    symbol: "MANA",
+    id: "decentraland",
+    address: "0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4",
+    decimals: 18,
+    logoURI:
+      "https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745",
+  },
+  {
+    name: "Aave Token",
+    symbol: "AAVE",
+    id: "aave",
+    address: "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+    decimals: 18,
+    logoURI:
+      "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
+  },
+  {
+    name: "Wrapped Bitcoin",
+    symbol: "WBTC",
+    id: "wrapped-bitcoin",
+    address: "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+    decimals: 18,
+    logoURI:
+      "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png?1548822744",
+  },
+  {
+    name: "Wrapped Ethereum",
+    symbol: "WETH",
+    id: "weth",
+    address: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
     decimals: 18,
     logoURI:
       "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880",
   },
 
   {
-    name: "1INCH Token",
-    symbol: "1INCH",
-    address: "0x111111111117dc0aa78b770fa6a738034120c302",
+    name: "Gains Network",
+    symbol: "GNS",
+    id: "gains-network",
+    address: "0xe5417af564e4bfda1c483642db72007871397896",
     decimals: 18,
     logoURI:
-      "https://assets.coingecko.com/coins/images/13469/small/1inch-token.png?1608803028",
+      "https://assets.coingecko.com/coins/images/19737/small/logo.png?1635909203",
   },
 
   {
-    name: "Aave Token",
-    symbol: "AAVE",
-    address: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
-  },
-  {
-    name: "Amp",
-    symbol: "AMP",
-    address: "0xfF20817765cB7f73d4bde2e66e067E58D11095C2",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/12409/small/amp-200x200.png?1599625397",
-  },
-  {
-    name: "Matic Token",
-    symbol: "MATIC",
-    address: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/4713/small/matic-token-icon.png?1624446912",
-  },
-  {
-    name: "Wrapped Bitcoin",
-    symbol: "WBTC",
-    address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png?1548822744",
-  },
-  {
-    name: "wDogecoin",
-    symbol: "WDOGE",
-    address: "0xf40c1f421ee02a550afdd8712ef34dce97eec6f2",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/5/small/dogecoin.png?1547792256",
-  },
-  {
-    name: "Shiba Inu",
-    symbol: "SHIB",
-    address: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/11939/small/shiba.png?1622619446",
-  },
-  {
-    name: "Maker",
-    symbol: "MKR",
-    address: "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/1364/small/Mark_Maker.png?1585191826",
-  },
-  {
-    name: "Compound",
-    symbol: "COMP",
-    address: "0xc00e94cb662c3520282e6f5717214004a7f26888",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/10775/small/COMP.png?1592625425",
-  },
-  {
-    name: "The Sandbox",
-    symbol: "SAND",
-    address: "0x3845badAde8e6dFF049820680d1F14bD3903a5d0",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/12129/small/sandbox_logo.jpg?1597397942",
-  },
-  {
-    name: "Uniswap",
-    symbol: "UNI",
-    address: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-    logoURI:
-      "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604",
-  },
-  {
-    name: "Balancer",
-    symbol: "BAL",
-    address: "0xba100000625a3754423978a60c9317c58a424e3D",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/11683/small/Balancer.png?1592792958",
-  },
-  {
     name: "Curve DAO Token",
     symbol: "CRV",
-    address: "0xD533a949740bb3306d119CC777fa900bA034cd52",
+    d: "curve-dao-token",
+    address: "0x172370d5Cd63279eFa6d502DAB29171933a610AF",
     decimals: 18,
     logoURI:
       "https://assets.coingecko.com/coins/images/12124/small/Curve.png?1597369484",
   },
-  {
-    name: "The Graph",
-    symbol: "GRT",
-    address: "0xc944e90c64b2c07662a292be6244bdf05cda44a7",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/13397/small/Graph_Token.png?1608145566",
-  },
-  {
-    name: "Kyber Network Crystal v2",
-    symbol: "KNC",
-    address: "0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/14899/small/RwdVsGcw_400x400.jpg?1618923851",
-  },
-  {
-    name: "Decentraland",
-    symbol: "MANA",
-    address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745",
-  },
-
-  {
-    name: "Basic Attention Token",
-    symbol: "BAT",
-    address: "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
-    decimals: 18,
-    logoURI:
-      "https://assets.coingecko.com/coins/images/677/small/basic-attention-token.png?1547034427",
-  },
 ];
 
-const imagePath = (address) =>
-  `https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
 export const SelectTokenDialog = ({
   selectTokenPopup,
   handleClose,
@@ -314,10 +238,7 @@ export const SelectTokenDialog = ({
       <div className={classes.background}>
         <div className={classes.container}>
           <div style={{ width: "100%" }}>
-            <Box
-              className="d-flex justify-content-between"
-              style={{ width: "100%" }}
-            >
+            <Box className="d-flex justify-content-between">
               <Typography variant="h6" fontWeight={600} lineHeight={1}>
                 Select a token
               </Typography>
@@ -361,7 +282,7 @@ export const SelectTokenDialog = ({
                 >
                   <ListItemAvatar>
                     <img
-                      src={imagePath(token.address)}
+                      src={token.logoURI}
                       alt={""}
                       style={{ height: 32, borderRadius: "50%" }}
                     />

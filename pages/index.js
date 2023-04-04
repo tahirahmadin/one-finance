@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Grid, useTheme } from "@mui/material";
+import { Box, Grid, Hidden, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import SideBar from "../common/Sidebar";
 import Seo from "../common/Seo";
@@ -59,9 +59,11 @@ export default function Home() {
       />
       {pageLoaded && (
         <Grid container>
-          <Grid item md={2}>
-            <SideBar />
-          </Grid>
+          <Hidden mdDown>
+            <Grid item md={2}>
+              <SideBar />
+            </Grid>
+          </Hidden>
           <Grid item md={10}>
             <Header />
             {menuIndex === 0 && <Pools />}

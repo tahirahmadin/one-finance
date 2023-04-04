@@ -159,6 +159,7 @@ export default function AccumulationComponent() {
   const [selectedToken, setSelectedToken] = useState({
     name: "Polkabridge",
     symbol: "PBR",
+    id: "polkabridge",
     address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
     decimals: 18,
     logoURI:
@@ -237,9 +238,9 @@ export default function AccumulationComponent() {
   // Check price of token
   useEffect(() => {
     async function asyncFn() {
-      let res = await getTokenPriceStats(selectedToken.name);
+      let res = await getTokenPriceStats(selectedToken.id);
       if (res) {
-        setTokenPriceData(res[selectedToken.name.toLowerCase()]);
+        setTokenPriceData(res[selectedToken.id.toLowerCase()]);
         console.log(res);
       }
     }
@@ -262,6 +263,8 @@ export default function AccumulationComponent() {
   const calculateOrdersData = useMemo(async () => {
     if (tokenPriceData) {
       let priceInWei = Web3.utils.toWei(tokenPriceData.usd.toString(), "ether");
+      console.log(priceInWei);
+      console.log(tokenPriceData);
       let pricesArr = [];
       let tokenReceiveArr = [];
       let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";

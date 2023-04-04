@@ -205,7 +205,7 @@ let tokenList = [
   {
     name: "Curve DAO Token",
     symbol: "CRV",
-    d: "curve-dao-token",
+    id: "curve-dao-token",
     address: "0x172370d5Cd63279eFa6d502DAB29171933a610AF",
     decimals: 18,
     logoURI:

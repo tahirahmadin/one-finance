@@ -35,6 +35,7 @@ import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import constants from "../../utils/constants";
 import PoolActivities from "../resuableComponents/PoolActivities";
 import { SelectTokenDialog } from "../resuableComponents/SelectToken";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -464,6 +465,7 @@ export default function AccumulationComponent() {
         handleClose={handleClose}
         setSelectedToken={setSelectedToken}
       />
+
       <Container>
         <Typography variant="h3" className={classes.pageTitle}>
           Accumulate - Eat The Dip
@@ -604,7 +606,7 @@ export default function AccumulationComponent() {
               </Grid>
             )}
           </Grid>
-        </Grid>
+        </Grid>{" "}
         <Grid
           container
           display={"flex"}
@@ -820,6 +822,21 @@ export default function AccumulationComponent() {
             </Box>
           </Grid>
         </Grid>
+        <Box>
+          <Button style={{ textDecoration: "none", textTransform: "none" }}>
+            <Typography variant="small" className={classes.pageSubtitle}>
+              For test tokens{" "}
+              <Link
+                href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
+                passHref={true}
+                target="_blank"
+              >
+                click here{" "}
+              </Link>{" "}
+              and hit claimFaucet function.
+            </Typography>
+          </Button>
+        </Box>
         <Box mt={5}>
           <div>
             <Typography

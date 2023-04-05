@@ -156,14 +156,24 @@ export default function AccumulationComponent() {
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
   const [activitiesGraphData, setActivitiesGraphData] = useState(null);
   const [selectTokenPopup, setSelectTokenPopup] = useState(false);
+  // const [selectedToken, setSelectedToken] = useState({
+  //   name: "Polkabridge",
+  //   symbol: "PBR",
+  //   id: "polkabridge",
+  //   address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
+  //   decimals: 18,
+  //   logoURI:
+  //     "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
+  // });
+
   const [selectedToken, setSelectedToken] = useState({
-    name: "Polkabridge",
-    symbol: "PBR",
+    name: "Sleep Token",
+    symbol: "SLEEPT",
     id: "polkabridge",
-    address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
+    address: "0xb94d207a3fBdb312cef2e5dBEb7C22A76516BE37",
     decimals: 18,
     logoURI:
-      "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
+      "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
   });
 
   const [getPoolDataQuery, { data, loading, error }] =
@@ -267,7 +277,7 @@ export default function AccumulationComponent() {
       console.log(tokenPriceData);
       let pricesArr = [];
       let tokenReceiveArr = [];
-      let selectedTokenAddress = "0xF13285D6659Aa6895e02EEFe3495408c99f70a86";
+      let selectedTokenAddress = selectedToken.address;
 
       if (amount > 0 && percent > 0 && grids > 0) {
         let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");

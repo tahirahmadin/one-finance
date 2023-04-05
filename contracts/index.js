@@ -20,8 +20,8 @@ export const tokenInstance = (provider = "unavailable") => {
   try {
     var web3 = web3Instance(provider);
     var tokenContract = new web3.eth.Contract(
-      ERC20RG.abi,
-      process.env.NEXT_PUBLIC_ERC20_CONTRACT
+      ERC20RG,
+      constants.contracts.fiat
     );
     return tokenContract;
   } catch (err) {

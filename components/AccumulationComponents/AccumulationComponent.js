@@ -251,7 +251,11 @@ export default function AccumulationComponent() {
     async function asyncFn() {
       let res = await getTokenPriceStats(selectedToken.id);
       if (res) {
-        setTokenPriceData(res[selectedToken.id.toLowerCase()]);
+        let tempData = {
+          usd: 1,
+        };
+        // setTokenPriceData(res[selectedToken.id.toLowerCase()]);
+        setTokenPriceData(tempData);
         console.log(res);
       }
     }

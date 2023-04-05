@@ -255,7 +255,7 @@ export default function PoolActivities({ activities }) {
                         {parseFloat(
                           Web3.utils.fromWei(singleActivity.token, "ether")
                         ).toFixed(2)}{" "}
-                        PBR
+                        Tokens
                       </Typography>
                     </Box>
                   </Box>

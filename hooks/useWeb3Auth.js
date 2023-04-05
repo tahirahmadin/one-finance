@@ -6,7 +6,6 @@ import ethersServiceProvider from "../services/ethersServiceProvider";
 import Web3 from "web3";
 import { useSelector, useDispatch } from "react-redux";
 import { setWalletStatus } from "../reducers/UiReducer";
-import { Router } from "next/router";
 
 export const useWeb3Auth = () => {
   const [web3Auth, setWeb3Auth] = useState(null);
@@ -155,11 +154,12 @@ export const useWeb3Auth = () => {
     if (accounts) {
       await ethersServiceProvider.setCurrentWeb3AuthInstance(web3AuthInstance);
       await ethersServiceProvider.setCurrentAccount(accounts);
-      // await dispatch(setWalletStatus(walletStatus + 1));
+      await dispatch(setWalletStatus(walletStatus + 1));
       setAddress(accounts);
       setWeb3Auth(web3AuthInstance);
     }
   };
+
   return {
     web3AuthSC: _web3Auth,
     accountSC: _account,

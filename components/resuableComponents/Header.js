@@ -107,23 +107,26 @@ const Header = () => {
             }}
           >
             <Grid display="flex" alignItems="center">
-              <Link href="/activities" style={{ textDecoration: "none" }}>
-                <Typography
-                  onClick={handleClick}
-                  variant="body2"
-                  color="textSecondary"
-                  className={classes.linkItems}
-                  style={{
-                    color: router.asPath.includes("/activities")
-                      ? theme.palette.cyan.main
-                      : "white",
-                    padding: "3px 25px",
-                    width: "100%",
-                  }}
+              <Box>
+                <Button
+                  style={{ textDecoration: "none", textTransform: "none" }}
                 >
-                  Explorer
-                </Typography>
-              </Link>
+                  <Typography variant="small" fontWeight={600}>
+                    <Link
+                      style={{
+                        textDecoration: "none",
+                        textTransform: "none",
+                        color: "white",
+                      }}
+                      href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
+                      passHref={true}
+                      target="_blank"
+                    >
+                      {"> "}GET USDT FAUCET
+                    </Link>{" "}
+                  </Typography>
+                </Button>
+              </Box>
               <Link href="/activities" style={{ textDecoration: "none" }}>
                 <Box
                   sx={{

@@ -95,7 +95,7 @@ const SideBar = ({}) => {
               Pools
             </Typography>
           </Paper>
-          <Link href="/">
+          <Link href="/" style={{ textDecoration: "none" }}>
             <Paper
               onClick={() => dispatch(setMenuIndex(1))}
               key={1}
@@ -117,131 +117,145 @@ const SideBar = ({}) => {
               </Typography>
             </Paper>
           </Link>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(2))}
-            key={1}
-            sx={{
-              boxShadow: 0,
-              borderRadius: 2,
-              bgcolor:
-                menuIndex === 2 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            <BarChart style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              Leaderboard
-            </Typography>
-          </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(3))}
-            key={1}
-            sx={{
-              boxShadow: 0,
-              borderRadius: 2,
-              bgcolor:
-                menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            <Wallet style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              Porfolio
-            </Typography>
-          </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(4))}
-            key={1}
-            sx={{
-              boxShadow: 0,
-              borderRadius: 2,
-              bgcolor:
-                menuIndex === 4 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            <Timeline style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              My Activities
-            </Typography>
-          </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(5))}
-            key={0}
-            sx={{
-              boxShadow: 0,
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Paper
+              onClick={() => dispatch(setMenuIndex(2))}
+              key={1}
+              sx={{
+                boxShadow: 0,
+                borderRadius: 2,
+                bgcolor:
+                  menuIndex === 2 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <BarChart style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                Leaderboard
+              </Typography>
+            </Paper>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            {" "}
+            <Paper
+              onClick={() => dispatch(setMenuIndex(3))}
+              key={1}
+              sx={{
+                boxShadow: 0,
+                borderRadius: 2,
+                bgcolor:
+                  menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <Wallet style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                Porfolio
+              </Typography>
+            </Paper>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Paper
+              onClick={() => dispatch(setMenuIndex(4))}
+              key={1}
+              sx={{
+                boxShadow: 0,
+                borderRadius: 2,
+                bgcolor:
+                  menuIndex === 4 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <Timeline style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                My Activities
+              </Typography>
+            </Paper>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Paper
+              onClick={() => dispatch(setMenuIndex(5))}
+              key={0}
+              sx={{
+                boxShadow: 0,
 
-              bgcolor:
-                menuIndex === 5 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              borderRadius: 2,
-            }}
-          >
-            <Telegram
-              style={{ marginRight: 10, color: "white", color: "#229ED9" }}
-            />
-            <Typography variant="title1" className={classes.menuTitle}>
-              Community
-            </Typography>
-          </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(6))}
-            key={0}
-            sx={{
-              boxShadow: 0,
+                bgcolor:
+                  menuIndex === 5 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                borderRadius: 2,
+              }}
+            >
+              <Telegram
+                style={{ marginRight: 10, color: "white", color: "#229ED9" }}
+              />
+              <Typography variant="title1" className={classes.menuTitle}>
+                Community
+              </Typography>
+            </Paper>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            {" "}
+            <Paper
+              onClick={() => dispatch(setMenuIndex(6))}
+              key={0}
+              sx={{
+                boxShadow: 0,
 
-              bgcolor:
-                menuIndex === 6 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              borderRadius: 2,
-            }}
-          >
-            <Help style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              How To Use
-            </Typography>
-          </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(7))}
-            key={0}
-            sx={{
-              boxShadow: 0,
+                bgcolor:
+                  menuIndex === 6 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                borderRadius: 2,
+              }}
+            >
+              <Help style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                How To Use
+              </Typography>
+            </Paper>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Paper
+              onClick={() => dispatch(setMenuIndex(7))}
+              key={0}
+              sx={{
+                boxShadow: 0,
 
-              bgcolor:
-                menuIndex === 7 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              borderRadius: 2,
-            }}
-          >
-            <Logout style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              Logout
-            </Typography>
-          </Paper>
+                bgcolor:
+                  menuIndex === 7 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                borderRadius: 2,
+              }}
+            >
+              <Logout style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                Logout
+              </Typography>
+            </Paper>
+          </Link>
         </Box>
       </Box>
     </Box>

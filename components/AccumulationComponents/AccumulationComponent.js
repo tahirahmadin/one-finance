@@ -753,7 +753,7 @@ export default function AccumulationComponent() {
                       mt={4}
                       display="flex"
                       flexDirection={"row"}
-                      justifyContent="space-around"
+                      justifyContent="space-evenly"
                       alignItems="center"
                     >
                       <Box

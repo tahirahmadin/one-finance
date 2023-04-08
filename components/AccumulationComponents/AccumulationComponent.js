@@ -9,6 +9,7 @@ import {
   Input,
   Slider,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import {
   checkUSDTApproved,
@@ -19,7 +20,16 @@ import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
-import { ArrowDropDown } from "@mui/icons-material";
+import {
+  AccountBalance,
+  ArrowDropDown,
+  CurrencyExchange,
+  Dataset,
+  DocumentScanner,
+  Feed,
+  Inventory,
+  NoteAdd,
+} from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -37,6 +47,9 @@ import constants from "../../utils/constants";
 import PoolActivities from "../resuableComponents/PoolActivities";
 import { SelectTokenDialog } from "../resuableComponents/SelectToken";
 import Link from "next/link";
+import { fromWei } from "../../utils/helper";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -70,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     border: "1px solid #2d2d32",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
-    borderRadius: 12,
+    borderRadius: 30,
     "&:hover": {
       boxShadow: "0px 24px 33px -9px #0000005C",
     },
@@ -123,14 +136,17 @@ const useStyles = makeStyles((theme) => ({
   },
 
   actionButton: {
-    borderRadius: 10,
-    background: "rgba(130, 71, 229, 0.3)",
+    borderRadius: 14,
+    background: "rgba(130, 71, 229, 0.7)",
     padding: "12px 20px 12px 20px",
     color: "white",
     width: "100%",
     marginTop: 20,
     fontWeight: 600,
     fontSize: 16,
+    "&:hover": {
+      background: "rgba(130, 71, 229, 0.9)",
+    },
   },
 }));
 
@@ -156,7 +172,6 @@ export default function AccumulationComponent() {
   const [loaded, setLoaded] = useState(false);
   const [poolGraphData, setPoolGraphData] = useState(null);
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
-  const [activitiesGraphData, setActivitiesGraphData] = useState(null);
   const [selectTokenPopup, setSelectTokenPopup] = useState(false);
   // const [selectedToken, setSelectedToken] = useState({
   //   name: "Polkabridge",
@@ -188,7 +203,7 @@ export default function AccumulationComponent() {
   useEffect(() => {
     if (accountSC) {
       getPoolUserDataQuery({
-        variables: { user: accountSC },
+        variables: { user: accountSC, type: "ACCUMULATION" },
         // pollInterval: 5000,
       });
     }
@@ -197,7 +212,7 @@ export default function AccumulationComponent() {
   // Get Pool Graph Data
   useEffect(() => {
     getPoolDataQuery({
-      variables: { address: constants.contracts.accumulation },
+      variables: { type: "ACCUMULATION" },
       // pollInterval: 5000,
     });
   }, [resetFlag, getPoolDataQuery]);
@@ -217,8 +232,8 @@ export default function AccumulationComponent() {
 
   // Get pool data
   useEffect(() => {
-    if (data) {
-      let poolData = data.pool;
+    if (data && data.pools.length > 0) {
+      let poolData = data.pools[0];
       setPoolGraphData(poolData);
       setLoaded(true);
     }
@@ -463,156 +478,81 @@ export default function AccumulationComponent() {
         <Typography variant="small" className={classes.pageSubtitle}>
           Start the strategy and eat every dip automatically without hassle
         </Typography>
+
         <Grid
           container
           display={"flex"}
           justifyContent="space-between"
-          spacing={12}
-          pt={1}
-        >
-          <Grid item md={6}>
-            {poolGraphData && (
-              <Grid container spacing={2}>
-                <Grid item md={5}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Total Invested($) :{" "}
-                      <strong style={{ fontWeight: 600 }}>
-                        $
-                        {parseFloat(
-                          Web3.utils.fromWei(poolGraphData.deposit, "ether")
-                        ).toFixed(2)}
-                      </strong>
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item md={3}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Fiat Spent:{" "}
-                      <strong style={{ fontWeight: 600 }}>
-                        ${getFiatSpent()}
-                      </strong>
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      className={classes.statsCardHeading}
-                    ></Typography>
-                  </Box>
-                </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Total Orders:{" "}
-                      <strong style={{ fontWeight: 600 }}>
-                        {poolGraphData.ordersCount}
-                      </strong>
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      className={classes.statsCardHeading}
-                    ></Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            )}
-          </Grid>
-          <Grid item md={6}>
-            {poolUserGraphData && (
-              <Grid container spacing={2}>
-                <Grid item md={4}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Your Deposits($)
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      className={classes.statsCardHeading}
-                      style={{ paddingTop: 3 }}
-                    >
-                      $
-                      {parseFloat(
-                        Web3.utils.fromWei(poolUserGraphData.deposit, "ether")
-                      ).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Remaining balance
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      style={{ paddingTop: 3 }}
-                      className={classes.statsCardHeading}
-                    >
-                      $
-                      {Web3.utils.fromWei(
-                        poolUserGraphData.fiatBalance,
-                        "ether"
-                      )}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.statsCard}>
-                    <Typography
-                      variant="body2"
-                      className={classes.statsCardPara}
-                      fontWeight={300}
-                    >
-                      Your Orders
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      style={{ paddingTop: 3 }}
-                      className={classes.statsCardHeading}
-                    >
-                      {poolUserGraphData.ordersCount}
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            )}
-          </Grid>
-        </Grid>{" "}
-        <Grid
-          container
-          display={"flex"}
-          justifyContent="space-between"
-          spacing={12}
+          spacing={3}
           pt={3}
         >
-          <Grid item md={6}>
-            <Box className={classes.card}>
+          <Grid item md={3.5}>
+            {poolUserGraphData && (
+              <Box
+                style={{
+                  border: "1px solid #2d2d32",
+                  height: "100%",
+                  width: "100%",
+                  padding: 20,
+                  borderRadius: 30,
+                  background: `linear-gradient(0deg, rgba(0, 0, 0, 0.91), rgba(3, 3, 3, 0.8) ),url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6kTUrTHYiI8JsOsLJZFoZwhQHg5DSdEVoQ&usqp=CAU")`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
+                display="flex"
+                flexDirection={"column"}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Box
+                  display="flex"
+                  flexDirection={"column"}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <img
+                    src="https://static.vecteezy.com/system/resources/previews/008/851/072/original/3d-rocket-business-illustration-png.png"
+                    height="150px"
+                  />
+                </Box>
+                <Typography
+                  variant="h6"
+                  fontWeight={700}
+                  textAlign={"center"}
+                  lineHeight={1.3}
+                >
+                  There are no strategy <br />
+                  created yet
+                </Typography>
+                <Typography
+                  variant="body3"
+                  fontWeight={400}
+                  py={1}
+                  color={"#bdbdbd"}
+                >
+                  You can create your strategy
+                </Typography>
+                <div className="text-center">
+                  <Button
+                    className={classes.actionButton}
+                    onClick={isApproved ? handleStake : handleApprove}
+                  >
+                    + Create Strategy
+                  </Button>
+                </div>
+              </Box>
+            )}
+            {/* <Box className={classes.card}>
               <div className="d-flex flex-column justify-content-around">
                 <div>
-                  <Typography variant="h6" fontWeight={600} lineHeight={1}>
-                    Create strategy
-                  </Typography>
-                  <Typography variant="small" lineHeight={1}>
-                    Put your orders and let strategy work for you
+                  <Typography
+                    variant="h6"
+                    fontWeight={600}
+                    lineHeight={1}
+                    style={{ color: "#e5e5e5" }}
+                  >
+                    <NoteAdd style={{ color: "#e5e5e5" }} /> Create strategy
                   </Typography>
                 </div>
 
@@ -791,10 +731,272 @@ export default function AccumulationComponent() {
                   </Button>
                 </div>
               </div>
-            </Box>
+            </Box> */}
           </Grid>
-          <Grid item md={6}>
-            <Box className={classes.card}>
+          <Grid item md={8.5}>
+            <Box
+              display={"flex"}
+              justifyContent="space-between"
+              className={classes.card}
+              style={{ backgroundColor: "#000000" }}
+            >
+              <Box width={"65%"}>
+                {poolGraphData && (
+                  <div className="d-flex flex-column justify-content-around w-100">
+                    <div>
+                      <Typography variant="h6" fontWeight={600} lineHeight={1}>
+                        <Inventory /> Pool overview
+                      </Typography>
+                    </div>
+
+                    <Box
+                      mt={4}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="space-around"
+                      alignItems="center"
+                    >
+                      <Box
+                        style={{
+                          border: "1px solid #2d2d32",
+                          minHeight: 100,
+                          minWidth: 120,
+                          padding: 20,
+                          borderRadius: 10,
+                          backgroundColor: "#0C0D10",
+                        }}
+                        display="flex"
+                        flexDirection={"column"}
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          display="flex"
+                          flexDirection={"column"}
+                          justifyContent="center"
+                          alignItems="center"
+                          style={{
+                            border: "1px solid #2d2d32",
+                            padding: 14,
+                            borderRadius: "50%",
+                          }}
+                        >
+                          <AccountBalance style={{ color: "#bdbdbd" }} />
+                        </Box>
+                        <Typography variant="body2" fontWeight={300} py={1}>
+                          Invested($)
+                        </Typography>
+                        <Typography variant="h5" fontWeight={600}>
+                          ${fromWei(poolUserGraphData.deposit)}
+                        </Typography>
+                      </Box>
+                      <Box
+                        style={{
+                          border: "1px solid #2d2d32",
+                          minHeight: 100,
+                          minWidth: 120,
+                          padding: 20,
+                          borderRadius: 10,
+                          backgroundColor: "#0C0D10",
+                        }}
+                        display="flex"
+                        flexDirection={"column"}
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          display="flex"
+                          flexDirection={"column"}
+                          justifyContent="center"
+                          alignItems="center"
+                          style={{
+                            border: "1px solid #2d2d32",
+                            padding: 14,
+                            borderRadius: "50%",
+                          }}
+                        >
+                          <CurrencyExchange style={{ color: "#bdbdbd" }} />
+                        </Box>
+                        <Typography variant="body2" fontWeight={300} py={1}>
+                          In Order($)
+                        </Typography>
+                        <Typography variant="h5" fontWeight={600}>
+                          ${fromWei(poolUserGraphData.fiatBalance)}
+                        </Typography>
+                      </Box>
+                      <Box
+                        style={{
+                          border: "1px solid #2d2d32",
+                          minHeight: 100,
+                          minWidth: 120,
+                          padding: 20,
+                          borderRadius: 10,
+                          backgroundColor: "#0C0D10",
+                        }}
+                        display="flex"
+                        flexDirection={"column"}
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          display="flex"
+                          flexDirection={"column"}
+                          justifyContent="center"
+                          alignItems="center"
+                          style={{
+                            border: "1px solid #2d2d32",
+
+                            padding: 14,
+                            borderRadius: "50%",
+                          }}
+                        >
+                          <Dataset style={{ color: "#bdbdbd" }} />
+                        </Box>
+                        <Typography variant="body2" fontWeight={300} py={1}>
+                          Orders
+                        </Typography>
+                        <Typography variant="h5" fontWeight={600}>
+                          {poolUserGraphData.ordersCount}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </div>
+                )}
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  mt={3}
+                  pr={2}
+                >
+                  <Typography variant="h6" fontWeight={600}>
+                    Daily orders executions:
+                  </Typography>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"flex-end"}
+                    alignItems={"center"}
+                  >
+                    <Typography variant="h3" fontWeight={600}>
+                      32
+                    </Typography>
+                    <div
+                      style={{
+                        borderRadius: 14,
+                        background: "rgba(130, 71, 229, 0.7)",
+                        padding: "6px 10px 6px 10px",
+                        color: "white",
+                        width: "fit-content",
+                        marginLeft: 7,
+                        fontWeight: 600,
+                        fontSize: 14,
+                      }}
+                    >
+                      2.3%
+                    </div>
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                style={{
+                  borderLeft: "1px solid #414141",
+                  paddingLeft: 20,
+                  width: "35%",
+                }}
+              >
+                {poolUserGraphData && (
+                  <div className="d-flex flex-column justify-content-around w-100">
+                    <div>
+                      <Typography variant="h6" fontWeight={600} lineHeight={1}>
+                        <Feed /> My investment
+                      </Typography>
+                    </div>
+
+                    <Box mt={2}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        py={1}
+                        textAlign={"left"}
+                      >
+                        Invested($)
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        ${fromWei(poolUserGraphData.deposit)}
+                      </Typography>
+                    </Box>
+                    <Box mt={2}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        py={1}
+                        textAlign={"left"}
+                      >
+                        In order($)
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        ${fromWei(poolUserGraphData.fiatBalance)}
+                      </Typography>
+                    </Box>
+                    <Box
+                      mt={2}
+                      style={{
+                        border: "1px solid #2d2d32",
+
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        borderRadius: 20,
+                        backgroundColor: "#0C0D10",
+                      }}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Box>
+                        <Typography variant="body2" fontWeight={300} pb={1}>
+                          Progress
+                        </Typography>
+                        <Typography variant="h5" fontWeight={600}>
+                          4/9
+                        </Typography>
+                      </Box>
+                      <Box style={{ width: 200, height: 70 }}></Box>
+                      <CircularProgressbar
+                        value={40}
+                        text={`40%`}
+                        styles={buildStyles({
+                          // Rotation of path and trail, in number of turns (0-1)
+                          rotation: 0,
+
+                          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                          strokeLinecap: "butt",
+
+                          // Text size
+                          textSize: "16px",
+
+                          // How long animation takes to go from one percentage to another, in seconds
+                          pathTransitionDuration: 0.5,
+
+                          // Can specify path transition in more detail, or remove it entirely
+                          // pathTransition: 'none',
+
+                          // Colors
+                          pathColor: `rgba(130, 71, 229, ${40 / 100})`,
+                          textColor: "white",
+                          trailColor: "#d6d6d6",
+                          backgroundColor: "#3e98c7",
+                        })}
+                      />
+                      ;
+                    </Box>
+                  </div>
+                )}
+              </Box>
+            </Box>
+            {/* <Box className={classes.card}>
               <div>
                 <Typography variant="h6" fontWeight={600} noWrap>
                   Orders chart
@@ -809,10 +1011,10 @@ export default function AccumulationComponent() {
                 yaxisMax={parseFloat(orderPrices[0]) * 1.2}
                 selectedToken={selectedToken}
               />
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
-        <Box>
+        <Box mt={3}>
           <Button style={{ textDecoration: "none", textTransform: "none" }}>
             <Typography variant="small" className={classes.pageSubtitle}>
               For test tokens{" "}

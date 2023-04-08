@@ -37,7 +37,7 @@ export const useWeb3Auth = () => {
             rpcTarget: "https://rpc-mumbai.maticvigil.com/",
           },
         });
-        console.log(web3authInstance);
+
         await web3authInstance.initModal();
         await ethersServiceProvider.setCurrentWeb3AuthInstance(
           web3authInstance

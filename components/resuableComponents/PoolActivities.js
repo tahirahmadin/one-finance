@@ -48,21 +48,9 @@ export default function PoolActivities({ poolType }) {
   // Get user pool activities
   useEffect(() => {
     if (ordersData) {
-      console.log("ordersData.orders");
-      console.log(ordersData.orders);
       setOrdersGraphData(ordersData.orders);
     }
   }, [ordersData]);
-
-  const getActivityActionName = (action) => {
-    if (action === "EXECUTE_BUY_ORDER") {
-      return "BUY";
-    } else if (action === "EXECUTE_SELL_ORDER") {
-      return "SeLL";
-    } else {
-      return action;
-    }
-  };
 
   return (
     <Box className={classes.boxCard}>

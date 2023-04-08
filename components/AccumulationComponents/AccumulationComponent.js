@@ -543,195 +543,6 @@ export default function AccumulationComponent() {
                 </div>
               </Box>
             )}
-            {/* <Box className={classes.card}>
-              <div className="d-flex flex-column justify-content-around">
-                <div>
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    lineHeight={1}
-                    style={{ color: "#e5e5e5" }}
-                  >
-                    <NoteAdd style={{ color: "#e5e5e5" }} /> Create strategy
-                  </Typography>
-                </div>
-
-                <Box
-                  mt={2}
-                  display="flex"
-                  flexDirection={"row"}
-                  justifyContent="space-between"
-                  alignItems="center"
-                  style={{
-                    border: "1px solid #2d2d32",
-                    padding: "10px 10px 10px 10px",
-                    borderRadius: 10,
-                  }}
-                  onClick={() => setSelectTokenPopup(true)}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <img
-                      src={selectedToken.logoURI}
-                      alt={"TokenLogo"}
-                      height="28px"
-                    />
-                    <Box ml={1}>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        color={"#e5e5e5"}
-                        lineHeight={1}
-                        padding={0}
-                        noWrap
-                        margin={0}
-                        spacing={0}
-                        gutterBottom={0}
-                      >
-                        {selectedToken.symbol}{" "}
-                        {tokenPriceData && (
-                          <small
-                            className="blink_me"
-                            style={{ color: "green", fontSize: 11 }}
-                          >
-                            ${tokenPriceData.usd.toFixed(3)}
-                          </small>
-                        )}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        lineHeight={1}
-                        noWrap
-                        style={{ fontSize: 10 }}
-                      >
-                        {selectedToken.name}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <ArrowDropDown style={{ color: "white" }} />
-                  </Box>
-                </Box>
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  mt={1}
-                  className={classes.inputWrapper}
-                >
-                  <Box>
-                    <Typography
-                      variant="small"
-                      textAlign={"left"}
-                      lineHeight={1}
-                    >
-                      Amount:
-                    </Typography>
-                    <Input
-                      value={amount}
-                      onInput={(event) => setAmount(event.target.value)}
-                      fullWidth
-                      placeholder="0"
-                      disableUnderline
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        color: "#e5e5e5",
-                      }}
-                      type="number"
-                    />
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    flexDirection="column"
-                    alignItems="flex-end"
-                    justifyContent={"center"}
-                  >
-                    <Typography
-                      variant="small"
-                      textAlign={"right"}
-                      style={{
-                        width: 200,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      Available: {usdtBalance}
-                    </Typography>
-                    <Box
-                      display="flex"
-                      flexDirection={"row"}
-                      justifyContent="flex-end"
-                      alignItems="center"
-                    >
-                      <Box
-                        display="flex"
-                        flexDirection={"row"}
-                        justifyContent="flex-start"
-                        alignItems="center"
-                      >
-                        <img
-                          src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
-                          alt="USDT"
-                          height="28px"
-                        />
-                      </Box>
-                      <Typography
-                        variant="body2"
-                        className={classes.para}
-                        fontSize={16}
-                        textAlign="left"
-                        fontWeight={600}
-                      >
-                        USDT
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-
-                <Box mt={1} className={classes.inputWrapper}>
-                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
-                    No of orders:
-                  </Typography>
-                  <Input
-                    value={grids}
-                    type="number"
-                    onInput={(event) => setGrids(parseInt(event.target.value))}
-                    fullWidth
-                    placeholder="Enter grid count here"
-                    disableUnderline
-                    style={{ fontSize: 20, fontWeight: 600 }}
-                  />
-                </Box>
-
-                <Box mt={1} className={classes.inputWrapper}>
-                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
-                    Trigger Percent:
-                  </Typography>
-                  <Input
-                    type="number"
-                    disableUnderline
-                    value={percent}
-                    fullWidth
-                    placeholder="10"
-                    onChange={(e) => handlePercentage(e)}
-                    style={{ fontSize: 20, fontWeight: 600 }}
-                  />
-                </Box>
-
-                <div className="text-center">
-                  <Button
-                    className={classes.actionButton}
-                    onClick={isApproved ? handleStake : handleApprove}
-                  >
-                    {isApproved ? "Create Strategy" : "Approve Strategy"}
-                  </Button>
-                </div>
-              </div>
-            </Box> */}
           </Grid>
           <Grid item md={8.5}>
             <Box
@@ -996,13 +807,205 @@ export default function AccumulationComponent() {
                 )}
               </Box>
             </Box>
-            {/* <Box className={classes.card}>
+          </Grid>
+        </Grid>
+        <Grid container mt={2} spacing={2}>
+          <Grid item md={6}>
+            <Box className={classes.card}>
+              <div className="d-flex flex-column justify-content-around">
+                <div>
+                  <Typography
+                    variant="h6"
+                    fontWeight={600}
+                    lineHeight={1}
+                    style={{ color: "#e5e5e5" }}
+                  >
+                    <NoteAdd style={{ color: "#e5e5e5" }} /> Create strategy
+                  </Typography>
+                </div>
+
+                <Box
+                  mt={2}
+                  display="flex"
+                  flexDirection={"row"}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  style={{
+                    border: "1px solid #2d2d32",
+                    padding: "10px 10px 10px 10px",
+                    borderRadius: 10,
+                  }}
+                  onClick={() => setSelectTokenPopup(true)}
+                >
+                  <Box
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <img
+                      src={selectedToken.logoURI}
+                      alt={"TokenLogo"}
+                      height="28px"
+                    />
+                    <Box ml={1}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        color={"#e5e5e5"}
+                        lineHeight={1}
+                        padding={0}
+                        noWrap
+                        margin={0}
+                        spacing={0}
+                        gutterBottom={0}
+                      >
+                        {selectedToken.symbol}{" "}
+                        {tokenPriceData && (
+                          <small
+                            className="blink_me"
+                            style={{ color: "green", fontSize: 11 }}
+                          >
+                            ${tokenPriceData.usd.toFixed(3)}
+                          </small>
+                        )}
+                      </Typography>
+                      <Typography
+                        variant="small"
+                        lineHeight={1}
+                        noWrap
+                        style={{ fontSize: 10 }}
+                      >
+                        {selectedToken.name}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <ArrowDropDown style={{ color: "white" }} />
+                  </Box>
+                </Box>
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  mt={1}
+                  className={classes.inputWrapper}
+                >
+                  <Box>
+                    <Typography
+                      variant="small"
+                      textAlign={"left"}
+                      lineHeight={1}
+                    >
+                      Amount:
+                    </Typography>
+                    <Input
+                      value={amount}
+                      onInput={(event) => setAmount(event.target.value)}
+                      fullWidth
+                      placeholder="0"
+                      disableUnderline
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 600,
+                        color: "#e5e5e5",
+                      }}
+                      type="number"
+                    />
+                  </Box>
+                  <Box
+                    display={"flex"}
+                    flexDirection="column"
+                    alignItems="flex-end"
+                    justifyContent={"center"}
+                  >
+                    <Typography
+                      variant="small"
+                      textAlign={"right"}
+                      style={{
+                        width: 200,
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      Available: {usdtBalance}
+                    </Typography>
+                    <Box
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <Box
+                        display="flex"
+                        flexDirection={"row"}
+                        justifyContent="flex-start"
+                        alignItems="center"
+                      >
+                        <img
+                          src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
+                          alt="USDT"
+                          height="28px"
+                        />
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        className={classes.para}
+                        fontSize={16}
+                        textAlign="left"
+                        fontWeight={600}
+                      >
+                        USDT
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box mt={1} className={classes.inputWrapper}>
+                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
+                    No of orders:
+                  </Typography>
+                  <Input
+                    value={grids}
+                    type="number"
+                    onInput={(event) => setGrids(parseInt(event.target.value))}
+                    fullWidth
+                    placeholder="Enter grid count here"
+                    disableUnderline
+                    style={{ fontSize: 20, fontWeight: 600 }}
+                  />
+                </Box>
+
+                <Box mt={1} className={classes.inputWrapper}>
+                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
+                    Trigger Percent:
+                  </Typography>
+                  <Input
+                    type="number"
+                    disableUnderline
+                    value={percent}
+                    fullWidth
+                    placeholder="10"
+                    onChange={(e) => handlePercentage(e)}
+                    style={{ fontSize: 20, fontWeight: 600 }}
+                  />
+                </Box>
+
+                <div className="text-center">
+                  <Button
+                    className={classes.actionButton}
+                    onClick={isApproved ? handleStake : handleApprove}
+                  >
+                    {isApproved ? "Create Strategy" : "Approve Strategy"}
+                  </Button>
+                </div>
+              </div>
+            </Box>
+          </Grid>
+          <Grid item md={6}>
+            <Box className={classes.card} style={{ height: "100%" }}>
               <div>
                 <Typography variant="h6" fontWeight={600} noWrap>
                   Orders chart
-                </Typography>
-                <Typography variant="small" noWrap>
-                  Visualise your orders in real-time
                 </Typography>
               </div>
               <LineChart
@@ -1011,7 +1014,7 @@ export default function AccumulationComponent() {
                 yaxisMax={parseFloat(orderPrices[0]) * 1.2}
                 selectedToken={selectedToken}
               />
-            </Box> */}
+            </Box>
           </Grid>
         </Grid>
         <Box mt={3}>

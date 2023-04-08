@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { tokenList } from "./data";
 
 export const fromWei = (tokens, decimals = 18) => {
   try {
@@ -42,4 +43,25 @@ export const formatCurrency = (value, precision = 1) => {
     maximumFractionDigits: precision,
   });
   return formatter.format(value)?.slice(3);
+};
+
+export const toDollarPrice = (value) => {
+  try {
+    if (!value) {
+      return 0;
+    }
+
+    return parseFloat(value / 100000000).toFixed(3);
+  } catch (error) {
+    console.log("exeption in toDollarPrice ", error);
+    return null;
+  }
+};
+
+export const getTokenStaticDataByAddress = (address) => {
+  let tokenData = tokenList.find(
+    (singleToken) => singleToken.address === address
+  );
+  console.log(tokenData);
+  return tokenData;
 };

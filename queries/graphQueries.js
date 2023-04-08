@@ -61,3 +61,25 @@ export const GetUserGraphData = gql`
     }
   }
 `;
+export const GetAllOrdersOfUser = gql`
+  query GetAllOrdersOfUser($address: String, $type: String) {
+    orders(first: 500, where: { user: $address, strategyType: $type }) {
+      id
+      orderId
+      user
+      open
+      entryPrice
+      nextPrice
+      percentage
+      grids
+      executedGrids
+      fiatBalance
+      deposit
+      remainingFiat
+      tokenBalance
+      tokenAddress
+      strategyType
+      remainingToken
+    }
+  }
+`;

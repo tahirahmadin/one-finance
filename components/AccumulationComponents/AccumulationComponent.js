@@ -24,6 +24,7 @@ import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  GetAllOrdersOfUser,
   GetPoolDataById,
   GetPoolUserActivityQuery,
   GetPoolUserDataByAddress,
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     fontWeight: 600,
-    color: "#f9f9f9",
+    color: "#e5e5e5",
     textAlign: "left",
   },
 
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   },
   statsCardHeading: {
     fontWeight: 600,
-    color: "#f9f9f9",
+    color: "#e5e5e5",
     textAlign: "left",
   },
   statsCardPara: {
@@ -106,12 +107,12 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 600,
     fontSize: 32,
-    color: "#f9f9f9",
+    color: "#e5e5e5",
     textAlign: "left",
   },
   heading: {
     fontWeight: 600,
-    color: "#f9f9f9",
+    color: "#e5e5e5",
     textAlign: "left",
   },
   inputWrapper: {
@@ -179,36 +180,29 @@ export default function AccumulationComponent() {
 
   const [getPoolDataQuery, { data, loading, error }] =
     useLazyQuery(GetPoolDataById);
+
   const [getPoolUserDataQuery, { data: poolUserData }] = useLazyQuery(
     GetPoolUserDataByAddress
   );
 
-  const [getPoolUserActivityQuery, { data: activityData }] = useLazyQuery(
-    GetPoolUserActivityQuery
-  );
+  useEffect(() => {
+    if (accountSC) {
+      getPoolUserDataQuery({
+        variables: { user: accountSC },
+        // pollInterval: 5000,
+      });
+    }
+  }, [resetFlag, accountSC, getPoolUserDataQuery]);
 
   // Get Pool Graph Data
   useEffect(() => {
     getPoolDataQuery({
       variables: { address: constants.contracts.accumulation },
-      pollInterval: 5000,
+      // pollInterval: 5000,
     });
   }, [resetFlag, getPoolDataQuery]);
 
   // Get Pool User Graph Data
-
-  useEffect(() => {
-    if (accountSC) {
-      getPoolUserActivityQuery({
-        variables: { user: accountSC, type: "ACCUMULATION" },
-        pollInterval: 5000,
-      });
-      getPoolUserDataQuery({
-        variables: { user: accountSC },
-        pollInterval: 5000,
-      });
-    }
-  }, [resetFlag, accountSC, getPoolUserActivityQuery, getPoolUserDataQuery]);
 
   // Get USDT Balance in account
   useEffect(() => {
@@ -237,14 +231,6 @@ export default function AccumulationComponent() {
       setPoolUserGraphData(poolUserData.poolUsers[0]);
     }
   }, [poolUserData]);
-
-  // Get user pool activities
-  useEffect(() => {
-    if (activityData) {
-      console.log(activityData.userActivities);
-      setActivitiesGraphData(activityData.userActivities);
-    }
-  }, [activityData]);
 
   // Check price of token
   useEffect(() => {
@@ -658,7 +644,7 @@ export default function AccumulationComponent() {
                       <Typography
                         variant="body2"
                         fontWeight={600}
-                        color={"#f9f9f9"}
+                        color={"#e5e5e5"}
                         lineHeight={1}
                         padding={0}
                         noWrap
@@ -713,7 +699,7 @@ export default function AccumulationComponent() {
                       style={{
                         fontSize: 20,
                         fontWeight: 600,
-                        color: "#f9f9f9",
+                        color: "#e5e5e5",
                       }}
                       type="number"
                     />
@@ -848,11 +834,9 @@ export default function AccumulationComponent() {
               className={classes.heading}
               fontWeight={700}
             >
-              Your Trades
+              My Orders
             </Typography>
-            {activitiesGraphData && (
-              <PoolActivities activities={activitiesGraphData} />
-            )}
+            <PoolActivities poolType={"ACCUMULATION"} />
           </div>
         </Box>
       </Container>

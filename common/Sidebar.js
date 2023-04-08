@@ -14,6 +14,7 @@ import {
   Wallet,
 } from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,26 +95,28 @@ const SideBar = ({}) => {
               Pools
             </Typography>
           </Paper>
-          <Paper
-            onClick={() => dispatch(setMenuIndex(1))}
-            key={1}
-            sx={{
-              boxShadow: 0,
-              borderRadius: 2,
-              bgcolor:
-                menuIndex === 1 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-              py: 2,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            <EmojiEvents style={{ marginRight: 10, color: "white" }} />
-            <Typography variant="title1" className={classes.menuTitle}>
-              Rewards
-            </Typography>
-          </Paper>
+          <Link href="/">
+            <Paper
+              onClick={() => dispatch(setMenuIndex(1))}
+              key={1}
+              sx={{
+                boxShadow: 0,
+                borderRadius: 2,
+                bgcolor:
+                  menuIndex === 1 ? `rgba(130, 71, 229, 0.3)` : "transparent",
+                py: 2,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <EmojiEvents style={{ marginRight: 10, color: "white" }} />
+              <Typography variant="title1" className={classes.menuTitle}>
+                Rewards
+              </Typography>
+            </Paper>
+          </Link>
           <Paper
             onClick={() => dispatch(setMenuIndex(2))}
             key={1}

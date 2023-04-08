@@ -787,7 +787,7 @@ export default function AccumulationComponent() {
                           Invested($)
                         </Typography>
                         <Typography variant="h5" fontWeight={600}>
-                          ${fromWei(poolUserGraphData.deposit)}
+                          ${fromWei(poolGraphData.deposit)}
                         </Typography>
                       </Box>
                       <Box
@@ -821,7 +821,7 @@ export default function AccumulationComponent() {
                           In Order($)
                         </Typography>
                         <Typography variant="h5" fontWeight={600}>
-                          ${fromWei(poolUserGraphData.fiatBalance)}
+                          ${fromWei(poolGraphData.fiatBalance)}
                         </Typography>
                       </Box>
                       <Box
@@ -856,7 +856,7 @@ export default function AccumulationComponent() {
                           Orders
                         </Typography>
                         <Typography variant="h5" fontWeight={600}>
-                          {poolUserGraphData.ordersCount}
+                          {poolGraphData.ordersCount}
                         </Typography>
                       </Box>
                     </Box>

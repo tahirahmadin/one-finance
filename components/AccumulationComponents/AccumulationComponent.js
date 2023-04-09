@@ -496,7 +496,7 @@ export default function AccumulationComponent() {
                   padding: 20,
                   borderRadius: 30,
                   background: `linear-gradient(0deg, rgba(0, 0, 0, 0.91), rgba(3, 3, 3, 0.8) ),url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6kTUrTHYiI8JsOsLJZFoZwhQHg5DSdEVoQ&usqp=CAU")`,
-                  backgroundPosition: "center",
+                  backgroundPosition: "left top",
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
                 }}

@@ -10,6 +10,13 @@ import {
   Slider,
   Container,
   CircularProgress,
+  ListSubheader,
+  TextField,
+  InputAdornment,
+  FormControl,
+  useMediaQuery,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   checkUSDTApproved,
@@ -29,6 +36,7 @@ import {
   Feed,
   Inventory,
   NoteAdd,
+  Search,
 } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
@@ -51,6 +59,25 @@ import { fromWei } from "../../utils/helper";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
+const TOKEN_LIST = [
+  {
+    name: "Sleep Token",
+    symbol: "SLEEPT",
+    id: "polkabridge",
+    address: "0xb94d207a3fBdb312cef2e5dBEb7C22A76516BE37",
+    decimals: 18,
+    logoURI:
+      "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
+  },
+  {
+    name: "Orare Token",
+    symbol: "ORARE",
+    id: "orare",
+    address: "0xff2382bd52efacef02cc895bcbfc4618608aa56f",
+    decimals: 18,
+    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11309.png",
+  },
+];
 const useStyles = makeStyles((theme) => ({
   background: {
     // backgroundImage: 'url("images/network.png")',
@@ -173,6 +200,8 @@ export default function AccumulationComponent() {
   const [poolGraphData, setPoolGraphData] = useState(null);
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
   const [selectTokenPopup, setSelectTokenPopup] = useState(false);
+
+  const [tokenSearchKey, setTokenSearchKey] = useState("");
   // const [selectedToken, setSelectedToken] = useState({
   //   name: "Polkabridge",
   //   symbol: "PBR",
@@ -183,15 +212,9 @@ export default function AccumulationComponent() {
   //     "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
   // });
 
-  const [selectedToken, setSelectedToken] = useState({
-    name: "Sleep Token",
-    symbol: "SLEEPT",
-    id: "polkabridge",
-    address: "0xb94d207a3fBdb312cef2e5dBEb7C22A76516BE37",
-    decimals: 18,
-    logoURI:
-      "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
-  });
+  const [selectedToken, setSelectedToken] = useState(TOKEN_LIST[0]);
+  const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const [getPoolDataQuery, { data, loading, error }] =
     useLazyQuery(GetPoolDataById);
@@ -462,6 +485,17 @@ export default function AccumulationComponent() {
     console.log("hitting");
     setSelectTokenPopup(false);
   };
+
+  const handleTokenSelect = useCallback(
+    (e) => {
+      const symbol = e.target.value;
+
+      const tokenSelected = TOKEN_LIST.find((el) => el.symbol === symbol);
+      setSelectedToken(tokenSelected);
+    },
+    [setSelectedToken]
+  );
+
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
@@ -835,7 +869,7 @@ export default function AccumulationComponent() {
                     padding: "10px 10px 10px 10px",
                     borderRadius: 10,
                   }}
-                  onClick={() => setSelectTokenPopup(true)}
+                  // onClick={() => setSelectTokenPopup(true)}
                 >
                   <Box
                     display="flex"
@@ -870,20 +904,120 @@ export default function AccumulationComponent() {
                           </small>
                         )}
                       </Typography>
-                      <Typography
+                    </Box>
+                  </Box>
+                  <Box width={"100%"}>
+                    <FormControl
+                      variant="standard"
+                      fullWidth
+                      sx={{ m: sm ? "10px 15px" : "0px 0px" }}
+                      style={{
+                        backgroundColor: "#000000",
+                      }}
+                    >
+                      {/* <Typography
                         variant="small"
                         lineHeight={1}
                         noWrap
                         style={{ fontSize: 10 }}
                       >
                         {selectedToken.name}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <ArrowDropDown style={{ color: "white" }} />
+                      </Typography> */}
+                      <Select
+                        variant="standard"
+                        disableUnderline={true}
+                        value={""}
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: sm && 14,
+                          letterSpacing: 1,
+                          color: "white",
+
+                          "& .MuiSvgIcon-root": {
+                            color: "white",
+                          },
+                        }}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 350,
+                              width: 250,
+                            },
+                          },
+                        }}
+                        onChange={handleTokenSelect}
+                      >
+                        <ListSubheader
+                          style={
+                            {
+                              // backgroundColor: "",
+                            }
+                          }
+                        >
+                          <TextField
+                            size="small"
+                            autoFocus
+                            fullWidth
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <Search fontSize="small" />
+                                </InputAdornment>
+                              ),
+                              style: {
+                                fontSize: sm && 14,
+                                color: "#000000",
+                              },
+                            }}
+                            value={tokenSearchKey}
+                            onChange={(e) => setTokenSearchKey(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key !== "Escape") {
+                                e.stopPropagation();
+                              }
+                            }}
+                          />
+                        </ListSubheader>
+
+                        {TOKEN_LIST.map((item, index) => (
+                          <MenuItem
+                            key={index}
+                            value={item.symbol}
+                            sx={{ fontSize: sm && 14 }}
+                            dense={sm}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>
+                              <img
+                                src={item.logoURI}
+                                style={{
+                                  height: sm ? 16 : 20,
+                                  marginRight: 5,
+                                }}
+                                alt={item.symbol}
+                              />
+                              {item.name}
+                            </div>
+
+                            {/*display  balance */}
+                            <Typography
+                              variant="h6"
+                              fontWeight={600}
+                              lineHeight={1}
+                              style={{ color: "#e5e5e5" }}
+                            >
+                              0
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Box>
                 </Box>
+
                 <Box
                   display={"flex"}
                   justifyContent={"space-between"}

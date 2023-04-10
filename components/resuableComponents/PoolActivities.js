@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useChain } from "react-moralis";
-import { Container } from "@mui/system";
-import Web3 from "web3";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { GetAllOrdersOfUser } from "../../queries/graphQueries";
+import { GetActiveOrdersOfUser } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
-import {
-  fromWei,
-  getTokenStaticDataByAddress,
-  toDollarPrice,
-} from "../../utils/helper";
+import { fromWei, toDollarPrice } from "../../utils/helper";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -33,8 +26,9 @@ export default function PoolActivities({ poolType }) {
 
   const [ordersGraphData, setOrdersGraphData] = useState(null);
 
-  const [getPoolUserOrderQuery, { data: ordersData }] =
-    useLazyQuery(GetAllOrdersOfUser);
+  const [getPoolUserOrderQuery, { data: ordersData }] = useLazyQuery(
+    GetActiveOrdersOfUser
+  );
 
   useEffect(() => {
     if (accountSC) {
@@ -385,7 +379,9 @@ export default function PoolActivities({ poolType }) {
                     color={"#bdbdbd"}
                     fontSize={14}
                   >
-                    View
+                    <TimeAgo
+                      datetime={parseInt(singleOrder.timestamp) * 1000}
+                    />
                   </Typography>
                 </Box>
               </Grid>

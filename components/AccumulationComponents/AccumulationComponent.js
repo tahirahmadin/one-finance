@@ -7,16 +7,11 @@ import {
   Typography,
   useTheme,
   Input,
-  Slider,
   Container,
-  CircularProgress,
-  ListSubheader,
-  TextField,
-  InputAdornment,
-  FormControl,
   useMediaQuery,
-  Select,
-  MenuItem,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import {
   checkUSDTApproved,
@@ -29,55 +24,31 @@ import { accumulationInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
 import {
   AccountBalance,
-  ArrowDropDown,
   CurrencyExchange,
   Dataset,
-  DocumentScanner,
+  ExpandMore,
   Feed,
   Inventory,
   NoteAdd,
-  Search,
 } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  GetAllOrdersOfUser,
   GetPoolDataById,
-  GetPoolUserActivityQuery,
   GetPoolUserDataByAddress,
 } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import LineChart from "../../common/Charts/LineChart";
-import TimeAgo from "timeago-react";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import constants from "../../utils/constants";
 import PoolActivities from "../resuableComponents/PoolActivities";
-import { SelectTokenDialog } from "../resuableComponents/SelectToken";
 import Link from "next/link";
 import { fromWei } from "../../utils/helper";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { tokenList } from "../../utils/data";
 
-const TOKEN_LIST = [
-  {
-    name: "Sleep Token",
-    symbol: "SLEEPT",
-    id: "polkabridge",
-    address: "0xb94d207a3fBdb312cef2e5dBEb7C22A76516BE37",
-    decimals: 18,
-    logoURI:
-      "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
-  },
-  {
-    name: "Orare Token",
-    symbol: "ORARE",
-    id: "orare",
-    address: "0xff2382bd52efacef02cc895bcbfc4618608aa56f",
-    decimals: 18,
-    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11309.png",
-  },
-];
 const useStyles = makeStyles((theme) => ({
   background: {
     // backgroundImage: 'url("images/network.png")',
@@ -199,20 +170,9 @@ export default function AccumulationComponent() {
   const [loaded, setLoaded] = useState(false);
   const [poolGraphData, setPoolGraphData] = useState(null);
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
-  const [selectTokenPopup, setSelectTokenPopup] = useState(false);
+  const [expandTokens, setExpandTokens] = useState(false);
+  const [selectedToken, setSelectedToken] = useState(tokenList[0]);
 
-  const [tokenSearchKey, setTokenSearchKey] = useState("");
-  // const [selectedToken, setSelectedToken] = useState({
-  //   name: "Polkabridge",
-  //   symbol: "PBR",
-  //   id: "polkabridge",
-  //   address: "0x298d492e8c1d909D3F63Bc4A36C66c64ACB3d695",
-  //   decimals: 18,
-  //   logoURI:
-  //     "https://assets.coingecko.com/coins/images/13744/small/symbol-whitebg200x200.png?1611377553",
-  // });
-
-  const [selectedToken, setSelectedToken] = useState(TOKEN_LIST[0]);
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
@@ -346,7 +306,6 @@ export default function AccumulationComponent() {
     let min = 0;
     let max = 50;
     value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-
     setPercent(value);
   };
 
@@ -406,8 +365,7 @@ export default function AccumulationComponent() {
     let price = tokenPriceData ? parseFloat(tokenPriceData.usd) * 100000000 : 0; // Making it 8 decimal price
     if (amount > 0 && percent > 0 && grids > 0) {
       let ordersData = await calculateOrdersData;
-      console.log(ordersData);
-      console.log(price);
+
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
@@ -474,36 +432,14 @@ export default function AccumulationComponent() {
     setStakeCase(0);
   };
 
-  const getFiatSpent = () => {
-    let deposit = Web3.utils.fromWei(poolGraphData.deposit, "ether");
-    let currentBalance = Web3.utils.fromWei(poolGraphData.fiatBalance, "ether");
-    let spent = parseInt(deposit) - parseInt(currentBalance);
-    return spent;
+  const handleTokenSelect = (index) => {
+    setSelectedToken(tokenList[index]);
+    setExpandTokens(false);
   };
-
-  const handleClose = () => {
-    console.log("hitting");
-    setSelectTokenPopup(false);
-  };
-
-  const handleTokenSelect = useCallback(
-    (e) => {
-      const symbol = e.target.value;
-
-      const tokenSelected = TOKEN_LIST.find((el) => el.symbol === symbol);
-      setSelectedToken(tokenSelected);
-    },
-    [setSelectedToken]
-  );
 
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
-      <SelectTokenDialog
-        selectTokenPopup={selectTokenPopup}
-        handleClose={handleClose}
-        setSelectedToken={setSelectedToken}
-      />
 
       <Container>
         <Typography variant="h3" className={classes.pageTitle}>
@@ -521,62 +457,60 @@ export default function AccumulationComponent() {
           pt={3}
         >
           <Grid item md={3.5}>
-            {poolUserGraphData && (
+            <Box
+              style={{
+                border: "1px solid #2d2d32",
+                height: "100%",
+                width: "100%",
+                padding: 20,
+                borderRadius: 30,
+                background: `linear-gradient(0deg, rgba(0, 0, 0, 0.91), rgba(3, 3, 3, 0.8) ),url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6kTUrTHYiI8JsOsLJZFoZwhQHg5DSdEVoQ&usqp=CAU")`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+              }}
+              display="flex"
+              flexDirection={"column"}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Box
-                style={{
-                  border: "1px solid #2d2d32",
-                  height: "100%",
-                  width: "100%",
-                  padding: 20,
-                  borderRadius: 30,
-                  background: `linear-gradient(0deg, rgba(0, 0, 0, 0.91), rgba(3, 3, 3, 0.8) ),url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6kTUrTHYiI8JsOsLJZFoZwhQHg5DSdEVoQ&usqp=CAU")`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                }}
                 display="flex"
                 flexDirection={"column"}
                 justifyContent="center"
                 alignItems="center"
               >
-                <Box
-                  display="flex"
-                  flexDirection={"column"}
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <img
-                    src="https://static.vecteezy.com/system/resources/previews/008/851/072/original/3d-rocket-business-illustration-png.png"
-                    height="150px"
-                  />
-                </Box>
-                <Typography
-                  variant="h6"
-                  fontWeight={700}
-                  textAlign={"center"}
-                  lineHeight={1.3}
-                >
-                  There are no strategy <br />
-                  created yet
-                </Typography>
-                <Typography
-                  variant="body3"
-                  fontWeight={400}
-                  py={1}
-                  color={"#bdbdbd"}
-                >
-                  You can create your strategy
-                </Typography>
-                <div className="text-center">
-                  <Button
-                    className={classes.actionButton}
-                    onClick={isApproved ? handleStake : handleApprove}
-                  >
-                    + Create Strategy
-                  </Button>
-                </div>
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/008/851/072/original/3d-rocket-business-illustration-png.png"
+                  height="150px"
+                />
               </Box>
-            )}
+              <Typography
+                variant="h6"
+                fontWeight={700}
+                textAlign={"center"}
+                lineHeight={1.3}
+              >
+                There are no strategy <br />
+                created yet
+              </Typography>
+              <Typography
+                variant="body3"
+                fontWeight={400}
+                py={1}
+                color={"#bdbdbd"}
+              >
+                You can create your strategy
+              </Typography>
+              <div className="text-center">
+                <Button
+                  className={classes.actionButton}
+                  onClick={isApproved ? handleStake : handleApprove}
+                >
+                  + Create Strategy
+                </Button>
+              </div>
+            </Box>
           </Grid>
           <Grid item md={8.5}>
             <Box
@@ -586,127 +520,129 @@ export default function AccumulationComponent() {
               style={{ backgroundColor: "#000000" }}
             >
               <Box width={"65%"}>
-                {poolGraphData && (
-                  <div className="d-flex flex-column justify-content-around w-100">
-                    <div>
-                      <Typography variant="h6" fontWeight={600} lineHeight={1}>
-                        <Inventory /> Pool overview
-                      </Typography>
-                    </div>
+                <div className="d-flex flex-column justify-content-around w-100">
+                  <div>
+                    <Typography variant="h6" fontWeight={600} lineHeight={1}>
+                      <Inventory /> Pool overview
+                    </Typography>
+                  </div>
 
+                  <Box
+                    mt={4}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                  >
                     <Box
-                      mt={4}
+                      style={{
+                        border: "1px solid #2d2d32",
+                        minHeight: 100,
+                        minWidth: 120,
+                        padding: 20,
+                        borderRadius: 10,
+                        backgroundColor: "#0C0D10",
+                      }}
                       display="flex"
-                      flexDirection={"row"}
-                      justifyContent="space-evenly"
+                      flexDirection={"column"}
+                      justifyContent="center"
                       alignItems="center"
                     >
                       <Box
-                        style={{
-                          border: "1px solid #2d2d32",
-                          minHeight: 100,
-                          minWidth: 120,
-                          padding: 20,
-                          borderRadius: 10,
-                          backgroundColor: "#0C0D10",
-                        }}
                         display="flex"
                         flexDirection={"column"}
                         justifyContent="center"
                         alignItems="center"
-                      >
-                        <Box
-                          display="flex"
-                          flexDirection={"column"}
-                          justifyContent="center"
-                          alignItems="center"
-                          style={{
-                            border: "1px solid #2d2d32",
-                            padding: 14,
-                            borderRadius: "50%",
-                          }}
-                        >
-                          <AccountBalance style={{ color: "#bdbdbd" }} />
-                        </Box>
-                        <Typography variant="body2" fontWeight={300} py={1}>
-                          Invested($)
-                        </Typography>
-                        <Typography variant="h5" fontWeight={600}>
-                          ${fromWei(poolGraphData.deposit)}
-                        </Typography>
-                      </Box>
-                      <Box
                         style={{
                           border: "1px solid #2d2d32",
-                          minHeight: 100,
-                          minWidth: 120,
-                          padding: 20,
-                          borderRadius: 10,
-                          backgroundColor: "#0C0D10",
+                          padding: 14,
+                          borderRadius: "50%",
                         }}
-                        display="flex"
-                        flexDirection={"column"}
-                        justifyContent="center"
-                        alignItems="center"
                       >
-                        <Box
-                          display="flex"
-                          flexDirection={"column"}
-                          justifyContent="center"
-                          alignItems="center"
-                          style={{
-                            border: "1px solid #2d2d32",
-                            padding: 14,
-                            borderRadius: "50%",
-                          }}
-                        >
-                          <CurrencyExchange style={{ color: "#bdbdbd" }} />
-                        </Box>
-                        <Typography variant="body2" fontWeight={300} py={1}>
-                          In Order($)
-                        </Typography>
-                        <Typography variant="h5" fontWeight={600}>
-                          ${fromWei(poolGraphData.fiatBalance)}
-                        </Typography>
+                        <AccountBalance style={{ color: "#bdbdbd" }} />
                       </Box>
-                      <Box
-                        style={{
-                          border: "1px solid #2d2d32",
-                          minHeight: 100,
-                          minWidth: 120,
-                          padding: 20,
-                          borderRadius: 10,
-                          backgroundColor: "#0C0D10",
-                        }}
-                        display="flex"
-                        flexDirection={"column"}
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        <Box
-                          display="flex"
-                          flexDirection={"column"}
-                          justifyContent="center"
-                          alignItems="center"
-                          style={{
-                            border: "1px solid #2d2d32",
-
-                            padding: 14,
-                            borderRadius: "50%",
-                          }}
-                        >
-                          <Dataset style={{ color: "#bdbdbd" }} />
-                        </Box>
-                        <Typography variant="body2" fontWeight={300} py={1}>
-                          Orders
-                        </Typography>
-                        <Typography variant="h5" fontWeight={600}>
-                          {poolGraphData.ordersCount}
-                        </Typography>
-                      </Box>
+                      <Typography variant="body2" fontWeight={300} py={1}>
+                        Invested($)
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        {poolGraphData
+                          ? "$" + fromWei(poolGraphData.deposit)
+                          : "-"}
+                      </Typography>
                     </Box>
-                  </div>
-                )}
+                    <Box
+                      style={{
+                        border: "1px solid #2d2d32",
+                        minHeight: 100,
+                        minWidth: 120,
+                        padding: 20,
+                        borderRadius: 10,
+                        backgroundColor: "#0C0D10",
+                      }}
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Box
+                        display="flex"
+                        flexDirection={"column"}
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{
+                          border: "1px solid #2d2d32",
+                          padding: 14,
+                          borderRadius: "50%",
+                        }}
+                      >
+                        <CurrencyExchange style={{ color: "#bdbdbd" }} />
+                      </Box>
+                      <Typography variant="body2" fontWeight={300} py={1}>
+                        In Order($)
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        {poolGraphData
+                          ? "$" + fromWei(poolGraphData.fiatBalance)
+                          : "-"}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        border: "1px solid #2d2d32",
+                        minHeight: 100,
+                        minWidth: 120,
+                        padding: 20,
+                        borderRadius: 10,
+                        backgroundColor: "#0C0D10",
+                      }}
+                      display="flex"
+                      flexDirection={"column"}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Box
+                        display="flex"
+                        flexDirection={"column"}
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{
+                          border: "1px solid #2d2d32",
+
+                          padding: 14,
+                          borderRadius: "50%",
+                        }}
+                      >
+                        <Dataset style={{ color: "#bdbdbd" }} />
+                      </Box>
+                      <Typography variant="body2" fontWeight={300} py={1}>
+                        Orders
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        {poolGraphData ? poolGraphData.ordersCount : "-"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </div>
                 <Box
                   display={"flex"}
                   justifyContent={"space-between"}
@@ -749,96 +685,98 @@ export default function AccumulationComponent() {
                   width: "35%",
                 }}
               >
-                {poolUserGraphData && (
-                  <div className="d-flex flex-column justify-content-around w-100">
-                    <div>
-                      <Typography variant="h6" fontWeight={600} lineHeight={1}>
-                        <Feed /> My investment
-                      </Typography>
-                    </div>
-
-                    <Box mt={2}>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        py={1}
-                        textAlign={"left"}
-                      >
-                        Invested($)
-                      </Typography>
-                      <Typography variant="h5" fontWeight={600}>
-                        ${fromWei(poolUserGraphData.deposit)}
-                      </Typography>
-                    </Box>
-                    <Box mt={2}>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        py={1}
-                        textAlign={"left"}
-                      >
-                        In order($)
-                      </Typography>
-                      <Typography variant="h5" fontWeight={600}>
-                        ${fromWei(poolUserGraphData.fiatBalance)}
-                      </Typography>
-                    </Box>
-                    <Box
-                      mt={2}
-                      style={{
-                        border: "1px solid #2d2d32",
-
-                        paddingLeft: 20,
-                        paddingRight: 20,
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        borderRadius: 20,
-                        backgroundColor: "#0C0D10",
-                      }}
-                      display="flex"
-                      flexDirection={"row"}
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Box>
-                        <Typography variant="body2" fontWeight={300} pb={1}>
-                          Progress
-                        </Typography>
-                        <Typography variant="h5" fontWeight={600}>
-                          4/9
-                        </Typography>
-                      </Box>
-                      <Box style={{ width: 200, height: 70 }}></Box>
-                      <CircularProgressbar
-                        value={40}
-                        text={`40%`}
-                        styles={buildStyles({
-                          // Rotation of path and trail, in number of turns (0-1)
-                          rotation: 0,
-
-                          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                          strokeLinecap: "butt",
-
-                          // Text size
-                          textSize: "16px",
-
-                          // How long animation takes to go from one percentage to another, in seconds
-                          pathTransitionDuration: 0.5,
-
-                          // Can specify path transition in more detail, or remove it entirely
-                          // pathTransition: 'none',
-
-                          // Colors
-                          pathColor: `rgba(130, 71, 229, ${40 / 100})`,
-                          textColor: "white",
-                          trailColor: "#d6d6d6",
-                          backgroundColor: "#3e98c7",
-                        })}
-                      />
-                      ;
-                    </Box>
+                <div className="d-flex flex-column justify-content-around w-100">
+                  <div>
+                    <Typography variant="h6" fontWeight={600} lineHeight={1}>
+                      <Feed /> My investment
+                    </Typography>
                   </div>
-                )}
+
+                  <Box mt={2}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      py={1}
+                      textAlign={"left"}
+                    >
+                      Invested($)
+                    </Typography>
+                    <Typography variant="h5" fontWeight={600}>
+                      {poolUserGraphData
+                        ? "$" + fromWei(poolUserGraphData.deposit)
+                        : "-"}
+                    </Typography>
+                  </Box>
+                  <Box mt={2}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      py={1}
+                      textAlign={"left"}
+                    >
+                      In order($)
+                    </Typography>
+                    <Typography variant="h5" fontWeight={600}>
+                      {poolUserGraphData
+                        ? "$" + fromWei(poolUserGraphData.fiatBalance)
+                        : "-"}
+                    </Typography>
+                  </Box>
+                  <Box
+                    mt={2}
+                    style={{
+                      border: "1px solid #2d2d32",
+
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      borderRadius: 20,
+                      backgroundColor: "#0C0D10",
+                    }}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box>
+                      <Typography variant="body2" fontWeight={300} pb={1}>
+                        Progress
+                      </Typography>
+                      <Typography variant="h5" fontWeight={600}>
+                        4/9
+                      </Typography>
+                    </Box>
+                    <Box style={{ width: 200, height: 70 }}></Box>
+                    <CircularProgressbar
+                      value={40}
+                      text={`40%`}
+                      styles={buildStyles({
+                        // Rotation of path and trail, in number of turns (0-1)
+                        rotation: 0,
+
+                        // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                        strokeLinecap: "butt",
+
+                        // Text size
+                        textSize: "16px",
+
+                        // How long animation takes to go from one percentage to another, in seconds
+                        pathTransitionDuration: 0.5,
+
+                        // Can specify path transition in more detail, or remove it entirely
+                        // pathTransition: 'none',
+
+                        // Colors
+                        pathColor: `rgba(130, 71, 229, ${40 / 100})`,
+                        textColor: "white",
+                        trailColor: "#d6d6d6",
+                        backgroundColor: "#3e98c7",
+                      })}
+                    />
+                    ;
+                  </Box>
+                </div>
               </Box>
             </Box>
           </Grid>
@@ -858,166 +796,100 @@ export default function AccumulationComponent() {
                   </Typography>
                 </div>
 
-                <Box
-                  mt={2}
-                  display="flex"
-                  flexDirection={"row"}
-                  justifyContent="space-between"
-                  alignItems="center"
-                  style={{
-                    border: "1px solid #2d2d32",
-                    padding: "10px 10px 10px 10px",
-                    borderRadius: 10,
-                  }}
-                  // onClick={() => setSelectTokenPopup(true)}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection={"row"}
-                    justifyContent="flex-start"
-                    alignItems="center"
+                <Box mt={2}>
+                  <Accordion
+                    expanded={expandTokens}
+                    style={{
+                      width: "100%",
+                      backgroundColor: "transparent",
+                      border: "1px solid #2d2d32",
+                      borderRadius: 10,
+                    }}
+                    disableGutters={true}
                   >
-                    <img
-                      src={selectedToken.logoURI}
-                      alt={"TokenLogo"}
-                      height="28px"
-                    />
-                    <Box ml={1}>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        color={"#e5e5e5"}
-                        lineHeight={1}
-                        padding={0}
-                        noWrap
-                        margin={0}
-                        spacing={0}
-                        gutterBottom={0}
-                      >
-                        {selectedToken.symbol}{" "}
-                        {tokenPriceData && (
-                          <small
-                            className="blink_me"
-                            style={{ color: "green", fontSize: 11 }}
-                          >
-                            ${tokenPriceData.usd.toFixed(3)}
-                          </small>
-                        )}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Box width={"100%"}>
-                    <FormControl
-                      variant="standard"
-                      fullWidth
-                      sx={{ m: sm ? "10px 15px" : "0px 0px" }}
-                      style={{
-                        backgroundColor: "#000000",
-                      }}
+                    <AccordionSummary
+                      expandIcon={
+                        <ExpandMore style={{ color: "#f9f9f9", padding: 0 }} />
+                      }
+                      aria-controls="panel2a-content"
+                      id="panel2a-header"
+                      onClick={() => setExpandTokens(true)}
                     >
-                      {/* <Typography
-                        variant="small"
-                        lineHeight={1}
-                        noWrap
-                        style={{ fontSize: 10 }}
+                      <Box
+                        display="flex"
+                        flexDirection={"row"}
+                        justifyContent="flex-start"
+                        alignItems="center"
                       >
-                        {selectedToken.name}
-                      </Typography> */}
-                      <Select
-                        variant="standard"
-                        disableUnderline={true}
-                        value={""}
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: sm && 14,
-                          letterSpacing: 1,
-                          color: "white",
-
-                          "& .MuiSvgIcon-root": {
-                            color: "white",
-                          },
-                        }}
-                        MenuProps={{
-                          PaperProps: {
-                            style: {
-                              maxHeight: 350,
-                              width: 250,
-                            },
-                          },
-                        }}
-                        onChange={handleTokenSelect}
-                      >
-                        <ListSubheader
-                          style={
-                            {
-                              // backgroundColor: "",
-                            }
-                          }
-                        >
-                          <TextField
-                            size="small"
-                            autoFocus
-                            fullWidth
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <Search fontSize="small" />
-                                </InputAdornment>
-                              ),
-                              style: {
-                                fontSize: sm && 14,
-                                color: "#000000",
-                              },
-                            }}
-                            value={tokenSearchKey}
-                            onChange={(e) => setTokenSearchKey(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key !== "Escape") {
-                                e.stopPropagation();
-                              }
-                            }}
-                          />
-                        </ListSubheader>
-
-                        {TOKEN_LIST.map((item, index) => (
-                          <MenuItem
-                            key={index}
-                            value={item.symbol}
-                            sx={{ fontSize: sm && 14 }}
-                            dense={sm}
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
+                        <img
+                          src={selectedToken.logoURI}
+                          alt={"TokenLogo"}
+                          height="28px"
+                        />
+                        <Box ml={1}>
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            color={"#e5e5e5"}
+                            lineHeight={1}
+                            padding={0}
                           >
-                            <div>
-                              <img
-                                src={item.logoURI}
-                                style={{
-                                  height: sm ? 16 : 20,
-                                  marginRight: 5,
-                                }}
-                                alt={item.symbol}
-                              />
-                              {item.name}
-                            </div>
-
-                            {/*display  balance */}
-                            <Typography
-                              variant="h6"
-                              fontWeight={600}
-                              lineHeight={1}
-                              style={{ color: "#e5e5e5" }}
+                            {selectedToken.symbol}{" "}
+                            {tokenPriceData && (
+                              <small
+                                className="blink_me"
+                                style={{ color: "green", fontSize: 11 }}
+                              >
+                                ${tokenPriceData.usd.toFixed(3)}
+                              </small>
+                            )}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box
+                        style={{
+                          maxHeight: 100,
+                          overflowY: "auto",
+                          borderTop: "0.5px solid #414141",
+                        }}
+                      >
+                        {tokenList.map((singleToken, index) => {
+                          return (
+                            <Box
+                              key={index}
+                              display="flex"
+                              flexDirection={"row"}
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              py={1}
+                              onClick={() => handleTokenSelect(index)}
+                              style={{ cursor: "pointer" }}
                             >
-                              0
-                            </Typography>
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
+                              <img
+                                src={singleToken.logoURI}
+                                alt={"TokenLogo"}
+                                height="28px"
+                              />
+                              <Box ml={1}>
+                                <Typography
+                                  variant="body2"
+                                  fontWeight={600}
+                                  color={"#e5e5e5"}
+                                  lineHeight={1}
+                                  noWrap
+                                >
+                                  {singleToken.symbol}{" "}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
                 </Box>
-
                 <Box
                   display={"flex"}
                   justifyContent={"space-between"}
@@ -1139,7 +1011,7 @@ export default function AccumulationComponent() {
             <Box className={classes.card} style={{ height: "100%" }}>
               <div>
                 <Typography variant="h6" fontWeight={600} noWrap>
-                  Orders chart
+                  Orders visualisation
                 </Typography>
               </div>
               <LineChart

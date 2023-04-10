@@ -60,7 +60,7 @@ export const toDollarPrice = (value) => {
 
 export const getTokenStaticDataByAddress = (address) => {
   let tokenData = tokenList.find(
-    (singleToken) => singleToken.address === address
+    (singleToken) => singleToken.address.toLowerCase() === address.toLowerCase()
   );
   console.log(tokenData);
   return tokenData;

@@ -3,6 +3,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
+import AllActivities from "./resuableComponents/AllActivities";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -37,8 +38,6 @@ export default function Activities() {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { account } = useChain();
-
   return (
     <Box>
       <Box className={classes.background}>
@@ -49,6 +48,7 @@ export default function Activities() {
           <Typography variant="body2" className={classes.pageSubtitle}>
             My recent activities will show here
           </Typography>
+          <AllActivities />
         </Container>
       </Box>
     </Box>

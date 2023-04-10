@@ -61,9 +61,14 @@ export const GetUserGraphData = gql`
     }
   }
 `;
-export const GetAllOrdersOfUser = gql`
-  query GetAllOrdersOfUser($address: String, $type: String) {
-    orders(first: 500, where: { user: $address, strategyType: $type }) {
+export const GetActiveOrdersOfUser = gql`
+  query GetActiveOrdersOfUser($address: String, $type: String) {
+    orders(
+      first: 500
+      orderBy: orderId
+      orderDirection: desc
+      where: { user: $address, strategyType: $type }
+    ) {
       id
       orderId
       user
@@ -80,6 +85,7 @@ export const GetAllOrdersOfUser = gql`
       tokenAddress
       strategyType
       remainingToken
+      timestamp
     }
   }
 `;

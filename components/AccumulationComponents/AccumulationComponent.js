@@ -437,6 +437,10 @@ export default function AccumulationComponent() {
     setExpandTokens(false);
   };
 
+  const scrollToCreate = () => {
+    window?.scrollTo(0, 250);
+  };
+
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
@@ -481,8 +485,9 @@ export default function AccumulationComponent() {
                 alignItems="center"
               >
                 <img
-                  src="https://static.vecteezy.com/system/resources/previews/008/851/072/original/3d-rocket-business-illustration-png.png"
-                  height="150px"
+                  src="https://static.vecteezy.com/system/resources/previews/009/373/591/original/business-icon-rocket-3d-illustration-png.png"
+                  height="110px"
+                  style={{ marginTop: -50 }}
                 />
               </Box>
               <Typography
@@ -505,7 +510,7 @@ export default function AccumulationComponent() {
               <div className="text-center">
                 <Button
                   className={classes.actionButton}
-                  onClick={isApproved ? handleStake : handleApprove}
+                  onClick={scrollToCreate}
                 >
                   + Create Strategy
                 </Button>
@@ -528,7 +533,7 @@ export default function AccumulationComponent() {
                   </div>
 
                   <Box
-                    mt={4}
+                    mt={3}
                     display="flex"
                     flexDirection={"row"}
                     justifyContent="space-evenly"
@@ -537,9 +542,9 @@ export default function AccumulationComponent() {
                     <Box
                       style={{
                         border: "1px solid #2d2d32",
-                        minHeight: 100,
+                        minHeight: 80,
                         minWidth: 120,
-                        padding: 20,
+                        padding: 15,
                         borderRadius: 10,
                         backgroundColor: "#0C0D10",
                       }}
@@ -555,16 +560,18 @@ export default function AccumulationComponent() {
                         alignItems="center"
                         style={{
                           border: "1px solid #2d2d32",
-                          padding: 14,
+                          padding: 12,
                           borderRadius: "50%",
                         }}
                       >
-                        <AccountBalance style={{ color: "#bdbdbd" }} />
+                        <AccountBalance
+                          style={{ color: "#bdbdbd", fontSize: 18 }}
+                        />
                       </Box>
-                      <Typography variant="body2" fontWeight={300} py={1}>
+                      <Typography variant="body3" fontWeight={300} py={1}>
                         Invested($)
                       </Typography>
-                      <Typography variant="h5" fontWeight={600}>
+                      <Typography variant="h6" fontWeight={600}>
                         {poolGraphData
                           ? "$" + fromWei(poolGraphData.deposit)
                           : "-"}
@@ -573,9 +580,9 @@ export default function AccumulationComponent() {
                     <Box
                       style={{
                         border: "1px solid #2d2d32",
-                        minHeight: 100,
+                        minHeight: 80,
                         minWidth: 120,
-                        padding: 20,
+                        padding: 15,
                         borderRadius: 10,
                         backgroundColor: "#0C0D10",
                       }}
@@ -595,12 +602,14 @@ export default function AccumulationComponent() {
                           borderRadius: "50%",
                         }}
                       >
-                        <CurrencyExchange style={{ color: "#bdbdbd" }} />
+                        <CurrencyExchange
+                          style={{ color: "#bdbdbd", fontSize: 18 }}
+                        />
                       </Box>
-                      <Typography variant="body2" fontWeight={300} py={1}>
+                      <Typography variant="body3" fontWeight={300} py={1}>
                         In Order($)
                       </Typography>
-                      <Typography variant="h5" fontWeight={600}>
+                      <Typography variant="h6" fontWeight={600}>
                         {poolGraphData
                           ? "$" + fromWei(poolGraphData.fiatBalance)
                           : "-"}
@@ -609,9 +618,9 @@ export default function AccumulationComponent() {
                     <Box
                       style={{
                         border: "1px solid #2d2d32",
-                        minHeight: 100,
+                        minHeight: 80,
                         minWidth: 120,
-                        padding: 20,
+                        padding: 15,
                         borderRadius: 10,
                         backgroundColor: "#0C0D10",
                       }}
@@ -632,12 +641,12 @@ export default function AccumulationComponent() {
                           borderRadius: "50%",
                         }}
                       >
-                        <Dataset style={{ color: "#bdbdbd" }} />
+                        <Dataset style={{ color: "#bdbdbd", fontSize: 18 }} />
                       </Box>
-                      <Typography variant="body2" fontWeight={300} py={1}>
+                      <Typography variant="body3" fontWeight={300} py={1}>
                         Orders
                       </Typography>
-                      <Typography variant="h5" fontWeight={600}>
+                      <Typography variant="h6" fontWeight={600}>
                         {poolGraphData ? poolGraphData.ordersCount : "-"}
                       </Typography>
                     </Box>
@@ -651,21 +660,21 @@ export default function AccumulationComponent() {
                   pr={2}
                 >
                   <Typography variant="h6" fontWeight={600}>
-                    Daily orders executions:
+                    Orders executed in last 24 hours:
                   </Typography>
                   <Box
                     display={"flex"}
                     justifyContent={"flex-end"}
                     alignItems={"center"}
                   >
-                    <Typography variant="h3" fontWeight={600}>
+                    <Typography variant="h5" fontWeight={600}>
                       32
                     </Typography>
                     <div
                       style={{
                         borderRadius: 14,
                         background: "rgba(130, 71, 229, 0.7)",
-                        padding: "6px 10px 6px 10px",
+                        padding: "3px 10px 3px 10px",
                         color: "white",
                         width: "fit-content",
                         marginLeft: 7,
@@ -695,13 +704,12 @@ export default function AccumulationComponent() {
                   <Box mt={2}>
                     <Typography
                       variant="body2"
-                      fontWeight={400}
-                      py={1}
+                      fontWeight={300}
                       textAlign={"left"}
                     >
                       Invested($)
                     </Typography>
-                    <Typography variant="h5" fontWeight={600}>
+                    <Typography variant="h6" fontWeight={600}>
                       {poolUserGraphData
                         ? "$" + fromWei(poolUserGraphData.deposit)
                         : "-"}
@@ -709,16 +717,17 @@ export default function AccumulationComponent() {
                   </Box>
                   <Box mt={2}>
                     <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      py={1}
+                      variant="body3"
+                      fontWeight={300}
                       textAlign={"left"}
                     >
-                      In order($)
+                      Funds used($)
                     </Typography>
-                    <Typography variant="h5" fontWeight={600}>
+                    <Typography variant="h6" fontWeight={600}>
                       {poolUserGraphData
-                        ? "$" + fromWei(poolUserGraphData.fiatBalance)
+                        ? "$" +
+                          (parseFloat(fromWei(poolUserGraphData.deposit)) -
+                            parseFloat(fromWei(poolUserGraphData.fiatBalance)))
                         : "-"}
                     </Typography>
                   </Box>
@@ -726,9 +735,8 @@ export default function AccumulationComponent() {
                     mt={2}
                     style={{
                       border: "1px solid #2d2d32",
-
-                      paddingLeft: 20,
-                      paddingRight: 20,
+                      paddingLeft: 15,
+                      paddingRight: 15,
                       paddingTop: 10,
                       paddingBottom: 10,
                       borderRadius: 20,
@@ -740,41 +748,47 @@ export default function AccumulationComponent() {
                     alignItems="center"
                   >
                     <Box>
-                      <Typography variant="body2" fontWeight={300} pb={1}>
+                      <Typography variant="body3" fontWeight={300} noWrap>
                         Progress
                       </Typography>
-                      <Typography variant="h5" fontWeight={600}>
-                        4/9
+                      <Typography variant="h6" fontWeight={600} pt={1}>
+                        3/32
                       </Typography>
                     </Box>
-                    <Box style={{ width: 200, height: 70 }}></Box>
-                    <CircularProgressbar
-                      value={40}
-                      text={`40%`}
-                      styles={buildStyles({
-                        // Rotation of path and trail, in number of turns (0-1)
-                        rotation: 0,
+                    <Box
+                      style={{ width: 60, height: 60 }}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <CircularProgressbar
+                        value={40}
+                        text={`40%`}
+                        styles={buildStyles({
+                          // Rotation of path and trail, in number of turns (0-1)
+                          rotation: 0,
 
-                        // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                        strokeLinecap: "butt",
+                          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                          strokeLinecap: "butt",
 
-                        // Text size
-                        textSize: "16px",
+                          // Text size
+                          textSize: "16px",
 
-                        // How long animation takes to go from one percentage to another, in seconds
-                        pathTransitionDuration: 0.5,
+                          // How long animation takes to go from one percentage to another, in seconds
+                          pathTransitionDuration: 0.5,
 
-                        // Can specify path transition in more detail, or remove it entirely
-                        // pathTransition: 'none',
+                          // Can specify path transition in more detail, or remove it entirely
+                          // pathTransition: 'none',
 
-                        // Colors
-                        pathColor: `rgba(130, 71, 229, ${40 / 100})`,
-                        textColor: "white",
-                        trailColor: "#d6d6d6",
-                        backgroundColor: "#3e98c7",
-                      })}
-                    />
-                    ;
+                          // Colors
+                          pathColor: `rgba(130, 71, 229, ${40 / 100})`,
+                          textColor: "white",
+                          trailColor: "#d6d6d6",
+                          backgroundColor: "#3e98c7",
+                        })}
+                      />
+                    </Box>
                   </Box>
                 </div>
               </Box>
@@ -1045,7 +1059,7 @@ export default function AccumulationComponent() {
               className={classes.heading}
               fontWeight={700}
             >
-              My Orders
+              Active Orders
             </Typography>
             <PoolActivities poolType={"ACCUMULATION"} />
           </div>

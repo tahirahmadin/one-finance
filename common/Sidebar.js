@@ -139,7 +139,7 @@ const SideBar = ({}) => {
               </Typography>
             </Paper>
           </Link>
-          <Link href="/" style={{ textDecoration: "none" }}>
+          {/* <Link href="/" style={{ textDecoration: "none" }}>
             {" "}
             <Paper
               onClick={() => dispatch(setMenuIndex(3))}
@@ -161,7 +161,7 @@ const SideBar = ({}) => {
                 Porfolio
               </Typography>
             </Paper>
-          </Link>
+          </Link> */}
           <Link href="/" style={{ textDecoration: "none" }}>
             <Paper
               onClick={() => dispatch(setMenuIndex(4))}

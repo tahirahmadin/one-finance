@@ -3,9 +3,13 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { GetActiveOrdersOfUser } from "../../queries/graphQueries";
+import {
+  GetActiveOrdersOfUser,
+  GetUserAllActivities,
+} from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import { fromWei, toDollarPrice } from "../../utils/helper";
+import { getTokenStaticDataByAddress } from "../../utils/helper";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -19,32 +23,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolActivities({ poolType }) {
+export default function LeaderboardComponent() {
   const classes = useStyles();
   const theme = useTheme();
   const { accountSC } = useWeb3Auth();
 
-  const [ordersGraphData, setOrdersGraphData] = useState(null);
+  const [activities, setActivities] = useState(null);
 
-  const [getPoolUserOrderQuery, { data: ordersData }] = useLazyQuery(
-    GetActiveOrdersOfUser
-  );
+  const [getUserAllActivitiesQuery, { data: activitiesData }] =
+    useLazyQuery(GetUserAllActivities);
 
   useEffect(() => {
     if (accountSC) {
-      getPoolUserOrderQuery({
-        variables: { address: accountSC, type: poolType },
+      getUserAllActivitiesQuery({
+        variables: { user: accountSC },
         // pollInterval: 5000,
       });
     }
-  }, [accountSC, getPoolUserOrderQuery]);
+  }, [accountSC, getUserAllActivitiesQuery]);
 
   // Get user pool activities
   useEffect(() => {
-    if (ordersData) {
-      setOrdersGraphData(ordersData.orders);
+    if (activitiesData) {
+      setActivities(activitiesData.userActivities);
     }
-  }, [ordersData]);
+  }, [activitiesData]);
+
+  const getSentence = (action) => {
+    if (action === "EXECUTE_BUY_ORDER") {
+      return `BUY ORDER`;
+    } else if (action === "INVESTED") {
+      return `CREATE ORDER`;
+    } else return action;
+  };
 
   return (
     <Box className={classes.boxCard}>
@@ -58,7 +69,20 @@ export default function PoolActivities({ poolType }) {
               color={"#bdbdbd"}
               fontSize={14}
             >
-              Token
+              Rank
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item md={5}>
+          <Box>
+            <Typography
+              variant="body2"
+              textAlign="left"
+              fontWeight={400}
+              color={"#bdbdbd"}
+              fontSize={14}
+            >
+              User
             </Typography>
           </Box>
         </Grid>
@@ -78,14 +102,14 @@ export default function PoolActivities({ poolType }) {
               color={"#bdbdbd"}
               fontSize={14}
             >
-              Invested($)
+              Volume($)
             </Typography>
           </Box>
         </Grid>
 
         <Grid
           item
-          md={2}
+          md={1.5}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
@@ -99,93 +123,17 @@ export default function PoolActivities({ poolType }) {
               color={"#bdbdbd"}
               fontSize={14}
             >
-              Next Price($)
+              Orders
             </Typography>
           </Box>
         </Grid>
+
         <Grid
           item
-          md={1}
+          md={1.5}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
-          alignItems="center"
-        >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="center"
-            alignItems="flex-start"
-          >
-            <Box>
-              <Typography
-                variant="body2"
-                textAlign="left"
-                fontWeight={400}
-                color={"#bdbdbd"}
-                fontSize={14}
-              >
-                Executed
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          md={2}
-          display="flex"
-          flexDirection={"row"}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-start"
-            alignItems="flex-start"
-          >
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              Pending
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          md={2}
-          display="flex"
-          flexDirection={"row"}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-start"
-            alignItems="flex-start"
-          >
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              Avg Buy Price($)
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          md={1}
-          display="flex"
-          flexDirection={"row"}
-          justifyContent="center"
           alignItems="center"
         >
           <Box
@@ -206,8 +154,8 @@ export default function PoolActivities({ poolType }) {
           </Box>
         </Grid>
       </Grid>
-      {ordersGraphData &&
-        ordersGraphData.map((singleOrder, index) => {
+      {activities &&
+        activities.map((activity, index) => {
           return (
             <Grid
               container
@@ -220,25 +168,49 @@ export default function PoolActivities({ poolType }) {
               key={index}
             >
               <Grid item md={2}>
-                <img
-                  src="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
-                  alt="Token"
-                  height="24px"
-                />
+                {index === 0 && (
+                  <img
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/first-gold-badge-8023027-6430617.png"
+                    alt="Rank1"
+                    height="44px"
+                  />
+                )}
+                {index === 1 && (
+                  <img
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/second-place-medal-4798823-3997214.png"
+                    alt="Rank2"
+                    height="44px"
+                  />
+                )}
+                {index === 2 && (
+                  <img
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/third-place-medal-4798824-3997215.png?f=webp"
+                    alt="Rank3"
+                    height="44px"
+                  />
+                )}
+                {index > 2 && (
+                  <img
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/winner-trophy-4800497-4014693.png"
+                    alt="Rank3"
+                    height="34px"
+                  />
+                )}
                 <Typography
-                  variant="body3"
+                  variant="subtitle"
                   textAlign="left"
                   fontWeight={600}
                   color={"#c7cad9"}
                   pl={1}
+                  noWrap
                 >
-                  SLEEPT
+                  {index + 1}
                 </Typography>
               </Grid>
 
               <Grid
                 item
-                md={2}
+                md={5}
                 display="flex"
                 flexDirection={"row"}
                 justifyContent="flex-start"
@@ -249,13 +221,14 @@ export default function PoolActivities({ poolType }) {
                     variant="body2"
                     textAlign="left"
                     fontWeight={400}
-                    color={"#bdbdbd"}
+                    color={"rgba(130, 71, 229, 1)"}
                     fontSize={14}
                   >
-                    ${fromWei(singleOrder.deposit)}
+                    0x872...c471195E7f6dB
                   </Typography>
                 </Box>
               </Grid>
+
               <Grid
                 item
                 md={2}
@@ -267,33 +240,6 @@ export default function PoolActivities({ poolType }) {
                 <Box
                   display="flex"
                   flexDirection={"column"}
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
-                >
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      textAlign="left"
-                      fontWeight={400}
-                      color={"#bdbdbd"}
-                      fontSize={14}
-                    >
-                      ${toDollarPrice(singleOrder.nextPrice)}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                md={1}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Box
-                  display="flex"
-                  flexDirection={"column"}
                   justifyContent="center"
                   alignItems="flex-start"
                 >
@@ -304,66 +250,16 @@ export default function PoolActivities({ poolType }) {
                     color={"#bdbdbd"}
                     fontSize={14}
                   >
-                    {singleOrder.executedGrids}
+                    $3,243
                   </Typography>
                 </Box>
               </Grid>
               <Grid
                 item
-                md={2}
+                md={1.5}
                 display="flex"
                 flexDirection={"row"}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Box
-                  display="flex"
-                  flexDirection={"column"}
-                  justifyContent="center"
-                  alignItems="flex-start"
-                >
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={14}
-                  >
-                    {singleOrder.grids - singleOrder.executedGrids}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                md={2}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Box
-                  display="flex"
-                  flexDirection={"column"}
-                  justifyContent="center"
-                  alignItems="flex-start"
-                >
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={14}
-                  >
-                    $0.73
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                md={1}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="center"
+                justifyContent="flex-start"
                 alignItems="center"
               >
                 <Box
@@ -379,9 +275,32 @@ export default function PoolActivities({ poolType }) {
                     color={"#bdbdbd"}
                     fontSize={14}
                   >
-                    <TimeAgo
-                      datetime={parseInt(singleOrder.timestamp) * 1000}
-                    />
+                    32
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid
+                item
+                md={1.5}
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Box
+                  display="flex"
+                  flexDirection={"column"}
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                >
+                  <Typography
+                    variant="body2"
+                    textAlign="left"
+                    fontWeight={400}
+                    color={"#bdbdbd"}
+                    fontSize={14}
+                  >
+                    <TimeAgo datetime={parseInt(activity.timestamp) * 1000} />
                   </Typography>
                 </Box>
               </Grid>

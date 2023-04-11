@@ -3,6 +3,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
+import LeaderboardComponent from "./resuableComponents/LeaderboardComponent";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -47,8 +48,9 @@ export default function Leaderboard() {
             Leaderboard
           </Typography>
           <Typography variant="body2" className={classes.pageSubtitle}>
-            Place order inside the strategy pools and enjoy high yeilds
+            Top traders with their respective trading volume
           </Typography>
+          <LeaderboardComponent />
         </Container>
       </Box>
     </Box>

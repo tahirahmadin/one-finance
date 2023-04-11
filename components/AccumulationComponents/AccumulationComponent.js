@@ -42,12 +42,12 @@ import { useLazyQuery } from "@apollo/client";
 import LineChart from "../../common/Charts/LineChart";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import constants from "../../utils/constants";
-import PoolActivities from "../resuableComponents/PoolActivities";
 import Link from "next/link";
 import { fromWei } from "../../utils/helper";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
+import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -1061,7 +1061,7 @@ export default function AccumulationComponent() {
             >
               Active Orders
             </Typography>
-            <PoolActivities poolType={"ACCUMULATION"} />
+            <UserPoolOrders poolType={"ACCUMULATION"} />
           </div>
         </Box>
       </Container>

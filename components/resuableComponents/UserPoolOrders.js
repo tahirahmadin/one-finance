@@ -139,7 +139,7 @@ export default function UserPoolOrders({ poolType }) {
                   fontWeight={600}
                   color={"#f9f9f9"}
                 >
-                  Order placed for ${fromWei(singleOrder.deposit)} at
+                  Order placed for ${fromWei(singleOrder.deposit)}
                 </Typography>
                 <Box
                   pt={1}

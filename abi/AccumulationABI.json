@@ -189,6 +189,31 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "_orderId", "type": "uint256" }
+    ],
+    "name": "emergencyWithdrawByOrderId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
+    "name": "emergencyWithdrawPoolTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyWithdrawPoolUsdt",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256[]", "name": "_orderIds", "type": "uint256[]" }
     ],
     "name": "executeOrders",
@@ -226,7 +251,7 @@
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "managers",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -255,6 +280,11 @@
       {
         "internalType": "uint256",
         "name": "fiatOrderAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenAccumulated",
         "type": "uint256"
       },
       { "internalType": "uint256", "name": "grids", "type": "uint256" },
@@ -356,6 +386,7 @@
   {
     "inputs": [
       { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
       { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
     "name": "userOrders",
@@ -370,23 +401,6 @@
     ],
     "name": "userTokenAddreses",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "address", "name": "", "type": "address" }
-    ],
-    "name": "userTokenBalances",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "userUsdtBalances",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },

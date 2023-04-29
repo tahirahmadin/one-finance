@@ -7,9 +7,10 @@ export const fromWei = (tokens, decimals = 18) => {
       return new BigNumber(0).toString();
     }
 
-    return new BigNumber(tokens)
+    let floatValue = new BigNumber(tokens)
       .div(new BigNumber(10).exponentiatedBy(decimals))
       .toString();
+    return parseFloat(floatValue).toFixed(1);
   } catch (error) {
     console.log("exeption in fromWei ", error);
     return null;

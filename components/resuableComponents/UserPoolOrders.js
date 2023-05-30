@@ -6,8 +6,13 @@ import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { GetActiveOrdersOfUser } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import { fromWei, toDollarPrice } from "../../utils/helper";
-import { AccessTime } from "@mui/icons-material";
+import { AccessTime, CheckBox } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
+import WithdrawPopup from "../../common/WithdrawPopup";
+import TxPopup from "../../common/TxPopup";
+import ethersServiceProvider from "../../services/ethersServiceProvider";
+import { accumulationInstance } from "../../contracts";
+import web3 from "../../web3";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -38,6 +43,9 @@ export default function UserPoolOrders({ poolType }) {
   const classes = useStyles();
   const theme = useTheme();
   const { accountSC } = useWeb3Auth();
+  const [showWithdraw, setShowWithdraw] = useState(false);
+  const [trxCase, setTrxCase] = useState(0);
+  const [selectedOrder, setSelectedOrder] = useState({});
 
   const [ordersGraphData, setOrdersGraphData] = useState(null);
 
@@ -61,6 +69,8 @@ export default function UserPoolOrders({ poolType }) {
     }
   }, [ordersData]);
 
+  console.log("orders ", ordersData);
+
   const getExecutedPercentage = (singleOrder) => {
     if (singleOrder && singleOrder.executedGrids && singleOrder.grids) {
       return (singleOrder.executedGrids * 100) / singleOrder.grids;
@@ -68,8 +78,77 @@ export default function UserPoolOrders({ poolType }) {
       return 0;
     }
   };
+
+  const handleWithdraw = (order) => {
+    setSelectedOrder(order);
+    setShowWithdraw(true);
+  };
+
+  // Write functions
+  const handleConfirm = async () => {
+    setTrxCase(1);
+    let userAddress = accountSC;
+    let provider = ethersServiceProvider.web3AuthInstance;
+
+    let accumulateContract = accumulationInstance(provider.provider);
+    if (selectedOrder) {
+      try {
+        let estimateGas = await accumulateContract.methods
+          .withdrawByOrderId(selectedOrder?.id)
+          .estimateGas({ from: userAddress });
+
+        let estimateGasPrice = await web3.eth.getGasPrice();
+        const response = await accumulateContract.methods
+          .withdrawByOrderId(selectedOrder?.id)
+          .send(
+            {
+              from: userAddress,
+              maxPriorityFeePerGas: "50000000000",
+              gasPrice: parseInt(
+                (parseInt(estimateGasPrice) * 10) / 9
+              ).toString(),
+              gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+            },
+            async function (error, transactionHash) {
+              if (transactionHash) {
+                setTrxCase(2);
+              } else {
+                setTrxCase(4);
+              }
+            }
+          )
+          .on("receipt", async function (receipt) {
+            setTrxCase(3);
+          })
+          .on("error", async function (error) {
+            if (error?.code === 4001) {
+              setTrxCase(4);
+            } else {
+              setTrxCase(4);
+            }
+          });
+      } catch (err) {
+        console.log("withdraw error  ", err);
+        setTrxCase(4);
+      }
+    }
+  };
+
   return (
     <Box className={classes.boxCard}>
+      <WithdrawPopup
+        order={selectedOrder}
+        handleWithdraw={handleConfirm}
+        open={showWithdraw}
+        resetPopup={() => setShowWithdraw(false)}
+      />
+      <TxPopup
+        txCase={trxCase}
+        resetPopup={() => {
+          setShowWithdraw(false);
+          setTrxCase(0);
+        }}
+      />
       {ordersGraphData &&
         ordersGraphData.map((singleOrder, index) => {
           return (
@@ -225,9 +304,19 @@ export default function UserPoolOrders({ poolType }) {
                 justifyContent="center"
                 alignItems="center"
               >
-                <Button className={classes.actionButton}>
-                  <AccessTime style={{ marginRight: 5 }} /> Withdraw
-                </Button>
+                {singleOrder?.open && (
+                  <Button
+                    className={classes.actionButton}
+                    onClick={() => handleWithdraw(singleOrder)}
+                  >
+                    <AccessTime style={{ marginRight: 5 }} /> Cancel
+                  </Button>
+                )}
+                {!singleOrder?.open && (
+                  <Button className={classes.actionButton} disabled={true}>
+                    <CheckBox style={{ marginRight: 5 }} /> Completed
+                  </Button>
+                )}
               </Grid>
             </Grid>
           );

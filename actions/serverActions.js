@@ -2,11 +2,24 @@ import axios from "axios";
 import constants from "../utils/constants";
 
 // Update user profile data
-let baseUrl = constants.backend_url;
+let baseUrl = constants.backend_dev;
 let foodTruckBaseUrl = "https://foodtruck.onerare.io";
 
 export const getUserData = async (address) => {
   let url = `${baseUrl}/user/${address}`;
+  let response = axios
+    .get(url)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return response;
+};
+
+export const getLatestPrice = async () => {
+  let url = `${baseUrl}/order-apis/v1/latest-price`;
   let response = axios
     .get(url)
     .then((res) => {

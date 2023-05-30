@@ -12,7 +12,7 @@ constants = {
   backend_dev: "http://localhost:5004",
   contracts: {
     fiat: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
-    accumulation: "0x0874d20b4358d0C7498d59048E2d12d4E4aA4379",
+    accumulation: "0x6a659bE81b515aec146839d423901BcE91D116A2",
   },
 };
 

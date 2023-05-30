@@ -48,6 +48,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
+import { useUpdatePrice } from "../../hooks/useUpdatePrice";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -440,6 +441,8 @@ export default function AccumulationComponent() {
   const scrollToCreate = () => {
     window?.scrollTo(0, 250);
   };
+
+  const tokenPrice = useUpdatePrice();
 
   return (
     <Box className={classes.background}>
@@ -849,12 +852,12 @@ export default function AccumulationComponent() {
                             padding={0}
                           >
                             {selectedToken.symbol}{" "}
-                            {tokenPriceData && (
+                            {tokenPrice?.price && (
                               <small
                                 className="blink_me"
                                 style={{ color: "green", fontSize: 11 }}
                               >
-                                ${tokenPriceData.usd.toFixed(3)}
+                                ${tokenPrice?.price}
                               </small>
                             )}
                           </Typography>

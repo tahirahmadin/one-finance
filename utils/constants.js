@@ -8,10 +8,11 @@ constants = {
   chainIdMainInHex: "0x89",
   chainIdTest: 80001,
   chainIdTestInHex: "0x13881",
-  backend_url: "https://game.onerare.io/api",
+  backend_url: "",
+  backend_dev: "http://localhost:5004",
   contracts: {
     fiat: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
-    accumulation: "0x88f07B2eEE714bc2133eA9F973E76c9724b66042",
+    accumulation: "0x0874d20b4358d0C7498d59048E2d12d4E4aA4379",
   },
 };
 

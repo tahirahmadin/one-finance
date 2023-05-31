@@ -34,14 +34,9 @@ import {
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  GetPoolDataById,
-  GetPoolUserDataByAddress,
-} from "../../queries/graphQueries";
-import { useLazyQuery } from "@apollo/client";
 import LineChart from "../../common/Charts/LineChart";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
-import constants from "../../utils/constants";
+import { constants, strategyType } from "../../utils/constants";
 import Link from "next/link";
 import { fromWei } from "../../utils/helper";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -49,6 +44,8 @@ import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import { useUpdatePrice } from "../../hooks/useUpdatePrice";
+import { usePoolInfo } from "../../hooks/usePoolInfo";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -169,37 +166,15 @@ export default function AccumulationComponent() {
   const [orderTokenReceived, setOrderTokenReceived] = useState([]);
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [poolGraphData, setPoolGraphData] = useState(null);
-  const [poolUserGraphData, setPoolUserGraphData] = useState(null);
+
   const [expandTokens, setExpandTokens] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
-  const [getPoolDataQuery, { data, loading, error }] =
-    useLazyQuery(GetPoolDataById);
-
-  const [getPoolUserDataQuery, { data: poolUserData }] = useLazyQuery(
-    GetPoolUserDataByAddress
-  );
-
-  useEffect(() => {
-    if (accountSC) {
-      getPoolUserDataQuery({
-        variables: { user: accountSC, type: "ACCUMULATION" },
-        // pollInterval: 5000,
-      });
-    }
-  }, [resetFlag, accountSC, getPoolUserDataQuery]);
-
-  // Get Pool Graph Data
-  useEffect(() => {
-    getPoolDataQuery({
-      variables: { type: "ACCUMULATION" },
-      // pollInterval: 5000,
-    });
-  }, [resetFlag, getPoolDataQuery]);
+  const { loading, poolInfo } = usePoolInfo(strategyType.ACCUMULATION);
+  const { userPoolInfo } = useUserInfo();
 
   // Get Pool User Graph Data
 
@@ -213,23 +188,6 @@ export default function AccumulationComponent() {
       asyncFn();
     }
   }, [accountSC, dispatch]);
-
-  // Get pool data
-  useEffect(() => {
-    if (data && data.pools.length > 0) {
-      let poolData = data.pools[0];
-      setPoolGraphData(poolData);
-      setLoaded(true);
-    }
-  }, [data]);
-
-  // Get pool user data
-  useEffect(() => {
-    if (poolUserData && poolUserData.poolUsers.length > 0) {
-      console.log(poolUserData.poolUsers[0]);
-      setPoolUserGraphData(poolUserData.poolUsers[0]);
-    }
-  }, [poolUserData]);
 
   // Check price of token
   useEffect(() => {
@@ -575,8 +533,8 @@ export default function AccumulationComponent() {
                         Invested($)
                       </Typography>
                       <Typography variant="h6" fontWeight={600}>
-                        {poolGraphData
-                          ? "$" + fromWei(poolGraphData.deposit)
+                        {poolInfo.invested
+                          ? "$" + fromWei(poolInfo.invested)
                           : "-"}
                       </Typography>
                     </Box>
@@ -613,8 +571,8 @@ export default function AccumulationComponent() {
                         In Order($)
                       </Typography>
                       <Typography variant="h6" fontWeight={600}>
-                        {poolGraphData
-                          ? "$" + fromWei(poolGraphData.fiatBalance)
+                        {poolInfo.inOrders
+                          ? "$" + fromWei(poolInfo.inOrders)
                           : "-"}
                       </Typography>
                     </Box>
@@ -650,7 +608,7 @@ export default function AccumulationComponent() {
                         Orders
                       </Typography>
                       <Typography variant="h6" fontWeight={600}>
-                        {poolGraphData ? poolGraphData.ordersCount : "-"}
+                        {poolInfo.totalOrders ? poolInfo.totalOrders : "-"}
                       </Typography>
                     </Box>
                   </Box>
@@ -713,8 +671,8 @@ export default function AccumulationComponent() {
                       Invested($)
                     </Typography>
                     <Typography variant="h6" fontWeight={600}>
-                      {poolUserGraphData
-                        ? "$" + fromWei(poolUserGraphData.deposit)
+                      {userPoolInfo.totalInvestedUSDT
+                        ? "$" + fromWei(userPoolInfo.totalInvestedUSDT)
                         : "-"}
                     </Typography>
                   </Box>
@@ -724,14 +682,11 @@ export default function AccumulationComponent() {
                       fontWeight={300}
                       textAlign={"left"}
                     >
-                      Funds used($)
+                      Token accumulated($)
                     </Typography>
                     <Typography variant="h6" fontWeight={600}>
-                      {poolUserGraphData
-                        ? "$" +
-                          (parseFloat(fromWei(poolUserGraphData.deposit)) -
-                            parseFloat(fromWei(poolUserGraphData.fiatBalance)))
-                        : "-"}
+                      {userPoolInfo.totalInvestedUSDT &&
+                        parseFloat(fromWei(userPoolInfo.tokensAccumulated))}
                     </Typography>
                   </Box>
                   <Box

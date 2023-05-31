@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import constants from "./utils/constants";
+import { constants } from "./utils/constants";
 import provider from "./provider";
 
 var web3;

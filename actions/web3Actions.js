@@ -1,4 +1,4 @@
-import constants from "../utils/constants";
+import { constants } from "../utils/constants";
 import web3 from "../web3";
 //Check wallet available
 //Returns boolean true or false

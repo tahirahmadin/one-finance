@@ -2,7 +2,7 @@ import Web3 from "web3";
 import ERC20RG from "../abi/ERC20RG.json";
 import TradingContractABI from "../abi/ERC20Trading.json";
 import AccumulationContractABI from "../abi/AccumulationABI.json";
-import constants from "../utils/constants";
+import { constants } from "../utils/constants";
 
 const web3Instance = (provider) => {
   if (provider === "unavailable") {

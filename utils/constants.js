@@ -1,8 +1,7 @@
 // 0 mainnet, 1 testnet
 let network_type = 1;
 
-let constants;
-constants = {
+export const constants = {
   net: network_type,
   chainIdMain: 137,
   chainIdMainInHex: "0x89",
@@ -16,4 +15,10 @@ constants = {
   },
 };
 
-export default constants;
+export const strategyType = {
+  ACCUMULATION: "ACCUMULATION",
+  DCA: "DCA",
+};
+
+export const graphQueryUrl =
+  "https://api.thegraph.com/subgraphs/name/tahirahmadin/sleepswap";

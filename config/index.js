@@ -1,4 +1,4 @@
-import constants from "../utils/constants";
+import { constants } from "../utils/constants";
 
 let network_type = constants.net; // Mainnet 0 and Testnet 1
 export const SUPPORTED_CHAINS = [

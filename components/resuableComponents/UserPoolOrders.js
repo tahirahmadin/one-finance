@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { GetActiveOrdersOfUser } from "../../queries/graphQueries";
-import { useLazyQuery } from "@apollo/client";
 import { fromWei, toDollarPrice } from "../../utils/helper";
 import { AccessTime, CheckBox } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
@@ -13,6 +11,8 @@ import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance } from "../../contracts";
 import web3 from "../../web3";
+import { useOrders } from "../../hooks/useOrders";
+import { strategyType } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -47,29 +47,15 @@ export default function UserPoolOrders({ poolType }) {
   const [trxCase, setTrxCase] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState({});
 
-  const [ordersGraphData, setOrdersGraphData] = useState(null);
-
-  const [getPoolUserOrderQuery, { data: ordersData }] = useLazyQuery(
-    GetActiveOrdersOfUser
+  const { pendingOrders, completedOrders, loading, error } = useOrders(
+    strategyType.ACCUMULATION
   );
 
-  useEffect(() => {
-    if (accountSC) {
-      getPoolUserOrderQuery({
-        variables: { address: accountSC, type: poolType },
-        // pollInterval: 5000,
-      });
-    }
-  }, [accountSC, getPoolUserOrderQuery]);
-
-  // Get user pool activities
-  useEffect(() => {
-    if (ordersData) {
-      setOrdersGraphData(ordersData.orders);
-    }
-  }, [ordersData]);
-
-  console.log("orders ", ordersData);
+  const allOrders = useMemo(() => {
+    const pending = !pendingOrders?.orders ? [] : pendingOrders?.orders;
+    const completed = !completedOrders?.orders ? [] : completedOrders?.orders;
+    return [...pending, ...completed];
+  }, [pendingOrders, completedOrders]);
 
   const getExecutedPercentage = (singleOrder) => {
     if (singleOrder && singleOrder.executedGrids && singleOrder.grids) {
@@ -149,178 +135,175 @@ export default function UserPoolOrders({ poolType }) {
           setTrxCase(0);
         }}
       />
-      {ordersGraphData &&
-        ordersGraphData.map((singleOrder, index) => {
-          return (
+      {allOrders?.map((singleOrder, index) => {
+        return (
+          <Grid
+            container
+            p={3}
+            style={{
+              borderRadius: 20,
+              marginTop: 10,
+              backgroundColor: "#000000",
+            }}
+            key={1}
+          >
             <Grid
-              container
-              p={3}
-              style={{
-                borderRadius: 20,
-                marginTop: 10,
-                backgroundColor: "#000000",
-              }}
-              key={1}
+              item
+              md={2}
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
             >
-              <Grid
-                item
-                md={2}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                <Box>
-                  <img
-                    src="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
-                    alt="Token"
-                    height="32px"
-                  />
-                </Box>
-                <Box>
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={600}
-                    color={"#f9f9f9"}
-                    pl={1}
-                    lineHeight={1}
-                  >
-                    SLEEPT
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={300}
-                    color={"#c7cad9"}
-                    pl={1}
-                    lineHeight={1}
-                  >
-                    <AccessTime fontSize="14" />{" "}
-                    <TimeAgo
-                      datetime={parseInt(singleOrder.timestamp) * 1000}
-                    />
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid
-                item
-                md={5}
-                display="flex"
-                flexDirection={"column"}
-                justifyContent="center"
-                alignItems="flex-start"
-              >
+              <Box>
+                <img
+                  src="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+                  alt="Token"
+                  height="32px"
+                />
+              </Box>
+              <Box>
                 <Typography
-                  variant="h6"
+                  variant="body2"
                   textAlign="left"
                   fontWeight={600}
                   color={"#f9f9f9"}
+                  pl={1}
+                  lineHeight={1}
                 >
-                  Order placed for ${fromWei(singleOrder.deposit)}
+                  SLEEPT
                 </Typography>
-                <Box
-                  pt={1}
-                  display="flex"
-                  flexDirection={"row"}
-                  justifyContent="flex-start"
-                  alignItems="center"
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={300}
+                  color={"#c7cad9"}
+                  pl={1}
+                  lineHeight={1}
                 >
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#c7cad9"}
-                  >
-                    Price: ${toDollarPrice(singleOrder.entryPrice)}
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#c7cad9"}
-                    px={1}
-                  >
-                    |
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#c7cad9"}
-                  >
-                    Percetage: {singleOrder.percentage}%
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#c7cad9"}
-                    px={1}
-                  >
-                    |
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#c7cad9"}
-                  >
-                    Orders: {singleOrder.grids}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                md={3}
+                  <AccessTime fontSize="14" />{" "}
+                  <TimeAgo datetime={parseInt(singleOrder.timestamp) * 1000} />
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid
+              item
+              md={5}
+              display="flex"
+              flexDirection={"column"}
+              justifyContent="center"
+              alignItems="flex-start"
+            >
+              <Typography
+                variant="h6"
+                textAlign="left"
+                fontWeight={600}
+                color={"#f9f9f9"}
+              >
+                Order placed for ${fromWei(singleOrder.deposit)}
+              </Typography>
+              <Box
+                pt={1}
                 display="flex"
                 flexDirection={"row"}
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Box>
-                  <LinearProgressComponent
-                    value={getExecutedPercentage(singleOrder)}
-                  />
-                  <Typography
-                    variant="body2"
-                    textAlign="left"
-                    fontWeight={400}
-                    color={"#bdbdbd"}
-                    fontSize={15}
-                    pt={1}
-                  >
-                    {getExecutedPercentage(singleOrder)}% Complete
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid
-                item
-                md={2}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="center"
-                alignItems="center"
-              >
-                {singleOrder?.open && (
-                  <Button
-                    className={classes.actionButton}
-                    onClick={() => handleWithdraw(singleOrder)}
-                  >
-                    <AccessTime style={{ marginRight: 5 }} /> Cancel
-                  </Button>
-                )}
-                {!singleOrder?.open && (
-                  <Button className={classes.actionButton} disabled={true}>
-                    <CheckBox style={{ marginRight: 5 }} /> Completed
-                  </Button>
-                )}
-              </Grid>
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#c7cad9"}
+                >
+                  Price: ${toDollarPrice(singleOrder.entryPrice)}
+                </Typography>
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#c7cad9"}
+                  px={1}
+                >
+                  |
+                </Typography>
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#c7cad9"}
+                >
+                  Percetage: {singleOrder.percentage}%
+                </Typography>
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#c7cad9"}
+                  px={1}
+                >
+                  |
+                </Typography>
+                <Typography
+                  variant="small"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#c7cad9"}
+                >
+                  Orders: {singleOrder.grids}
+                </Typography>
+              </Box>
             </Grid>
-          );
-        })}
+            <Grid
+              item
+              md={3}
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Box>
+                <LinearProgressComponent
+                  value={getExecutedPercentage(singleOrder)}
+                />
+                <Typography
+                  variant="body2"
+                  textAlign="left"
+                  fontWeight={400}
+                  color={"#bdbdbd"}
+                  fontSize={15}
+                  pt={1}
+                >
+                  {getExecutedPercentage(singleOrder)}% Complete
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid
+              item
+              md={2}
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="center"
+              alignItems="center"
+            >
+              {singleOrder?.open && (
+                <Button
+                  className={classes.actionButton}
+                  onClick={() => handleWithdraw(singleOrder)}
+                >
+                  <AccessTime style={{ marginRight: 5 }} /> Cancel
+                </Button>
+              )}
+              {!singleOrder?.open && (
+                <Button className={classes.actionButton} disabled={true}>
+                  <CheckBox style={{ marginRight: 5 }} /> Completed
+                </Button>
+              )}
+            </Grid>
+          </Grid>
+        );
+      })}
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import constants from "../utils/constants";
+import { constants } from "../utils/constants";
 
 // Update user profile data
 let baseUrl = constants.backend_dev;

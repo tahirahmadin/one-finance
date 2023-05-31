@@ -20,6 +20,7 @@ import Script, { initScriptLoader } from "next/script";
 import Head from "next/head";
 // Wallet Connect
 import { Web3ReactProvider } from "@web3-react/core";
+import { graphQueryUrl } from "../utils/constants";
 
 const defaultOptions = {
   watchQuery: {
@@ -33,10 +34,8 @@ const defaultOptions = {
 };
 
 export const apolloClient = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GRAPH_API_URL,
+  uri: graphQueryUrl,
   cache: new InMemoryCache(),
-  defaultOptions: defaultOptions,
-  connectToDevTools: true,
 });
 
 export const emotionCache = createEmotionCache();

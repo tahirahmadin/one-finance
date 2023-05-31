@@ -85,12 +85,18 @@ export const GetActiveOrdersOfUser = gql`
       first: 500
       orderBy: orderId
       orderDirection: desc
-      where: { user: $address, strategyType: $type }
+      where: {
+        user: $address
+        strategyType: $type
+        open: $open
+        completed: $completed
+      }
     ) {
       id
       orderId
       user
       open
+      completed
       entryPrice
       nextPrice
       percentage
@@ -107,3 +113,61 @@ export const GetActiveOrdersOfUser = gql`
     }
   }
 `;
+
+export const getOrdersQuery = (
+  page = 1,
+  account,
+  strategy,
+  state = "pending"
+) => {
+  const items = page * 10;
+  const skips = (page - 1) * 10;
+
+  let open = true;
+  let completed = true;
+
+  if (state === "pending") {
+    open = true;
+    completed = false;
+  } else if (state === "completed") {
+    open = false;
+    completed = true;
+  } else {
+    // cancelled
+    open = false;
+    completed = false;
+  }
+
+  const queryObj = `
+    query {
+      orders(
+        first: ${items},
+        skip: ${skips},
+        orderBy: timestamp,
+        orderDirection: desc,
+        where: { user: "${account}", open: ${open}, completed: ${completed}, strategyType: "${strategy}"  }
+      ) {
+        id
+        orderId
+        user
+        open
+        completed
+        entryPrice
+        nextPrice
+        percentage
+        grids
+        executedGrids
+        fiatBalance
+        deposit
+        remainingFiat
+        tokenBalance
+        tokenAddress
+        strategyType
+        remainingToken
+        timestamp
+      }
+    }
+  `;
+
+  return queryObj;
+};

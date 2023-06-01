@@ -46,6 +46,7 @@ import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import { useUpdatePrice } from "../../hooks/useUpdatePrice";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useUserInfo } from "../../hooks/useUserInfo";
+import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -391,9 +392,12 @@ export default function AccumulationComponent() {
     setStakeCase(0);
   };
 
-  const handleTokenSelect = (index) => {
-    setSelectedToken(tokenList[index]);
-    setExpandTokens(false);
+  const [openTokenSelect, setOpenTokenSelect] = useState(false);
+  const handleTokenSelected = (token) => {
+    setSelectedToken(token);
+    // setExpandTokens(false);
+    setOpenTokenSelect(false);
+    console.log("selected token ", token);
   };
 
   const scrollToCreate = () => {
@@ -770,7 +774,7 @@ export default function AccumulationComponent() {
 
                 <Box mt={2}>
                   <Accordion
-                    expanded={expandTokens}
+                    expanded={false}
                     style={{
                       width: "100%",
                       backgroundColor: "transparent",
@@ -785,7 +789,7 @@ export default function AccumulationComponent() {
                       }
                       aria-controls="panel2a-content"
                       id="panel2a-header"
-                      onClick={() => setExpandTokens(!expandTokens)}
+                      onClick={() => setOpenTokenSelect(true)}
                     >
                       <Box
                         display="flex"
@@ -819,7 +823,13 @@ export default function AccumulationComponent() {
                         </Box>
                       </Box>
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <SelectTokenDialog
+                      open={openTokenSelect}
+                      handleClose={() => setOpenTokenSelect(false)}
+                      handleTokenSelected={handleTokenSelected}
+                      disableToken={selectedToken}
+                    />
+                    {/* <AccordionDetails>
                       <Box
                         style={{
                           maxHeight: 100,
@@ -859,7 +869,7 @@ export default function AccumulationComponent() {
                           );
                         })}
                       </Box>
-                    </AccordionDetails>
+                    </AccordionDetails> */}
                   </Accordion>
                 </Box>
                 <Box

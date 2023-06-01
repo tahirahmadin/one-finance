@@ -1,17 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import Link from "next/link";
 import { useLazyQuery } from "@apollo/client";
 import { GetPoolUserDataByAddress } from "./../../queries/graphQueries";
 import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { strategyType } from "../../utils/constants";
+import { constants, strategyType } from "../../utils/constants";
+import { Info } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    backgroundColor: "#17191A",
+    backgroundColor: constants.baseColorLight,
     marginTop: 20,
     marginBottom: 20,
     paddingTop: 20,
@@ -21,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     border: "1px solid #414141",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
-    borderRadius: 10,
+    borderRadius: 14,
     "&:hover": {
       boxShadow: "0px 24px 33px -9px #0000005C",
     },
@@ -35,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     color: "#f9f9f9",
     textAlign: "left",
+    fontSize: 16,
   },
   description: {
     fontWeight: 400,
@@ -46,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
   field: {
     fontWeight: 400,
     color: "#bdbdbd",
-    textAlign: "left",
+    textAlign: "center",
   },
   value: {
     fontWeight: 600,
     color: "#f9f9f9",
-    textAlign: "left",
+    textAlign: "center",
     lineHeight: 1.5,
     paddingTop: 5,
   },
@@ -151,19 +160,89 @@ export default function PoolCard({ poolStaticData, index }) {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <img src={poolStaticData.icon} alt="Grid" height="42px" />
+          <img src={poolStaticData.icon} alt="Grid" height="32px" />
           <Box ml={1}>
             <Typography variant="h6" className={classes.title}>
               {poolStaticData.title}
+              <Tooltip title={poolStaticData.description}>
+                <IconButton>
+                  <Info style={{ color: "white", fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
             </Typography>
           </Box>
         </Box>
-        <div style={{ color: "#24A582" }}>#{index + 1}</div>
+        {/* <div>
+          <Typography variant="body3" style={{ color: "#24A582" }}>
+            Add
+          </Typography>
+        </div> */}
       </Box>
-      <Typography variant="verysmall" className={classes.description} paragraph>
-        {poolStaticData.description}
-      </Typography>
-
+      <Box
+        display="flex"
+        flexDirection={"row"}
+        justifyContent="space-between"
+        alignItems="center"
+        gap={1}
+        py={2}
+        mt={2}
+        style={{
+          backgroundColor: "#000000",
+          borderRadius: 10,
+          padding: "4%",
+          width: "100%",
+        }}
+      >
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="verysmall" className={classes.field}>
+            Invested($)
+          </Typography>
+          <Typography variant="small" className={classes.value}>
+            $
+            {poolGraphData.invested &&
+              parseFloat(
+                Web3.utils.fromWei(poolGraphData.invested, "ether")
+              ).toFixed(2)}
+          </Typography>
+        </Box>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="verysmall" className={classes.field}>
+            Volume($)
+          </Typography>
+          <Typography variant="small" className={classes.value}>
+            $43K
+          </Typography>
+        </Box>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="verysmall" className={classes.field}>
+            Participants
+          </Typography>
+          <Typography variant="small" className={classes.value}>
+            {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
+          </Typography>
+        </Box>
+      </Box>
       <Box>
         <Box
           display={"flex"}
@@ -266,10 +345,10 @@ export default function PoolCard({ poolStaticData, index }) {
               width: "100%",
             }}
           >
-            View Pool
+            Start Strategy
           </Button>
         </Link>
-        <Box display="flex" justifyContent="center" alignItems="center">
+        {/* <Box display="flex" justifyContent="center" alignItems="center">
           <div
             style={{
               paddingTop: 15,
@@ -283,7 +362,7 @@ export default function PoolCard({ poolStaticData, index }) {
           >
             ⭐️ Stake and Earn
           </div>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

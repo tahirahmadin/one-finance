@@ -75,11 +75,11 @@ export default function Pools() {
       <Box className={classes.background}>
         <Container>
           <Typography variant="h2" className={classes.pageTitle}>
-            Pools
+            Strategy Pools
           </Typography>
-          <Typography variant="body2" className={classes.pageSubtitle}>
+          {/* <Typography variant="body2" className={classes.pageSubtitle}>
             Place order inside the strategy pools and enjoy high yeilds
-          </Typography>
+          </Typography> */}
 
           <Grid
             container

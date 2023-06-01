@@ -2,6 +2,8 @@
 let network_type = 1;
 
 export const constants = {
+  highlighColor: "rgba(130, 71, 229, 0.3)",
+  baseColorLight: "#0C0D10",
   net: network_type,
   chainIdMain: 137,
   chainIdMainInHex: "0x89",

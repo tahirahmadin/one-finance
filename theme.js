@@ -107,10 +107,17 @@ let themes = createTheme({
       fontFamily: "Poppins",
       fontSize: "0.75rem",
       color: "#bdbdbd",
+      lineHeight: 0.7,
     },
     verysmall: {
       fontFamily: "Poppins",
       fontSize: "0.7rem",
+      color: "#bdbdbd",
+      lineHeight: 0.7,
+    },
+    smallheading: {
+      fontFamily: "Poppins",
+      fontSize: "0.9rem",
       color: "#bdbdbd",
     },
   },

@@ -4,7 +4,7 @@ import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { fromWei, toDollarPrice } from "../../utils/helper";
-import { AccessTime, CheckBox } from "@mui/icons-material";
+import { AccessTime, CheckBox, Close } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import WithdrawPopup from "../../common/WithdrawPopup";
 import TxPopup from "../../common/TxPopup";
@@ -292,7 +292,7 @@ export default function UserPoolOrders({ poolType }) {
                   className={classes.actionButton}
                   onClick={() => handleWithdraw(singleOrder)}
                 >
-                  <AccessTime style={{ marginRight: 5 }} /> Cancel
+                  <Close style={{ marginRight: 5 }} /> Cancel
                 </Button>
               )}
               {!singleOrder?.open && (

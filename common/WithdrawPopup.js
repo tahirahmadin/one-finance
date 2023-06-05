@@ -187,7 +187,7 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                       Order placed for ${fromWei(order.deposit)}
                     </Typography>
                     <Box
-                      pt={1}
+                      pt={4}
                       display="flex"
                       flexDirection={"row"}
                       justifyContent="flex-start"
@@ -199,7 +199,8 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                         fontWeight={400}
                         color={"#c7cad9"}
                       >
-                        USDT: {fromWei(order.remainingFiat)}
+                        USDT: <br /> <br />
+                        {fromWei(order.remainingFiat)}
                       </Typography>
                       <Typography
                         variant="small"
@@ -216,7 +217,8 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                         fontWeight={400}
                         color={"#c7cad9"}
                       >
-                        SLEEP: {fromWei(order.tokenBalance)}
+                        SLEEP: <br /> <br />
+                        {fromWei(order.tokenBalance)}
                       </Typography>
                       <Typography
                         variant="small"
@@ -233,7 +235,8 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                         fontWeight={400}
                         color={"#c7cad9"}
                       >
-                        Orders: {order.grids}
+                        Orders: <br /> <br />
+                        {order.grids}
                       </Typography>
 
                       <Typography
@@ -251,7 +254,8 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                         fontWeight={400}
                         color={"#c7cad9"}
                       >
-                        Executed: {order.executedGrids}
+                        Executed: <br /> <br />
+                        {order.executedGrids}
                       </Typography>
                     </Box>
                   </Grid>
@@ -259,7 +263,7 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
 
                 <div className="my-2">
                   <Typography
-                    variant="body2"
+                    variant="h6"
                     className={classes.para}
                     textAlign="center"
                     fontWeight={400}
@@ -275,7 +279,7 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
                   className={classes.actionButton}
                   onClick={handleWithdraw}
                 >
-                  Confirm
+                  Confirm, Cancel Order
                 </Button>
               </div>
             </div>

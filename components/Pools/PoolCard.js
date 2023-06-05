@@ -88,7 +88,6 @@ export default function PoolCard({ poolStaticData, index }) {
   const classes = useStyles();
   const theme = useTheme();
 
-  // const [poolGraphData, setPoolGraphData] = useState(null);
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
 
   const { accountSC } = useWeb3Auth();
@@ -96,23 +95,10 @@ export default function PoolCard({ poolStaticData, index }) {
   const { poolInfo: poolGraphData, loading } = usePoolInfo(
     strategyType.ACCUMULATION
   );
-  // const [getPoolDataQuery, { data, loading, error }] =
-  //   useLazyQuery(GetPoolDataById);
 
   const [getPoolUserDataByAddress, { data: userPoolData }] = useLazyQuery(
     GetPoolUserDataByAddress
   );
-
-  // useEffect(() => {
-  //   if (poolStaticData) {
-  //     getPoolDataQuery({
-  //       variables: {
-  //         address: poolStaticData.contractAddress,
-  //         type: poolStaticData.type,
-  //       },
-  //     });
-  //   }
-  // }, [poolStaticData, getPoolDataQuery]);
 
   useEffect(() => {
     if (poolStaticData && accountSC) {
@@ -125,16 +111,6 @@ export default function PoolCard({ poolStaticData, index }) {
       });
     }
   }, [poolStaticData, accountSC, getPoolUserDataByAddress]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log(data);
-  //     let poolGraphData = data.pools;
-  //     if (poolGraphData.length > 0) {
-  //       setPoolGraphData(poolGraphData[0]);
-  //     }
-  //   }
-  // }, [data]);
 
   useEffect(() => {
     if (userPoolData) {
@@ -191,6 +167,10 @@ export default function PoolCard({ poolStaticData, index }) {
           borderRadius: 10,
           padding: "4%",
           width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Box
@@ -201,10 +181,10 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="verysmall" className={classes.field}>
+          <Typography variant="small" className={classes.field}>
             Invested($)
           </Typography>
-          <Typography variant="small" className={classes.value}>
+          <Typography variant="body3" className={classes.value}>
             $
             {poolGraphData.invested &&
               parseFloat(
@@ -220,10 +200,10 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="verysmall" className={classes.field}>
+          <Typography variant="small" className={classes.field}>
             Volume($)
           </Typography>
-          <Typography variant="small" className={classes.value}>
+          <Typography variant="body3" className={classes.value}>
             $43K
           </Typography>
         </Box>
@@ -235,10 +215,10 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="verysmall" className={classes.field}>
+          <Typography variant="small" className={classes.field}>
             Participants
           </Typography>
-          <Typography variant="small" className={classes.value}>
+          <Typography variant="body3" className={classes.value}>
             {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
           </Typography>
         </Box>

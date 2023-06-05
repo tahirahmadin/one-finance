@@ -617,40 +617,6 @@ export default function AccumulationComponent() {
                     </Box>
                   </Box>
                 </div>
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                  mt={3}
-                  pr={2}
-                >
-                  <Typography variant="h6" fontWeight={600}>
-                    Orders executed in last 24 hours:
-                  </Typography>
-                  <Box
-                    display={"flex"}
-                    justifyContent={"flex-end"}
-                    alignItems={"center"}
-                  >
-                    <Typography variant="h5" fontWeight={600}>
-                      32
-                    </Typography>
-                    <div
-                      style={{
-                        borderRadius: 14,
-                        background: "rgba(130, 71, 229, 0.7)",
-                        padding: "3px 10px 3px 10px",
-                        color: "white",
-                        width: "fit-content",
-                        marginLeft: 7,
-                        fontWeight: 600,
-                        fontSize: 14,
-                      }}
-                    >
-                      2.3%
-                    </div>
-                  </Box>
-                </Box>
               </Box>
               <Box
                 style={{
@@ -693,7 +659,7 @@ export default function AccumulationComponent() {
                         parseFloat(fromWei(userPoolInfo.tokensAccumulated))}
                     </Typography>
                   </Box>
-                  <Box
+                  {/* <Box
                     mt={2}
                     style={{
                       border: "1px solid #2d2d32",
@@ -751,7 +717,7 @@ export default function AccumulationComponent() {
                         })}
                       />
                     </Box>
-                  </Box>
+                  </Box> */}
                 </div>
               </Box>
             </Box>

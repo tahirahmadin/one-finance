@@ -10,6 +10,7 @@ import Header from "./../components/resuableComponents/Header";
 import Rewards from "../components/Rewards";
 import Leaderboard from "../components/Leaderboard";
 import Activities from "../components/Activities";
+import DashboardPage from "./dashboard";
 
 const useStyles = makeStyles({
   background: {
@@ -66,11 +67,12 @@ export default function Home() {
           </Hidden>
           <Grid item md={10}>
             <Header />
-            {menuIndex === 0 && <Pools />}
-            {menuIndex === 1 && <Rewards />}
-            {menuIndex === 2 && <Leaderboard />}
-            {menuIndex === 3 && <Portfolio />}
+            {menuIndex === 0 && <DashboardPage />}
+            {menuIndex === 1 && <Pools />}
+            {menuIndex === 2 && <Rewards />}
+            {menuIndex === 3 && <Leaderboard />}
             {menuIndex === 4 && <Activities />}
+            {menuIndex === 5 && <Activities />}
           </Grid>
         </Grid>
       )}

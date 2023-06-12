@@ -145,7 +145,7 @@ const SideBar = ({}) => {
                 menuIndex === 0 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
-              Strategy Pools
+              Dashboard
             </Typography>
           </Box>
           <Link href="/" style={{ textDecoration: "none" }}>
@@ -173,12 +173,12 @@ const SideBar = ({}) => {
                     : classes.menuTitle
                 }
               >
-                Rewards
+                Strategy Pools
               </Typography>
             </Box>
           </Link>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <Paper
+            <Box
               onClick={() => dispatch(setMenuIndex(2))}
               key={1}
               className={classes.selectedPaper}
@@ -188,7 +188,7 @@ const SideBar = ({}) => {
                   menuIndex === 2 ? constants.highlighColor : "transparent",
               }}
             >
-              <BarChart
+              <EmojiEvents
                 style={{
                   marginRight: 10,
                   color: menuIndex === 2 ? "white" : "#bdbdbd",
@@ -202,33 +202,40 @@ const SideBar = ({}) => {
                     : classes.menuTitle
                 }
               >
+                Rewards
+              </Typography>
+            </Box>
+          </Link>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Paper
+              onClick={() => dispatch(setMenuIndex(3))}
+              key={1}
+              className={classes.selectedPaper}
+              sx={{
+                boxShadow: 0,
+                bgcolor:
+                  menuIndex === 3 ? constants.highlighColor : "transparent",
+              }}
+            >
+              <BarChart
+                style={{
+                  marginRight: 10,
+                  color: menuIndex === 3 ? "white" : "#bdbdbd",
+                }}
+              />
+              <Typography
+                variant="title1"
+                className={
+                  menuIndex === 3
+                    ? classes.selectedMenuTitle
+                    : classes.menuTitle
+                }
+              >
                 Leaderboard
               </Typography>
             </Paper>
           </Link>
-          {/* <Link href="/" style={{ textDecoration: "none" }}>
-            {" "}
-            <Paper
-              onClick={() => dispatch(setMenuIndex(3))}
-              key={1}
-              sx={{
-                boxShadow: 0,
-                borderRadius: 2,
-                bgcolor:
-                  menuIndex === 3 ? `rgba(130, 71, 229, 0.3)` : "transparent",
-                py: 2,
-                px: 2,
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-            >
-              <Wallet style={{ marginRight: 10, color: "white" }} />
-              <Typography variant="title1" className={classes.menuTitle}>
-                Porfolio
-              </Typography>
-            </Paper>
-          </Link> */}
+
           <Link href="/" style={{ textDecoration: "none" }}>
             <Paper
               onClick={() => dispatch(setMenuIndex(4))}

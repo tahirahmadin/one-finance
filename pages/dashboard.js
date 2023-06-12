@@ -15,6 +15,7 @@ import ethersServiceProvider from "../services/ethersServiceProvider";
 import { constants } from "../utils/constants";
 import WalletSummary from "../components/Dashboard/WalletSummary";
 import TrendingCard from "../components/Dashboard/TrendingCard";
+import DashboardActivities from "../components/Dashboard/DashboardActivities";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -105,7 +106,6 @@ const DashboardPage = () => {
           <Typography variant="h2" className={classes.pageTitle}>
             Dashboard
           </Typography>
-
           <Grid container spacing={2} mb={4}>
             <Grid item md={8}>
               <Box pt={0} className={classes.card1}></Box>
@@ -114,7 +114,7 @@ const DashboardPage = () => {
               <WalletSummary />
             </Grid>
           </Grid>
-
+          {/*  Trending cards */}
           <Typography variant="h5">Trending</Typography>
           <Grid container spacing={2}>
             <Grid item md={4}>
@@ -127,6 +127,16 @@ const DashboardPage = () => {
               <TrendingCard />
             </Grid>
           </Grid>
+
+          {/*  Activities */}
+          <Box mt={5}>
+            <div>
+              <Typography variant="h5">Recent Orders</Typography>
+            </div>
+            <div>
+              <DashboardActivities />
+            </div>
+          </Box>
         </Container>
       </Box>
     </Box>

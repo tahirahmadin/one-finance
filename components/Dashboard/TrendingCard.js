@@ -105,7 +105,7 @@ export default function TrendingCard() {
         </Box>
         <Box mt={2}>
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
+            src="https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png"
             height="30px"
           />
           <img
@@ -121,7 +121,7 @@ export default function TrendingCard() {
           style={{ lineHeight: 1.4 }}
           fontWeight={600}
         >
-          BTC-USDT
+          ETH-USDT
         </Typography>
         <Typography
           mt={1}

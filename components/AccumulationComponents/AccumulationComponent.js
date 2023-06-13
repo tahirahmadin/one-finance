@@ -620,35 +620,50 @@ export default function AccumulationComponent() {
                   </Box>
                 </Box>
 
-                <Box mt={1} className={classes.inputWrapper}>
-                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
-                    No of orders:
-                  </Typography>
-                  <Input
-                    value={grids}
-                    type="number"
-                    onInput={(event) => setGrids(parseInt(event.target.value))}
-                    fullWidth
-                    placeholder="Enter grid count here"
-                    disableUnderline
-                    style={{ fontSize: 20, fontWeight: 600 }}
-                  />
-                </Box>
-
-                <Box mt={1} className={classes.inputWrapper}>
-                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
-                    Trigger Percent:
-                  </Typography>
-                  <Input
-                    type="number"
-                    disableUnderline
-                    value={percent}
-                    fullWidth
-                    placeholder="10"
-                    onChange={(e) => handlePercentage(e)}
-                    style={{ fontSize: 20, fontWeight: 600 }}
-                  />
-                </Box>
+                <Grid container spacing={2}>
+                  <Grid item md={6}>
+                    <Box mt={1} className={classes.inputWrapper}>
+                      <Typography
+                        variant="small"
+                        textAlign={"left"}
+                        lineHeight={1}
+                      >
+                        No of orders:
+                      </Typography>
+                      <Input
+                        value={grids}
+                        type="number"
+                        onInput={(event) =>
+                          setGrids(parseInt(event.target.value))
+                        }
+                        fullWidth
+                        placeholder="Enter grid count here"
+                        disableUnderline
+                        style={{ fontSize: 20, fontWeight: 600 }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item md={6}>
+                    <Box mt={1} className={classes.inputWrapper}>
+                      <Typography
+                        variant="small"
+                        textAlign={"left"}
+                        lineHeight={1}
+                      >
+                        Trigger Percent:
+                      </Typography>
+                      <Input
+                        type="number"
+                        disableUnderline
+                        value={percent}
+                        fullWidth
+                        placeholder="10"
+                        onChange={(e) => handlePercentage(e)}
+                        style={{ fontSize: 20, fontWeight: 600 }}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
 
                 <div className="text-center">
                   <Button

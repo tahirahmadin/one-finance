@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
+import LinearProgressComponent from "../../common/LinearProgressComponent";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
@@ -123,60 +124,102 @@ export default function AccumulationTopHeader() {
         justifyContent="space-between"
         alignItems={"flex-start"}
       >
-        <Box display={"flex"} justifyContent="flex-start" alignItems={"center"}>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          justifyContent="space-between"
+          alignItems={"flex-start"}
+        >
           <Box
-            style={{
-              backgroundColor: "#0C0D11",
-              height: 80,
-              width: 80,
-              borderRadius: 8,
-            }}
             display={"flex"}
-            justifyContent="center"
+            justifyContent="flex-start"
             alignItems={"center"}
           >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2936/2936952.png"
-              height={50}
-              width={50}
-            />
-          </Box>
-          <Box ml={2}>
             <Box
+              style={{
+                backgroundColor: "#0C0D11",
+                height: 80,
+                width: 80,
+                borderRadius: 8,
+              }}
               display={"flex"}
-              justifyContent="flex-start"
+              justifyContent="center"
               alignItems={"center"}
             >
-              <Typography
-                variant="h3"
-                className={classes.pageTitle}
-                color="#212121"
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2936/2936952.png"
+                height={50}
+                width={50}
+              />
+            </Box>
+            <Box ml={2}>
+              <Box
+                display={"flex"}
+                justifyContent="flex-start"
+                alignItems={"center"}
               >
-                Accumulate - Eat The Dip
-              </Typography>
-              <Typography
-                style={{
-                  marginLeft: 5,
-                  borderRadius: 10,
-                  fontSize: 8,
+                <Typography
+                  variant="h3"
+                  className={classes.pageTitle}
+                  color="#212121"
+                >
+                  Accumulate - Eat The Dip
+                </Typography>
+                <Typography
+                  style={{
+                    marginLeft: 5,
+                    borderRadius: 10,
+                    fontSize: 8,
 
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  color: "black",
-                  fontWeight: 600,
-                  paddingTop: 3,
-                  paddingBottom: 3,
-                  backgroundImage: "linear-gradient(to right,#f9f9f9, #DADADA)",
-                }}
-              >
-                <TrendingUp style={{ fontSize: 13 }} /> 326 people invested
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    color: "black",
+                    fontWeight: 600,
+                    paddingTop: 3,
+                    paddingBottom: 3,
+                    backgroundImage:
+                      "linear-gradient(to right,#f9f9f9, #DADADA)",
+                  }}
+                >
+                  <TrendingUp style={{ fontSize: 13 }} /> 326 people invested
+                </Typography>
+              </Box>
+
+              <Typography variant="small" className={classes.pageSubtitle}>
+                Start the strategy and eat every dip automatically without any
+                hassle.
               </Typography>
             </Box>
-
-            <Typography variant="small" className={classes.pageSubtitle}>
-              Start the strategy and eat every dip automatically without any
-              hassle.
-            </Typography>
+          </Box>
+          <Box style={{ width: "100%" }} mt={3}>
+            <Box
+              display={"flex"}
+              justifyContent="space-between"
+              alignItems={"center"}
+              mb={1}
+            >
+              <Typography
+                variant="small"
+                color={"#212121"}
+                style={{ textAlign: "right" }}
+              >
+                2023
+              </Typography>
+              <Typography
+                variant="small"
+                color={"#212121"}
+                style={{ textAlign: "right" }}
+              >
+                18 months left
+              </Typography>
+            </Box>
+            <LinearProgressComponent value={32} />
+            {/* <Box mt={3}>
+              <Typography variant="small" className={classes.pageSubtitle}>
+                * Investment for <strong>2 years</strong> is recommended for
+                best results.
+              </Typography>
+            </Box> */}
           </Box>
         </Box>
 
@@ -225,6 +268,7 @@ export default function AccumulationTopHeader() {
           </Box>
         </Box>
       </Box>
+
       <Typography variant="small" className={classes.pageSubtitle}>
         * Investment for <strong>2 years</strong> is recommended for best
         results.

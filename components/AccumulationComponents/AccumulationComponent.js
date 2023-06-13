@@ -24,12 +24,15 @@ import { accumulationInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
 import {
   AccountBalance,
+  Balance,
   CurrencyExchange,
   Dataset,
   ExpandMore,
   Feed,
   Inventory,
   NoteAdd,
+  TrendingUp,
+  Wallet,
 } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
@@ -49,6 +52,7 @@ import { useUserInfo } from "../../hooks/useUserInfo";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulateUserSummary from "./AccumulateUserSummary";
 import AccumulatePoolSummary from "./AccumulatePoolSummary";
+import AccumulationTopHeader from "./AccumulationTopHeader";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -69,13 +73,35 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     fontWeight: 600,
-    color: "#e5e5e5",
+    color: "#212121",
     textAlign: "left",
   },
 
   pageSubtitle: {
-    color: "#bdbdbd",
+    color: "#616161",
     textAlign: "left",
+  },
+  cardTop: {
+    backgroundColor: "#0C0D11",
+    marginTop: 20,
+    marginBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 40,
+    width: "100%",
+    minHeight: 200,
+    border: "1px solid #1b1d24",
+    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
+    borderRadius: 14,
+    "&:hover": {
+      boxShadow: "0px 24px 33px -9px #0000005C",
+    },
+
+    [theme.breakpoints.down("md")]: {
+      height: "100%",
+      width: "100%",
+    },
   },
   card: {
     padding: 20,
@@ -170,14 +196,10 @@ export default function AccumulationComponent() {
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const [expandTokens, setExpandTokens] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
-  const { loading, poolInfo } = usePoolInfo(strategyType.ACCUMULATION);
-  const { userPoolInfo } = useUserInfo();
 
   // Get Pool User Graph Data
 
@@ -413,29 +435,23 @@ export default function AccumulationComponent() {
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
 
       <Container>
-        <Typography variant="h3" className={classes.pageTitle}>
-          Accumulate - Eat The Dip
-        </Typography>
-        <Typography variant="small" className={classes.pageSubtitle}>
-          Start the strategy and eat every dip automatically without hassle
-        </Typography>
-
         <Grid
           container
           display={"flex"}
           justifyContent="space-between"
-          spacing={3}
+          spacing={2}
           pt={3}
         >
-          <Grid item md={7}>
-            <AccumulatePoolSummary />
+          <Grid item md={9}>
+            <AccumulationTopHeader />
           </Grid>
-          <Grid item md={5}>
+          <Grid item md={3}>
             <AccumulateUserSummary />
           </Grid>
         </Grid>
         <Grid container mt={2} spacing={2}>
           <Grid item md={6}>
+            {" "}
             <Box className={classes.card}>
               <div className="d-flex flex-column justify-content-around">
                 <div>

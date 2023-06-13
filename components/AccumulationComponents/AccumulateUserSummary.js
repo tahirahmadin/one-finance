@@ -18,10 +18,10 @@ import { Info } from "@mui/icons-material";
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: constants.baseColorLight,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
     width: "100%",
     border: "1px solid #414141",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
@@ -87,8 +87,20 @@ export default function AccumulateUserSummary() {
   return (
     <Box pt={0} className={classes.card}>
       <Box>
-        <Typography variant="body2">My Investment</Typography>
-        <Typography variant="h2" style={{ fontWeight: 600, lineHeight: 1.6 }}>
+        <Typography
+          variant="body2"
+          color="#bdbdbd"
+          fontSize={12}
+          fontWeight={300}
+        >
+          My Investment
+        </Typography>
+        <Typography
+          variant="h3"
+          fontSize={12}
+          fontWeight={700}
+          lineHeight={1.3}
+        >
           $2,434
         </Typography>
       </Box>
@@ -99,10 +111,19 @@ export default function AccumulateUserSummary() {
         alignItems="center"
         mt={2}
       >
-        <Typography variant="body2">Tokens</Typography>
+        <Typography
+          variant="body2"
+          color="#bdbdbd"
+          fontSize={12}
+          fontWeight={300}
+        >
+          Balances in pool
+        </Typography>
         <Typography
           variant="small"
-          style={{ color: constants.highlighColorDark }}
+          fontSize={12}
+          fontWeight={300}
+          color={constants.highlighColorDark}
         >
           View All
         </Typography>
@@ -127,7 +148,7 @@ export default function AccumulateUserSummary() {
           >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
-              height="35px"
+              height="28px"
             />
             <Box
               ml={1}
@@ -138,19 +159,21 @@ export default function AccumulateUserSummary() {
             >
               <Typography
                 variant="body2"
-                color={"#ffffff"}
-                style={{ lineHeight: 1.4 }}
+                color={"#f9f9f9"}
+                fontSize={13}
+                fontWeight={500}
+                lineHeight={1.2}
               >
                 BTC
               </Typography>
               <Typography
                 variant="verysmall"
-                textAlign="left"
-                fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
+                color={"#bdbdbd"}
+                fontSize={11}
+                fontWeight={300}
+                lineHeight={1.2}
               >
-                Starting from $1750 on 10%
+                Bitcoin
               </Typography>
             </Box>
           </Box>
@@ -165,18 +188,11 @@ export default function AccumulateUserSummary() {
               <Typography
                 variant="body2"
                 color={"#ffffff"}
-                style={{ lineHeight: 1.4 }}
-              >
-                $1000
-              </Typography>
-              <Typography
-                variant="verysmall"
-                textAlign="left"
+                fontSize={11}
                 fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
+                lineHeight={1.2}
               >
-                4 Orders
+                0.32 BTC
               </Typography>
             </Box>
           </Box>
@@ -198,8 +214,8 @@ export default function AccumulateUserSummary() {
             alignItems={"center"}
           >
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
-              height="35px"
+              src="https://cdn.icon-icons.com/icons2/2429/PNG/512/ethereum_logo_icon_147293.png"
+              height="28px"
             />
             <Box
               ml={1}
@@ -210,19 +226,21 @@ export default function AccumulateUserSummary() {
             >
               <Typography
                 variant="body2"
-                color={"#ffffff"}
-                style={{ lineHeight: 1.4 }}
+                color={"#f9f9f9"}
+                fontSize={13}
+                fontWeight={500}
+                lineHeight={1.2}
               >
                 ETH
               </Typography>
               <Typography
                 variant="verysmall"
-                textAlign="left"
-                fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
+                color={"#bdbdbd"}
+                fontSize={11}
+                fontWeight={300}
+                lineHeight={1.2}
               >
-                Starting from $1750 on 10%
+                Ethereum
               </Typography>
             </Box>
           </Box>
@@ -237,18 +255,11 @@ export default function AccumulateUserSummary() {
               <Typography
                 variant="body2"
                 color={"#ffffff"}
-                style={{ lineHeight: 1.4 }}
-              >
-                $1000
-              </Typography>
-              <Typography
-                variant="verysmall"
-                textAlign="left"
+                fontSize={11}
                 fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
+                lineHeight={1.2}
               >
-                6 orders
+                1.32 ETH
               </Typography>
             </Box>
           </Box>

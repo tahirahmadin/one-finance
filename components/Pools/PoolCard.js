@@ -328,21 +328,6 @@ export default function PoolCard({ poolStaticData, index }) {
             Start Strategy
           </Button>
         </Link>
-        {/* <Box display="flex" justifyContent="center" alignItems="center">
-          <div
-            style={{
-              paddingTop: 15,
-              color: "#027FFF",
-              fontWeight: 400,
-              fontSize: 13,
-              textDecoration: "none",
-              marginRight: 10,
-              fontFamily: "poppins",
-            }}
-          >
-            ⭐️ Stake and Earn
-          </div>
-        </Box> */}
       </Box>
     </Box>
   );

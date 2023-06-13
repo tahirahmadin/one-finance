@@ -104,7 +104,7 @@ const DashboardPage = () => {
       <Box className={classes.background}>
         <Container>
           <Typography variant="h2" className={classes.pageTitle}>
-            Dashboard
+            Overview Dashboard
           </Typography>
           <Grid container spacing={2} mb={4}>
             <Grid item md={8}>

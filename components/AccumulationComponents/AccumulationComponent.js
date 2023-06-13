@@ -22,37 +22,23 @@ import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
-import {
-  AccountBalance,
-  Balance,
-  CurrencyExchange,
-  Dataset,
-  ExpandMore,
-  Feed,
-  Inventory,
-  NoteAdd,
-  TrendingUp,
-  Wallet,
-} from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
 import LineChart from "../../common/Charts/LineChart";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import { constants, strategyType } from "../../utils/constants";
-import Link from "next/link";
-import { fromWei } from "../../utils/helper";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import { useUpdatePrice } from "../../hooks/useUpdatePrice";
-import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { useUserInfo } from "../../hooks/useUserInfo";
+
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulateUserSummary from "./AccumulateUserSummary";
-import AccumulatePoolSummary from "./AccumulatePoolSummary";
+
 import AccumulationTopHeader from "./AccumulationTopHeader";
+import AccumulateOrderBook from "./AccumulateOrderBook";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -62,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover,contain",
     height: "100%",
     width: "100%",
-    paddingTop: "2%",
+    paddingTop: 5,
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
@@ -106,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: 20,
     width: "100%",
-    border: "1px solid #2d2d32",
+    border: "1px solid #21232b",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: 30,
     "&:hover": {
@@ -440,7 +426,6 @@ export default function AccumulationComponent() {
           display={"flex"}
           justifyContent="space-between"
           spacing={2}
-          pt={3}
         >
           <Grid item md={9}>
             <AccumulationTopHeader />
@@ -449,19 +434,13 @@ export default function AccumulationComponent() {
             <AccumulateUserSummary />
           </Grid>
         </Grid>
-        <Grid container mt={2} spacing={2}>
+        <Grid container mt={5} spacing={2}>
           <Grid item md={6}>
-            {" "}
-            <Box className={classes.card}>
+            <Box>
               <div className="d-flex flex-column justify-content-around">
                 <div>
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    lineHeight={1}
-                    style={{ color: "#e5e5e5" }}
-                  >
-                    <NoteAdd style={{ color: "#e5e5e5" }} /> Create strategy
+                  <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
+                    Create strategy
                   </Typography>
                 </div>
 
@@ -683,36 +662,17 @@ export default function AccumulationComponent() {
             </Box>
           </Grid>
           <Grid item md={6}>
-            <Box className={classes.card} style={{ height: "100%" }}>
-              <div>
-                <Typography variant="h6" fontWeight={600} noWrap>
-                  Orders visualisation
-                </Typography>
-              </div>
-              <LineChart
-                xaxis={orderPrices}
-                yaxis={orderTokenReceived}
-                yaxisMax={parseFloat(orderPrices[0]) * 1.2}
-                selectedToken={selectedToken}
-              />
+            <Box
+              style={{
+                height: "100%",
+                width: "auto",
+              }}
+            >
+              <AccumulateOrderBook />
             </Box>
           </Grid>
         </Grid>
-        <Box mt={3}>
-          <Button style={{ textDecoration: "none", textTransform: "none" }}>
-            <Typography variant="small" className={classes.pageSubtitle}>
-              For test tokens{" "}
-              <Link
-                href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
-                passHref={true}
-                target="_blank"
-              >
-                click here{" "}
-              </Link>{" "}
-              and hit claimFaucet function.
-            </Typography>
-          </Button>
-        </Box>
+
         <Box mt={5}>
           <div>
             <Typography
@@ -720,7 +680,7 @@ export default function AccumulationComponent() {
               className={classes.heading}
               fontWeight={700}
             >
-              Active Orders
+              Your Orders
             </Typography>
             <UserPoolOrders poolType={"ACCUMULATION"} />
           </div>

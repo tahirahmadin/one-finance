@@ -106,8 +106,7 @@ export const tokenList = [
     id: "polkabridge",
     address: "0xb94d207a3fBdb312cef2e5dBEb7C22A76516BE37",
     decimals: 18,
-    logoURI:
-      "https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png",
+    logoURI: "https://www.sleepswap.io/SleepSwap_Plain.png",
   },
   {
     name: "MATIC",

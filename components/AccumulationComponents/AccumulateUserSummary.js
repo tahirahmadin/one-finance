@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
     paddingRight: 15,
     width: "100%",
-    border: "1px solid #414141",
+    border: "1px solid #21232b",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: 14,
     "&:hover": {

@@ -121,7 +121,7 @@ export default function AccumulationTopHeader() {
       <Box
         display={"flex"}
         justifyContent="space-between"
-        alignItems={"center"}
+        alignItems={"flex-start"}
       >
         <Box display={"flex"} justifyContent="flex-start" alignItems={"center"}>
           <Box
@@ -166,15 +166,16 @@ export default function AccumulationTopHeader() {
                   fontWeight: 600,
                   paddingTop: 3,
                   paddingBottom: 3,
-                  backgroundImage: "linear-gradient(to right,#DADADA, #bdbdbd)",
+                  backgroundImage: "linear-gradient(to right,#f9f9f9, #DADADA)",
                 }}
               >
-                <TrendingUp style={{ fontSize: 12 }} /> 326 people invested
+                <TrendingUp style={{ fontSize: 13 }} /> 326 people invested
               </Typography>
             </Box>
 
             <Typography variant="small" className={classes.pageSubtitle}>
-              Start the strategy and eat every dip automatically without hassle
+              Start the strategy and eat every dip automatically without any
+              hassle.
             </Typography>
           </Box>
         </Box>
@@ -198,7 +199,7 @@ export default function AccumulationTopHeader() {
           </Box>
           <Box mt={2}>
             <Typography variant="body2" color="#616161" fontSize={12}>
-              *Recommended period
+              Trading volume (24 hrs)
             </Typography>
             <Typography
               variant="body1"
@@ -206,11 +207,28 @@ export default function AccumulationTopHeader() {
               fontSize={16}
               fontWeight={600}
             >
-              2 Yrs
+              32,435
+            </Typography>
+          </Box>
+          <Box mt={2}>
+            <Typography variant="body2" color="#616161" fontSize={12}>
+              Total trades executed
+            </Typography>
+            <Typography
+              variant="body1"
+              color="#212121"
+              fontSize={16}
+              fontWeight={600}
+            >
+              549
             </Typography>
           </Box>
         </Box>
       </Box>
+      <Typography variant="small" className={classes.pageSubtitle}>
+        * Investment for <strong>2 years</strong> is recommended for best
+        results.
+      </Typography>
     </Box>
   );
 }

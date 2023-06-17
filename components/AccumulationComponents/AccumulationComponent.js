@@ -698,8 +698,8 @@ export default function AccumulationComponent() {
                 >
                   Investment summary
                 </Typography>
-                <Grid container spacing={4}>
-                  <Grid item md={7}>
+                <Grid container spacing={2}>
+                  <Grid item md={6}>
                     <Box>
                       <Box>
                         <Grid container py={0.5}>
@@ -707,7 +707,7 @@ export default function AccumulationComponent() {
                             <Typography
                               variant="body2"
                               fontWeight={300}
-                              fontSize={11}
+                              fontSize={10}
                               color={"#bdbdbd"}
                             >
                               Price(USDT)
@@ -717,7 +717,7 @@ export default function AccumulationComponent() {
                             <Typography
                               variant="body2"
                               fontWeight={300}
-                              fontSize={11}
+                              fontSize={10}
                               color={"#bdbdbd"}
                             >
                               Amount(USDT)
@@ -727,7 +727,7 @@ export default function AccumulationComponent() {
                             <Typography
                               variant="body2"
                               fontWeight={300}
-                              fontSize={11}
+                              fontSize={10}
                               color={"#bdbdbd"}
                             >
                               Received(ETH)
@@ -774,11 +774,14 @@ export default function AccumulationComponent() {
                           </Grid>
                         ))}
                       </Box>
-
+                    </Box>
+                  </Grid>
+                  <Grid item md={6}>
+                    <Box>
                       <Typography
                         variant="body2"
                         fontWeight={400}
-                        fontSize={12}
+                        fontSize={11}
                         lineHeight={1.8}
                         color={"#f9f9f9"}
                         mt={1}
@@ -789,7 +792,7 @@ export default function AccumulationComponent() {
                       <Typography
                         variant="body2"
                         fontWeight={400}
-                        fontSize={12}
+                        fontSize={11}
                         lineHeight={1.8}
                         color={"#f9f9f9"}
                       >
@@ -799,7 +802,7 @@ export default function AccumulationComponent() {
                       <Typography
                         variant="body2"
                         fontWeight={400}
-                        fontSize={12}
+                        fontSize={11}
                         lineHeight={1.8}
                         color={"#f9f9f9"}
                       >
@@ -816,16 +819,13 @@ export default function AccumulationComponent() {
                           </span>
                         </strong>
                       </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item md={5}>
-                    <Box>
                       <Typography
                         variant="body2"
                         fontWeight={400}
                         fontSize={14}
                         lineHeight={1.8}
                         color={"#bdbdbd"}
+                        mt={2}
                       >
                         ROI:
                       </Typography>

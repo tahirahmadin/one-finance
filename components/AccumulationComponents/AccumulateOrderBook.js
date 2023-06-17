@@ -1,9 +1,12 @@
 import { makeStyles } from "@mui/styles";
-import { Pending, Wallet } from "@mui/icons-material";
+import { ExpandMore, Pending, Wallet } from "@mui/icons-material";
 
 import {
+  Accordion,
+  AccordionSummary,
   Box,
   Button,
+  Grid,
   IconButton,
   Typography,
   useMediaQuery,
@@ -42,516 +45,364 @@ const AccumulateOrderBook = () => {
 
   return (
     <div>
-      <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
-        Order book
-      </Typography>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
+          Order book
+        </Typography>
+        <Accordion
+          expanded={false}
+          style={{
+            width: "25%",
+            backgroundColor: "transparent",
+            border: "1px solid #2d2d32",
+            borderRadius: 10,
+            paddingLeft: 10,
+            paddingTop: 6,
+            paddingBottom: 6,
+          }}
+          disableGutters={true}
+        >
+          <Box
+            display="flex"
+            flexDirection={"row"}
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <img
+              src={
+                "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"
+              }
+              alt={"TokenLogo"}
+              height="28px"
+            />
+            <Box ml={1}>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                color={"#e5e5e5"}
+                lineHeight={1}
+                padding={0}
+              >
+                MATIC{" "}
+              </Typography>
+            </Box>
+          </Box>
+        </Accordion>
+      </Box>
 
-      <Box mt={1}>
-        <Box
-          style={{
-            border: "1px solid #0C0D12",
-            backgroundColor: "#111214",
-            borderRadius: 14,
-            padding: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            width: "auto",
-          }}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <IconButton color="success" style={{ height: 16, width: 16 }}>
-              <Pending style={{ fontSize: 16 }} />
-            </IconButton>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                Bitcoin
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                USDT
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                132
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                0.27
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                Price
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                $25,500
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          style={{
-            border: "1px solid #0C0D12",
-            backgroundColor: "#111214",
-            borderRadius: 14,
-            padding: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            width: "auto",
-          }}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <IconButton color="success" style={{ height: 16, width: 16 }}>
-              <Pending style={{ fontSize: 16 }} />
-            </IconButton>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                Bitcoin
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                USDT
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                132
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                0.29
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                Price
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                $24,000
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          style={{
-            border: "1px solid #0C0D12",
-            backgroundColor: "#111214",
-            borderRadius: 14,
-            padding: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            width: "auto",
-          }}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <IconButton color="success" style={{ height: 16, width: 16 }}>
-              <Pending style={{ fontSize: 16 }} />
-            </IconButton>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                Bitcoin
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                USDT
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                132
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                0.32
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                Price
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                $22,500
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          style={{
-            border: "1px solid #0C0D12",
-            backgroundColor: "#111214",
-            borderRadius: 14,
-            padding: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            width: "auto",
-          }}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <IconButton color="success" style={{ height: 16, width: 16 }}>
-              <Pending style={{ fontSize: 16 }} />
-            </IconButton>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                Bitcoin
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                USDT
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                132
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                0.39
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                Price
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                $21,000
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          style={{
-            border: "1px solid #0C0D12",
-            backgroundColor: "#111214",
-            borderRadius: 14,
-            padding: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            width: "auto",
-          }}
-          display={"flex"}
-          justifyContent={"space-between"}
-        >
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <IconButton color="success" style={{ height: 16, width: 16 }}>
-              <Pending style={{ fontSize: 16 }} />
-            </IconButton>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                Bitcoin
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                USDT
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                132
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                BTC
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                0.43
-              </Typography>
-            </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box ml={2}>
-              <Typography
-                variant="verysmall"
-                fontWeight={300}
-                fontSize={12}
-                color={"#e5e5e5"}
-              >
-                Price
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={14}
-                color={"#fff"}
-              >
-                $27,000
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+      <Box
+        style={{
+          border: "1px solid #0C0D12",
+          backgroundColor: "#111214",
+          borderRadius: 14,
+          padding: 6,
+          paddingLeft: 20,
+          paddingRight: 20,
+          width: "auto",
+        }}
+      >
+        <Grid container py={0.5}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              Type
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              Price(USDT)
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              Amount(USDT)
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              Received(ETH)
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1500
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              ml={-1}
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              ◍ BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1400
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1300
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1200
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1100
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1000
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0.34 ETH
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
     </div>
   );

@@ -147,14 +147,15 @@ const useStyles = makeStyles((theme) => ({
   },
 
   actionButton: {
-    borderRadius: 14,
+    borderRadius: 8,
     background: "rgba(130, 71, 229, 0.7)",
     padding: "12px 20px 12px 20px",
     color: "white",
     width: "100%",
     marginTop: 20,
-    fontWeight: 600,
+    fontWeight: 500,
     fontSize: 16,
+    textTransform: "none",
     "&:hover": {
       background: "rgba(130, 71, 229, 0.9)",
     },
@@ -181,7 +182,7 @@ export default function AccumulationComponent() {
   const [orderTokenReceived, setOrderTokenReceived] = useState([]);
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [loaded, setLoaded] = useState(false);
-
+  const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -402,7 +403,6 @@ export default function AccumulationComponent() {
     setStakeCase(0);
   };
 
-  const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const handleTokenSelected = (token) => {
     setSelectedToken(token);
     // setExpandTokens(false);
@@ -416,6 +416,20 @@ export default function AccumulationComponent() {
 
   const tokenPrice = useUpdatePrice();
 
+  const getPriceOfSingleOrder = (index) => {
+    return parseFloat((2000 * (100 - (index + 1) * percent)) / 100);
+  };
+  const getTotalTokenAccumulated = () => {
+    let amountToBuy = amount / grids;
+    let totalAmountWillBeBought = 0;
+    {
+      [...Array(grids)].map((singleOrder, index) => {
+        let amountOfSingleOrder = amountToBuy / getPriceOfSingleOrder(index);
+        totalAmountWillBeBought += amountOfSingleOrder;
+      });
+    }
+    return totalAmountWillBeBought.toFixed(3);
+  };
   return (
     <Box className={classes.background}>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
@@ -452,6 +466,7 @@ export default function AccumulationComponent() {
                       backgroundColor: "transparent",
                       border: "1px solid #2d2d32",
                       borderRadius: 10,
+                      padding: 0,
                     }}
                     disableGutters={true}
                   >
@@ -463,35 +478,44 @@ export default function AccumulationComponent() {
                       id="panel2a-header"
                       onClick={() => setOpenTokenSelect(true)}
                     >
-                      <Box
-                        display="flex"
-                        flexDirection={"row"}
-                        justifyContent="flex-start"
-                        alignItems="center"
-                      >
-                        <img
-                          src={selectedToken.logoURI}
-                          alt={"TokenLogo"}
-                          height="28px"
-                        />
-                        <Box ml={1}>
-                          <Typography
-                            variant="body2"
-                            fontWeight={600}
-                            color={"#e5e5e5"}
-                            lineHeight={1}
-                            padding={0}
-                          >
-                            {selectedToken.symbol}{" "}
-                            {tokenPrice?.price && (
-                              <small
-                                className="blink_me"
-                                style={{ color: "green", fontSize: 11 }}
-                              >
-                                ${tokenPrice?.price}
-                              </small>
-                            )}
-                          </Typography>
+                      <Box>
+                        <Typography
+                          variant="small"
+                          textAlign={"left"}
+                          lineHeight={0.4}
+                        >
+                          Select token
+                        </Typography>
+                        <Box
+                          display="flex"
+                          flexDirection={"row"}
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <img
+                            src={selectedToken.logoURI}
+                            alt={"TokenLogo"}
+                            height="28px"
+                          />
+                          <Box ml={1}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={600}
+                              color={"#e5e5e5"}
+                              lineHeight={1}
+                              padding={0}
+                            >
+                              {selectedToken.symbol}{" "}
+                              {tokenPrice?.price && (
+                                <small
+                                  className="blink_me"
+                                  style={{ color: "green", fontSize: 11 }}
+                                >
+                                  ${tokenPrice?.price}
+                                </small>
+                              )}
+                            </Typography>
+                          </Box>
                         </Box>
                       </Box>
                     </AccordionSummary>
@@ -628,7 +652,7 @@ export default function AccumulationComponent() {
                         textAlign={"left"}
                         lineHeight={1}
                       >
-                        No of orders:
+                        Number of orders:
                       </Typography>
                       <Input
                         value={grids}
@@ -650,7 +674,7 @@ export default function AccumulationComponent() {
                         textAlign={"left"}
                         lineHeight={1}
                       >
-                        Trigger Percent:
+                        Buy on every drop of (%):
                       </Typography>
                       <Input
                         type="number"
@@ -664,13 +688,172 @@ export default function AccumulationComponent() {
                     </Box>
                   </Grid>
                 </Grid>
+                <Typography
+                  mt={2}
+                  mb={1}
+                  variant="body2"
+                  fontWeight={300}
+                  fontSize={13}
+                  color={"#bdbdbd"}
+                >
+                  Investment summary
+                </Typography>
+                <Grid container spacing={4}>
+                  <Grid item md={7}>
+                    <Box>
+                      <Box>
+                        <Grid container py={0.5}>
+                          <Grid item md={4}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={300}
+                              fontSize={11}
+                              color={"#bdbdbd"}
+                            >
+                              Price(USDT)
+                            </Typography>
+                          </Grid>
+                          <Grid item md={4}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={300}
+                              fontSize={11}
+                              color={"#bdbdbd"}
+                            >
+                              Amount(USDT)
+                            </Typography>
+                          </Grid>
+                          <Grid item md={4}>
+                            <Typography
+                              variant="body2"
+                              fontWeight={300}
+                              fontSize={11}
+                              color={"#bdbdbd"}
+                            >
+                              Received(ETH)
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        {[...Array(grids)].map((singleOrder, index) => (
+                          <Grid container mt={1} py={0.2}>
+                            <Grid item md={4}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={500}
+                                fontSize={13}
+                                color={"#fff"}
+                              >
+                                ${(2000 * (100 - (index + 1) * percent)) / 100}
+                              </Typography>
+                            </Grid>
+                            <Grid item md={4}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={500}
+                                fontSize={13}
+                                color={"#fff"}
+                              >
+                                ${(amount / grids).toFixed(2)}
+                              </Typography>
+                            </Grid>
+                            <Grid item md={4}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={300}
+                                fontSize={13}
+                                color={"#fff"}
+                              >
+                                {(
+                                  amount /
+                                  grids /
+                                  getPriceOfSingleOrder(index)
+                                ).toFixed(2)}{" "}
+                                ETH
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        ))}
+                      </Box>
 
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={12}
+                        lineHeight={1.8}
+                        color={"#f9f9f9"}
+                        mt={1}
+                      >
+                        - Total ETH :
+                        <strong> {getTotalTokenAccumulated()} ETH</strong>.
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={12}
+                        lineHeight={1.8}
+                        color={"#f9f9f9"}
+                      >
+                        - Expected ETH Price:
+                        <strong> $10,000</strong>
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={12}
+                        lineHeight={1.8}
+                        color={"#f9f9f9"}
+                      >
+                        - Your profit:
+                        <strong>
+                          {" "}
+                          {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
+                          <span style={{ color: "#28C59A" }}>
+                            ${" "}
+                            {(
+                              getTotalTokenAccumulated() * 10000 -
+                              amount
+                            ).toFixed(2)}{" "}
+                          </span>
+                        </strong>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item md={5}>
+                    <Box>
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={14}
+                        lineHeight={1.8}
+                        color={"#bdbdbd"}
+                      >
+                        ROI:
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={23}
+                        color={"#28C59A"}
+                      >
+                        <strong>
+                          {" "}
+                          {(
+                            ((getTotalTokenAccumulated() * 10000 - amount) *
+                              100) /
+                            amount
+                          ).toFixed()}
+                          %
+                        </strong>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
                 <div className="text-center">
                   <Button
                     className={classes.actionButton}
                     onClick={isApproved ? handleStake : handleApprove}
                   >
-                    {isApproved ? "Create Strategy" : "Approve Strategy"}
+                    {isApproved ? "Place order" : "Approve Investment"}
                   </Button>
                 </div>
               </div>
@@ -695,7 +878,7 @@ export default function AccumulationComponent() {
               className={classes.heading}
               fontWeight={700}
             >
-              Your Orders
+              My investments
             </Typography>
             <UserPoolOrders poolType={"ACCUMULATION"} />
           </div>

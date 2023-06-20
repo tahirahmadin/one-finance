@@ -51,22 +51,22 @@ export default function Pools() {
       type: "ACCUMULATION",
     },
     {
-      title: "Spot Grid Strategy",
+      title: "DCA Strategy",
       description:
-        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
+        "Strategy will be your favorite tokens at a specific interval to make your buy prices normalised.",
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
-      url: "grid-strategy",
+      url: "accumulation",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
       type: "GRID",
     },
     {
-      title: "Spot Grid Strategy",
+      title: "RSI Indicator Strategy",
       description:
-        "Your orders will be placed and executed based on percentage changes in the market price of the specific token.",
-      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
-      url: "grid-strategy",
+        "Buy and Sell tokens based market price movement strength based indicator RSI.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/growth-chart-3943015-3273369.png",
+      url: "accumulation",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
-      type: "GRID",
+      type: "ACCUMULATION",
     },
   ];
 

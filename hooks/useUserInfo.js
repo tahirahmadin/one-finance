@@ -5,6 +5,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GetPoolUserDataByAddress } from "../queries/graphQueries";
 import { strategyType } from "../utils/constants";
 import { useWeb3Auth } from "./useWeb3Auth";
+import Web3 from "web3";
 
 export function useUserInfo() {
   const { accountSC } = useWeb3Auth();
@@ -40,7 +41,14 @@ export function useUserInfo() {
 
     setUserData({
       totalOrders: data?.poolUsers?.[0]?.ordersCount,
-      totalInvestedUSDT: data?.poolUsers?.[0]?.deposit,
+      totalInvestedUSDT: Web3.utils.fromWei(
+        data?.poolUsers?.[0]?.deposit.toString(),
+        "ether"
+      ),
+      inOrderUSDT: Web3.utils.fromWei(
+        data?.poolUsers?.[0]?.fiatBalance.toString(),
+        "ether"
+      ),
       tokensAccumulated: data?.poolUsers?.[0]?.tokenBalance,
     });
   }, [data]);

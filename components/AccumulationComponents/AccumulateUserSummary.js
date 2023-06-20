@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
 import Web3 from "web3";
 
@@ -84,8 +85,13 @@ export default function AccumulateUserSummary() {
   const classes = useStyles();
   const theme = useTheme();
 
+  const { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
+    strategyType.ACCUMULATION
+  );
+
   return (
     <Box pt={0} className={classes.card}>
+      {console.log(userPoolGraphData)}
       <Box>
         <Typography
           variant="body2"
@@ -93,7 +99,7 @@ export default function AccumulateUserSummary() {
           fontSize={12}
           fontWeight={300}
         >
-          My Investment
+          My Investment (USDT)
         </Typography>
         <Typography
           variant="h3"
@@ -101,7 +107,7 @@ export default function AccumulateUserSummary() {
           fontWeight={700}
           lineHeight={1.3}
         >
-          $2,434
+          ${userPoolGraphData && userPoolGraphData.totalInvestedUSDT}
         </Typography>
       </Box>
       <Box
@@ -147,7 +153,7 @@ export default function AccumulateUserSummary() {
             alignItems={"center"}
           >
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
+              src="https://www.sleepswap.io/SleepSwap_Plain.png"
               height="28px"
             />
             <Box
@@ -164,7 +170,7 @@ export default function AccumulateUserSummary() {
                 fontWeight={500}
                 lineHeight={1.2}
               >
-                BTC
+                SLEEPT
               </Typography>
               <Typography
                 variant="verysmall"
@@ -173,7 +179,7 @@ export default function AccumulateUserSummary() {
                 fontWeight={300}
                 lineHeight={1.2}
               >
-                Bitcoin
+                SleepSwap
               </Typography>
             </Box>
           </Box>
@@ -192,7 +198,7 @@ export default function AccumulateUserSummary() {
                 fontWeight={500}
                 lineHeight={1.2}
               >
-                0.32 BTC
+                {userPoolGraphData && userPoolGraphData.tokensAccumulated}{" "}
               </Typography>
             </Box>
           </Box>
@@ -259,7 +265,7 @@ export default function AccumulateUserSummary() {
                 fontWeight={500}
                 lineHeight={1.2}
               >
-                1.32 ETH
+                0
               </Typography>
             </Box>
           </Box>

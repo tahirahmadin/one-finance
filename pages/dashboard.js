@@ -96,10 +96,10 @@ const DashboardPage = () => {
   return (
     <Box mb={4.6}>
       <Seo
-        title="Dashboard | OneRare Foodverse"
-        description="Take a look at your ORARE, Ingredients, Dishes and the Dish calculator — all in one place. See the Dashboard here."
-        keywords="dashboard, metaverse dashboard, dashboard foodverse, foodverse status, dish calculator foodverse, nft game, metaverse game, game nft, nft metaverse, nft blockchain, metaverse blockchain, food metaverse, foodverse, food game, nft food, metaverse food game"
-        image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/original.png"
+        title="SleepSwap | Track and Trade Smartly"
+        description="Trade like a pro"
+        keywords="sleepswap"
+        image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/gallery.jpg"
       />
       <Box className={classes.background}>
         <Container>

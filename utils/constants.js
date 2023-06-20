@@ -14,7 +14,7 @@ export const constants = {
   backend_dev: "http://localhost:5004",
   contracts: {
     fiat: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
-    accumulation: "0x6a659bE81b515aec146839d423901BcE91D116A2",
+    accumulation: "0xD26E48de5356162E72CE66cF94075D205B196d7a",
   },
 };
 

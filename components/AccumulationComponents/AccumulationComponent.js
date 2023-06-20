@@ -11,7 +11,6 @@ import {
   useMediaQuery,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import {
   checkUSDTApproved,
@@ -26,17 +25,13 @@ import { ExpandMore } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
-import LineChart from "../../common/Charts/LineChart";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import { constants, strategyType } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
-import { useUpdatePrice } from "../../hooks/useUpdatePrice";
-
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulateUserSummary from "./AccumulateUserSummary";
-
 import AccumulationTopHeader from "./AccumulationTopHeader";
 import AccumulateOrderBook from "./AccumulateOrderBook";
 
@@ -207,7 +202,7 @@ export default function AccumulationComponent() {
       let res = await getTokenPriceStats(selectedToken.id);
       if (res) {
         let tempData = {
-          usd: 1,
+          usd: 2000,
         };
         // setTokenPriceData(res[selectedToken.id.toLowerCase()]);
         setTokenPriceData(tempData);
@@ -229,48 +224,6 @@ export default function AccumulationComponent() {
       asyncFn();
     }
   }, [accountSC, resetFlag]);
-
-  const calculateOrdersData = useMemo(async () => {
-    if (tokenPriceData) {
-      let priceInWei = Web3.utils.toWei(tokenPriceData.usd.toString(), "ether");
-      console.log(priceInWei);
-      console.log(tokenPriceData);
-      let pricesArr = [];
-      let tokenReceiveArr = [];
-      let selectedTokenAddress = selectedToken.address;
-
-      if (amount > 0 && percent > 0 && grids > 0) {
-        let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-        let orderPriceForBuy = priceInWei;
-
-        let buyOrders = [...Array(grids)].map((ele, index) => {
-          orderPriceForBuy = (orderPriceForBuy * (100 - percent)) / 100;
-          console.log(orderPriceForBuy);
-          let orderPriceInUsd = parseFloat(
-            Web3.utils.fromWei(orderPriceForBuy.toString(), "ether")
-          ).toFixed(3);
-          console.log(orderPriceForBuy);
-          console.log(orderPriceInUsd);
-          pricesArr.push(orderPriceInUsd);
-          tokenReceiveArr.push((amount / grids / orderPriceInUsd).toFixed(2));
-          return Web3.utils.toWei(orderPriceForBuy.toString(), "ether");
-        });
-
-        let orderObj = {
-          buyOrders,
-          fiatAmount,
-          selectedTokenAddress,
-        };
-
-        setOrderPrices(pricesArr);
-        setOrderTokenReceived(tokenReceiveArr);
-        console.log(pricesArr);
-        console.log(tokenReceiveArr);
-        console.log(orderObj);
-        return orderObj;
-      }
-    }
-  }, [amount, grids, percent, resetFlag, loaded, tokenPriceData]);
 
   const handlePercentage = (event) => {
     let { value } = event.target;
@@ -300,11 +253,11 @@ export default function AccumulationComponent() {
         .send(
           {
             from: userAddress,
-            maxPriorityFeePerGas: "50000000000",
+            maxPriorityFeePerGas: "80000000000",
             gasPrice: parseInt(
-              (parseInt(estimateGasPrice) * 10) / 9
+              (parseInt(estimateGasPrice) * 10) / 6
             ).toString(),
-            gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
           },
           async function (error, transactionHash) {
             if (transactionHash) {
@@ -333,68 +286,64 @@ export default function AccumulationComponent() {
 
   // Write functions
   const handleStake = async () => {
-    let price = tokenPriceData ? parseFloat(tokenPriceData.usd) * 100000000 : 0; // Making it 8 decimal price
     if (amount > 0 && percent > 0 && grids > 0) {
-      let ordersData = await calculateOrdersData;
+      let price = tokenPriceData
+        ? parseFloat(tokenPriceData.usd) * 100000000
+        : 0; // Making it 8 decimal price
+      let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
+      console.log(price);
+      // let ordersData = await calculateOrdersData;
 
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
 
       let accumulateContract = accumulationInstance(provider.provider);
-      if (ordersData) {
-        try {
-          let estimateGas = await accumulateContract.methods
-            .invest(
-              ordersData.fiatAmount,
-              grids,
-              percent,
-              price,
-              ordersData.selectedTokenAddress
-            )
-            .estimateGas({ from: userAddress });
+      try {
+        let estimateGas = await accumulateContract.methods
+          .invest(fiatAmount, grids, percent, price, selectedToken.address)
+          .estimateGas({ from: userAddress });
 
-          let estimateGasPrice = await web3.eth.getGasPrice();
-          const response = await accumulateContract.methods
-            .invest(
-              ordersData.fiatAmount,
-              grids,
-              percent,
-              price,
-              ordersData.selectedTokenAddress
-            )
-            .send(
-              {
-                from: userAddress,
-                maxPriorityFeePerGas: "50000000000",
-                gasPrice: parseInt(
-                  (parseInt(estimateGasPrice) * 10) / 9
-                ).toString(),
-                gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
-              },
-              async function (error, transactionHash) {
-                if (transactionHash) {
-                  setStakeCase(2);
-                } else {
-                  setStakeCase(4);
-                }
-              }
-            )
-            .on("receipt", async function (receipt) {
-              setStakeCase(3);
-              setResetFlag(resetFlag + 1);
-            })
-            .on("error", async function (error) {
-              if (error?.code === 4001) {
-                setStakeCase(4);
+        let estimateGasPrice = await web3.eth.getGasPrice();
+        const response = await accumulateContract.methods
+          .invest(
+            ordersData.fiatAmount,
+            grids,
+            percent,
+            price,
+            ordersData.selectedTokenAddress
+          )
+          .send(
+            {
+              from: userAddress,
+              maxPriorityFeePerGas: "80000000000",
+              gasPrice: parseInt(
+                (parseInt(estimateGasPrice) * 10) / 6
+              ).toString(),
+              gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
+            },
+            async function (error, transactionHash) {
+              if (transactionHash) {
+                setStakeCase(2);
               } else {
                 setStakeCase(4);
               }
-            });
-        } catch (err) {
-          console.log(err);
-          setStakeCase(4);
-        }
+            }
+          )
+          .on("receipt", async function (receipt) {
+            setStakeCase(3);
+            setResetFlag(resetFlag + 1);
+          })
+          .on("error", async function (error) {
+            if (error?.code === 4001) {
+              setStakeCase(4);
+            } else {
+              setStakeCase(4);
+            }
+          });
+      } catch (err) {
+        console.log(err);
+        setStakeCase(4);
       }
     }
   };
@@ -410,11 +359,8 @@ export default function AccumulationComponent() {
     console.log("selected token ", token);
   };
 
-  const scrollToCreate = () => {
-    window?.scrollTo(0, 250);
-  };
-
-  const tokenPrice = useUpdatePrice();
+  // const tokenPrice = useUpdatePrice();
+  const tokenPrice = { price: 2000 };
 
   const getPriceOfSingleOrder = (index) => {
     return parseFloat((2000 * (100 - (index + 1) * percent)) / 100);

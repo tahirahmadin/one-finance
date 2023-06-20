@@ -122,7 +122,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                     <img
                       src="https://cdn3d.iconscout.com/3d/premium/thumb/time-is-money-5374083-4492219.png"
                       alt="Waiting"
-                      height="150px"
+                      height="120px"
                     />
                   </div>
 
@@ -132,17 +132,18 @@ const TxPopup = ({ txCase, resetPopup }) => {
                       className={classes.heading}
                       textAlign="center"
                       fontWeight={600}
-                      fontSize={22}
+                      fontSize={20}
+                      color={"#f9f9f9"}
                     >
                       Waiting for Confirmation
                     </Typography>
                     <Typography
                       variant="body2"
-                      className={classes.para}
                       textAlign="center"
+                      mt={2}
                       fontWeight={400}
-                      fontSize={14}
-                      pt={3}
+                      fontSize={15}
+                      color={"#bdbdbd"}
                     >
                       Confirm the transaction in Metamask to make <br />
                       strategy working.
@@ -168,7 +169,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                     <img
                       src="https://cdn3d.iconscout.com/3d/premium/thumb/shopping-offer-time-4408277-3663982.png"
                       alt="Submitted"
-                      height="150px"
+                      height="120px"
                     />
                   </div>
                   <div className="my-2">
@@ -183,11 +184,12 @@ const TxPopup = ({ txCase, resetPopup }) => {
                       Transaction Submitted
                     </Typography>
                     <Typography
+                      mt={2}
                       variant="body2"
                       className={classes.para}
                       textAlign="center"
-                      fontWeight={400}
-                      fontSize={14}
+                      fontSize={15}
+                      color={"#bdbdbd"}
                     >
                       Transaction is submitted and we are creating <br />
                       your space in the pool.
@@ -213,7 +215,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                     <img
                       src="https://cdn3d.iconscout.com/3d/premium/thumb/success-5825150-4874092.png"
                       alt="success"
-                      height="150px"
+                      height="120px"
                     />
                   </div>
                   <div className="my-2">
@@ -223,16 +225,19 @@ const TxPopup = ({ txCase, resetPopup }) => {
                       className={classes.heading}
                       textAlign="center"
                       fontWeight={600}
-                      fontSize={22}
+                      fontSize={20}
+                      color={"#f9f9f9"}
                     >
                       Transaction Successful!
                     </Typography>
                     <Typography
+                      mt={2}
                       variant="body2"
                       className={classes.para}
                       textAlign="center"
                       fontWeight={400}
-                      fontSize={14}
+                      fontSize={15}
+                      color={"#bdbdbd"}
                     >
                       Congratulations! your strategy is ready to give you yeilds
                       <br /> while you sleep.
@@ -258,7 +263,7 @@ const TxPopup = ({ txCase, resetPopup }) => {
                     <img
                       src="https://cdn3d.iconscout.com/3d/premium/thumb/expired-time-warning-5342745-4468817.png"
                       alt="failed"
-                      height="150px"
+                      height="120px"
                     />
                   </div>
 
@@ -267,20 +272,21 @@ const TxPopup = ({ txCase, resetPopup }) => {
                       variant="h5"
                       textAlign="center"
                       fontWeight={600}
-                      fontSize={22}
-                      color={"#212121"}
+                      fontSize={20}
+                      color={"#f9f9f9"}
                     >
-                      Oops! Stake Failed!
+                      Sorry, Something went wrong!
                     </Typography>
                     <Typography
+                      mt={2}
                       variant="body2"
                       textAlign="center"
                       fontWeight={400}
-                      fontSize={14}
-                      color={"#616161"}
+                      fontSize={15}
+                      color={"#bdbdbd"}
                     >
                       Sorry, Something went wrong and we are not able to <br />{" "}
-                      give you space in the pool.
+                      give you pass in the pool. Try again!
                     </Typography>
                   </div>
                 </div>

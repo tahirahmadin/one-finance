@@ -17,12 +17,6 @@ import { strategyType } from "../../utils/constants";
 const useStyles = makeStyles((theme) => ({
   boxCard: {
     marginTop: 20,
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingTop: 12,
-    paddingBottom: 12,
-    backgroundColor: "#0C0D10",
-    borderRadius: 10,
   },
   actionButton: {
     borderRadius: 14,
@@ -135,15 +129,16 @@ export default function UserPoolOrders({ poolType }) {
           setTrxCase(0);
         }}
       />
+      {allOrders.length === 0 && <div>No orders found.</div>}
       {allOrders?.map((singleOrder, index) => {
         return (
           <Grid
             container
-            p={3}
+            p={2}
             style={{
               borderRadius: 20,
               marginTop: 10,
-              backgroundColor: "#000000",
+              backgroundColor: "#15171c",
             }}
             key={1}
           >
@@ -157,7 +152,7 @@ export default function UserPoolOrders({ poolType }) {
             >
               <Box>
                 <img
-                  src="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+                  src="https://www.sleepswap.io/SleepSwap_Plain.png"
                   alt="Token"
                   height="32px"
                 />

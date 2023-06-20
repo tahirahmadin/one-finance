@@ -2,7 +2,14 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_usdtAddress", "type": "address" },
-      { "internalType": "address", "name": "_swapRouter", "type": "address" }
+      { "internalType": "address", "name": "_swapRouter", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "_minimumOrderAmount",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "_minGrids", "type": "uint256" },
+      { "internalType": "uint256", "name": "_minPercent", "type": "uint256" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -184,13 +191,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "disableTestMode",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "address", "name": "_token", "type": "address" }
     ],
@@ -202,13 +202,6 @@
   {
     "inputs": [],
     "name": "emergencyWithdrawPoolUsdt",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "enableTestMode",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -252,6 +245,27 @@
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "managers",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minimumGrids",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minimumOrderAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minimumPercentChange",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -359,6 +373,33 @@
       { "internalType": "uint256", "name": "_newFeePercent", "type": "uint256" }
     ],
     "name": "updateFeePercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_grids", "type": "uint256" }
+    ],
+    "name": "updateMinimumGrids",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "updateMinimumOrderAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_percentChange", "type": "uint256" }
+    ],
+    "name": "updateMinimumPercentChange",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -3,6 +3,13 @@ import { makeStyles } from "@mui/styles";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
+import { constants, strategyType } from "../../utils/constants";
+import { Info } from "@mui/icons-material";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import { usePoolInfo } from "../../hooks/usePoolInfo";
+import { GetPoolUserDataByAddress } from "../../queries/graphQueries";
+import { useLazyQuery } from "@apollo/client";
+import Web3 from "web3";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
@@ -112,6 +119,10 @@ export default function AccumulationTopHeader() {
   const classes = useStyles();
   const theme = useTheme();
 
+  const { poolInfo: poolGraphData, loading } = usePoolInfo(
+    strategyType.ACCUMULATION
+  );
+
   return (
     <Box
       className={classes.cardTop}
@@ -181,7 +192,8 @@ export default function AccumulationTopHeader() {
                       "linear-gradient(to right,#f9f9f9, #DADADA)",
                   }}
                 >
-                  <TrendingUp style={{ fontSize: 13 }} /> 326 people invested
+                  <TrendingUp style={{ fontSize: 13 }} />{" "}
+                  {poolGraphData && poolGraphData.participants} people invested
                 </Typography>
               </Box>
 
@@ -214,12 +226,6 @@ export default function AccumulationTopHeader() {
               </Typography>
             </Box>
             <LinearProgressComponent value={32} />
-            {/* <Box mt={3}>
-              <Typography variant="small" className={classes.pageSubtitle}>
-                * Investment for <strong>2 years</strong> is recommended for
-                best results.
-              </Typography>
-            </Box> */}
           </Box>
         </Box>
 
@@ -237,7 +243,10 @@ export default function AccumulationTopHeader() {
               color="#000000"
               style={{ fontWeight: 600, lineHeight: 1.6 }}
             >
-              $943,600
+              ${" "}
+              {poolGraphData && poolGraphData.invested
+                ? poolGraphData.invested
+                : "-"}
             </Typography>
           </Box>
           <Box mt={2}>
@@ -250,7 +259,7 @@ export default function AccumulationTopHeader() {
               fontSize={16}
               fontWeight={600}
             >
-              32,435
+              {poolGraphData ? poolGraphData.allTimeVol : "-"}
             </Typography>
           </Box>
           <Box mt={2}>
@@ -263,7 +272,9 @@ export default function AccumulationTopHeader() {
               fontSize={16}
               fontWeight={600}
             >
-              549
+              {poolGraphData && poolGraphData.totalOrders
+                ? poolGraphData.totalOrders
+                : "-"}
             </Typography>
           </Box>
         </Box>

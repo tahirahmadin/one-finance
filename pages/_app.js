@@ -51,21 +51,18 @@ function MyApp({ Component, pageProps }) {
         />
         <link
           rel="shortcut icon"
-          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+          href="https://www.sleepswap.io/SleepSwap_Plain.png"
           type="image/x-icon"
         />
-        <link
-          rel="icon"
-          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
-        />
+        <link rel="icon" href="https://www.sleepswap.io/SleepSwap_Plain.png" />
         <link
           rel="icon"
           type="image/png"
-          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+          href="https://www.sleepswap.io/SleepSwap_Plain.png"
         />
         <link
           rel="apple-touch-icon"
-          href="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+          href="https://www.sleepswap.io/SleepSwap_Plain.png"
         />
         <meta name="revisit-after" content="1 days" />
         <link

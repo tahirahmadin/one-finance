@@ -1,13 +1,10 @@
 import { makeStyles } from "@mui/styles";
-import { ExpandMore, Pending, Wallet } from "@mui/icons-material";
 
 import {
   Accordion,
-  AccordionSummary,
   Box,
   Button,
   Grid,
-  IconButton,
   Typography,
   useMediaQuery,
   useTheme,
@@ -55,10 +52,10 @@ const AccumulateOrderBook = () => {
             width: "25%",
             backgroundColor: "transparent",
             border: "1px solid #2d2d32",
-            borderRadius: 10,
-            paddingLeft: 10,
-            paddingTop: 6,
-            paddingBottom: 6,
+            borderRadius: 14,
+            paddingLeft: 5,
+            paddingTop: 5,
+            paddingBottom: 5,
           }}
           disableGutters={true}
         >
@@ -102,7 +99,7 @@ const AccumulateOrderBook = () => {
         }}
       >
         <Grid container py={0.5}>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -113,7 +110,7 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -123,7 +120,7 @@ const AccumulateOrderBook = () => {
               Price(USDT)
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -133,19 +130,10 @@ const AccumulateOrderBook = () => {
               Amount(USDT)
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={11}
-              color={"#bdbdbd"}
-            >
-              Received(ETH)
-            </Typography>
-          </Grid>
         </Grid>
+
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -156,7 +144,7 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -166,7 +154,7 @@ const AccumulateOrderBook = () => {
               $1500
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -176,63 +164,9 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
-            </Typography>
-          </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
-            <Typography
-              ml={-1}
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#28C59A"}
-            >
-              ◍ BUY
-            </Typography>
-          </Grid>
-
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
-            >
-              $1400
-            </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
-            >
-              $130
-            </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -243,17 +177,17 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
               color={"#fff"}
             >
-              $1300
+              $1500
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -263,19 +197,9 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
-            </Typography>
-          </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -286,17 +210,17 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
               color={"#fff"}
             >
-              $1200
+              $1500
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -306,19 +230,9 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
-            </Typography>
-          </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -329,60 +243,17 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
               color={"#fff"}
             >
-              $1100
+              $1500
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
-            >
-              $130
-            </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container mt={1} py={1}>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#28C59A"}
-            >
-              BUY
-            </Typography>
-          </Grid>
-
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
-            >
-              $1000
-            </Typography>
-          </Grid>
-          <Grid item md={3}>
+          <Grid item md={4}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -390,16 +261,6 @@ const AccumulateOrderBook = () => {
               color={"#fff"}
             >
               $130
-            </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={300}
-              fontSize={13}
-              color={"#fff"}
-            >
-              0.34 ETH
             </Typography>
           </Grid>
         </Grid>

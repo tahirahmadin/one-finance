@@ -28,23 +28,23 @@ export function usePoolInfo(strategy = strategyType.ACCUMULATION) {
     if (!data?.pools) {
       return;
     }
-    console.log(data);
-    setPoolData({
-      totalOrders: data?.pools?.[0]?.ordersCount,
-      invested: Web3.utils.fromWei(
-        data?.pools?.[0]?.deposit.toString(),
-        "ether"
-      ),
-      inOrders: Web3.utils.fromWei(
-        data?.pools?.[0]?.fiatBalance.toString(),
-        "ether"
-      ),
-      allTimeVol: parseInt(
-        Web3.utils.fromWei(data?.pools?.[0]?.deposit.toString(), "ether") -
-          Web3.utils.fromWei(data?.pools?.[0]?.fiatBalance.toString(), "ether")
-      ),
-      participants: data?.pools?.[0]?.usersCount,
-    });
+    let poolValues = data?.pools?.[0];
+    if (poolValues) {
+      let tempInvested = poolValues.deposit.toString();
+      let tempInOrders = poolValues.fiatBalance.toString();
+      let tempFiatBalance = poolValues.fiatBalance.toString();
+
+      setPoolData({
+        totalOrders: data?.pools?.[0]?.ordersCount,
+        invested: Web3.utils.fromWei(tempInvested, "ether"),
+        inOrders: Web3.utils.fromWei(tempInOrders, "ether"),
+        allTimeVol: parseInt(
+          Web3.utils.fromWei(tempInvested, "ether") -
+            Web3.utils.fromWei(tempFiatBalance, "ether")
+        ),
+        participants: data?.pools?.[0]?.usersCount,
+      });
+    }
   }, [data]);
 
   useEffect(() => {

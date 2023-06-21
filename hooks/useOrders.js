@@ -8,9 +8,6 @@ import { useWeb3Auth } from "./useWeb3Auth";
 
 export function useOrders(strategy = strategyType.ACCUMULATION) {
   const { accountSC: account } = useWeb3Auth();
-
-  // console.log("current account ", account);
-
   const ordersPage = 1;
   const pendingOrderGraphQuery = useMemo(() => {
     return getOrdersQuery(ordersPage, account, strategy, "pending");

@@ -4,18 +4,17 @@ import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import { constants, strategyType } from "../../utils/constants";
-import { Info } from "@mui/icons-material";
-import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { GetPoolUserDataByAddress } from "../../queries/graphQueries";
-import { useLazyQuery } from "@apollo/client";
-import Web3 from "web3";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
     fontWeight: 600,
     color: "#212121",
     textAlign: "left",
+    fontSize: "1.6vw",
+    [theme.breakpoints.down("md")]: {
+      fontSize: 22,
+    },
   },
 
   pageSubtitle: {
@@ -181,7 +180,6 @@ export default function AccumulationTopHeader() {
                     marginLeft: 5,
                     borderRadius: 10,
                     fontSize: 8,
-
                     paddingLeft: 10,
                     paddingRight: 10,
                     color: "black",
@@ -203,7 +201,7 @@ export default function AccumulationTopHeader() {
               </Typography>
             </Box>
           </Box>
-          <Box style={{ width: "100%" }} mt={3}>
+          <Box style={{ width: "93%" }} mt={3}>
             <Box
               display={"flex"}
               justifyContent="space-between"
@@ -233,6 +231,7 @@ export default function AccumulationTopHeader() {
           display={"flex"}
           flexDirection={"column"}
           justifyContent="flex-end"
+          width={"20%"}
         >
           <Box>
             <Typography variant="body2" color="#616161" fontSize={12}>
@@ -251,7 +250,7 @@ export default function AccumulationTopHeader() {
           </Box>
           <Box mt={2}>
             <Typography variant="body2" color="#616161" fontSize={12}>
-              Trading volume (24 hrs)
+              Trading vol. (24 hrs)
             </Typography>
             <Typography
               variant="body1"
@@ -264,7 +263,7 @@ export default function AccumulationTopHeader() {
           </Box>
           <Box mt={2}>
             <Typography variant="body2" color="#616161" fontSize={12}>
-              Total trades executed
+              Total trades
             </Typography>
             <Typography
               variant="body1"

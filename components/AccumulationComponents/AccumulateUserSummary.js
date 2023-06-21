@@ -15,6 +15,7 @@ import Web3 from "web3";
 
 import { constants, strategyType } from "../../utils/constants";
 import { Info } from "@mui/icons-material";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -84,14 +85,24 @@ const useStyles = makeStyles((theme) => ({
 export default function AccumulateUserSummary() {
   const classes = useStyles();
   const theme = useTheme();
+  const { accountSC } = useWeb3Auth();
 
-  const { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
-    strategyType.ACCUMULATION
-  );
+  const [userPoolState, setUserPoolState] = useState(null);
 
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
+          strategyType.ACCUMULATION
+        );
+        console.log(userPoolGraphData);
+        setUserPoolState(userPoolGraphData);
+      }
+      asyncFn();
+    }
+  }, [accountSC]);
   return (
     <Box pt={0} className={classes.card}>
-      {console.log(userPoolGraphData)}
       <Box>
         <Typography
           variant="body2"
@@ -107,7 +118,7 @@ export default function AccumulateUserSummary() {
           fontWeight={700}
           lineHeight={1.3}
         >
-          ${userPoolGraphData && userPoolGraphData.totalInvestedUSDT}
+          ${userPoolState ? userPoolState.totalInvestedUSDT : 0}
         </Typography>
       </Box>
       <Box
@@ -198,7 +209,7 @@ export default function AccumulateUserSummary() {
                 fontWeight={500}
                 lineHeight={1.2}
               >
-                {userPoolGraphData && userPoolGraphData.tokensAccumulated}{" "}
+                {userPoolState ? userPoolState.tokensAccumulated : 0}{" "}
               </Typography>
             </Box>
           </Box>

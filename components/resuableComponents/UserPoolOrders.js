@@ -129,7 +129,9 @@ export default function UserPoolOrders({ poolType }) {
           setTrxCase(0);
         }}
       />
-      {allOrders.length === 0 && <div>No orders found.</div>}
+      {allOrders.length === 0 && (
+        <div style={{ color: "#bdbdbd", paddingTop: 10 }}>No orders found.</div>
+      )}
       {allOrders?.map((singleOrder, index) => {
         return (
           <Grid

@@ -136,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputWrapper: {
     border: "1px solid #2d2d32",
-    padding: "2px 20px 2px 20px",
+    padding: "2px 10px 2px 10px",
     borderRadius: 10,
     backgroundColor: "rgba(106, 85, 234,0.03)",
   },
@@ -394,8 +394,8 @@ export default function AccumulationComponent() {
             <AccumulateUserSummary />
           </Grid>
         </Grid>
-        <Grid container mt={5} spacing={2}>
-          <Grid item md={6}>
+        <Grid container mt={5} spacing={3}>
+          <Grid item md={4.5}>
             <Box>
               <div className="d-flex flex-column justify-content-around">
                 <div>
@@ -634,166 +634,7 @@ export default function AccumulationComponent() {
                     </Box>
                   </Grid>
                 </Grid>
-                <Typography
-                  mt={2}
-                  mb={1}
-                  variant="body2"
-                  fontWeight={300}
-                  fontSize={13}
-                  color={"#bdbdbd"}
-                >
-                  Investment summary
-                </Typography>
-                <Grid container spacing={2}>
-                  <Grid item md={6}>
-                    <Box>
-                      <Box>
-                        <Grid container py={0.5}>
-                          <Grid item md={4}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={300}
-                              fontSize={10}
-                              color={"#bdbdbd"}
-                            >
-                              Price(USDT)
-                            </Typography>
-                          </Grid>
-                          <Grid item md={4}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={300}
-                              fontSize={10}
-                              color={"#bdbdbd"}
-                            >
-                              Amount(USDT)
-                            </Typography>
-                          </Grid>
-                          <Grid item md={4}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={300}
-                              fontSize={10}
-                              color={"#bdbdbd"}
-                            >
-                              Received(ETH)
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        {[...Array(grids)].map((singleOrder, index) => (
-                          <Grid container mt={1} py={0.2}>
-                            <Grid item md={4}>
-                              <Typography
-                                variant="body2"
-                                fontWeight={500}
-                                fontSize={13}
-                                color={"#fff"}
-                              >
-                                ${(2000 * (100 - (index + 1) * percent)) / 100}
-                              </Typography>
-                            </Grid>
-                            <Grid item md={4}>
-                              <Typography
-                                variant="body2"
-                                fontWeight={500}
-                                fontSize={13}
-                                color={"#fff"}
-                              >
-                                ${(amount / grids).toFixed(2)}
-                              </Typography>
-                            </Grid>
-                            <Grid item md={4}>
-                              <Typography
-                                variant="body2"
-                                fontWeight={300}
-                                fontSize={13}
-                                color={"#fff"}
-                              >
-                                {(
-                                  amount /
-                                  grids /
-                                  getPriceOfSingleOrder(index)
-                                ).toFixed(2)}{" "}
-                                ETH
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        ))}
-                      </Box>
-                    </Box>
-                  </Grid>
-                  <Grid item md={6}>
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1.8}
-                        color={"#f9f9f9"}
-                        mt={1}
-                      >
-                        - Total ETH :
-                        <strong> {getTotalTokenAccumulated()} ETH</strong>.
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1.8}
-                        color={"#f9f9f9"}
-                      >
-                        - Expected ETH Price:
-                        <strong> $10,000</strong>
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1.8}
-                        color={"#f9f9f9"}
-                      >
-                        - Your profit:
-                        <strong>
-                          {" "}
-                          {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
-                          <span style={{ color: "#28C59A" }}>
-                            ${" "}
-                            {(
-                              getTotalTokenAccumulated() * 10000 -
-                              amount
-                            ).toFixed(2)}{" "}
-                          </span>
-                        </strong>
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={14}
-                        lineHeight={1.8}
-                        color={"#bdbdbd"}
-                        mt={2}
-                      >
-                        ROI:
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        fontSize={23}
-                        color={"#28C59A"}
-                      >
-                        <strong>
-                          {" "}
-                          {(
-                            ((getTotalTokenAccumulated() * 10000 - amount) *
-                              100) /
-                            amount
-                          ).toFixed()}
-                          %
-                        </strong>
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
+
                 <div className="text-center">
                   <Button
                     className={classes.actionButton}
@@ -805,7 +646,165 @@ export default function AccumulationComponent() {
               </div>
             </Box>
           </Grid>
-          <Grid item md={6}>
+          <Grid item md={3.5}>
+            <Typography
+              variant="body1"
+              mt={5}
+              mb={1}
+              fontWeight={600}
+              fontSize={13}
+              color={"#f9f9f9"}
+            >
+              My Investment summary
+            </Typography>
+
+            <Box>
+              <Box>
+                <Typography
+                  variant="body2"
+                  mb={1}
+                  fontWeight={500}
+                  fontSize={12}
+                  color={"#f9f9f9"}
+                >
+                  Orders
+                </Typography>
+                <Grid container py={0.5}>
+                  <Grid item md={4}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={300}
+                      fontSize={10}
+                      color={"#bdbdbd"}
+                    >
+                      Price(USDT)
+                    </Typography>
+                  </Grid>
+                  <Grid item md={4}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={300}
+                      fontSize={10}
+                      color={"#bdbdbd"}
+                    >
+                      Amount(USDT)
+                    </Typography>
+                  </Grid>
+                  <Grid item md={4}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={300}
+                      fontSize={10}
+                      color={"#bdbdbd"}
+                    >
+                      Received(ETH)
+                    </Typography>
+                  </Grid>
+                </Grid>
+                {[...Array(grids)].map((singleOrder, index) => (
+                  <Grid container mt={1}>
+                    <Grid item md={4}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        fontSize={13}
+                        color={"#fff"}
+                      >
+                        ${(2000 * (100 - (index + 1) * percent)) / 100}
+                      </Typography>
+                    </Grid>
+                    <Grid item md={4}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={500}
+                        fontSize={13}
+                        color={"#fff"}
+                      >
+                        ${(amount / grids).toFixed(2)}
+                      </Typography>
+                    </Grid>
+                    <Grid item md={4}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={300}
+                        fontSize={13}
+                        color={"#fff"}
+                      >
+                        {(
+                          amount /
+                          grids /
+                          getPriceOfSingleOrder(index)
+                        ).toFixed(2)}{" "}
+                        ETH
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Box>
+            </Box>
+            <Box>
+              <Typography
+                variant="body2"
+                fontWeight={400}
+                fontSize={11}
+                lineHeight={1.8}
+                color={"#f9f9f9"}
+                mt={2}
+              >
+                - Total ETH :<strong> {getTotalTokenAccumulated()} ETH</strong>.
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight={400}
+                fontSize={11}
+                lineHeight={1.8}
+                color={"#f9f9f9"}
+              >
+                - Expected ETH Price:
+                <strong> $10,000</strong>
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight={400}
+                fontSize={11}
+                lineHeight={1.8}
+                color={"#f9f9f9"}
+              >
+                - Your profit:
+                <strong>
+                  {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
+                  <span style={{ color: "#28C59A" }}>
+                    $ {(getTotalTokenAccumulated() * 10000 - amount).toFixed(2)}{" "}
+                  </span>
+                </strong>
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight={400}
+                fontSize={14}
+                lineHeight={1.8}
+                color={"#bdbdbd"}
+                mt={2}
+              >
+                ROI:
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                fontSize={23}
+                color={"#28C59A"}
+              >
+                <strong>
+                  {(
+                    ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
+                    amount
+                  ).toFixed()}
+                  %
+                </strong>
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={4}>
             <Box
               style={{
                 height: "100%",

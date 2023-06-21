@@ -78,6 +78,7 @@ const SideBar = ({}) => {
       display="flex"
       flexDirection="column"
       height="100%"
+      maxWidth={400}
       minWidth={240}
     >
       <Box>

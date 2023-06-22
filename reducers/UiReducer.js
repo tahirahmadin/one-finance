@@ -8,6 +8,7 @@ const initialState = {
   walletStatus: 0,
   accumulationPoolData: null,
   usdtBalance: 0,
+  selectedDashboardMenuItem: "DASHBOARD",
 };
 
 export const getPoolDataById = createAsyncThunk(
@@ -40,6 +41,9 @@ const UiReducer = createSlice({
     setUsdtBalanceOfUser(state, action) {
       state.usdtBalance = action.payload;
     },
+    setDashboardMenuItem(state, action) {
+      state.selectedDashboardMenuItem = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPoolDataById.fulfilled, (state, action) => {
@@ -59,6 +63,7 @@ export const {
   setTokenData,
   setWalletStatus,
   setUsdtBalanceOfUser,
+  setDashboardMenuItem,
 } = actions;
 
 export default UiReducer;

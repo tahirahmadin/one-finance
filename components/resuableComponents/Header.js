@@ -8,6 +8,7 @@ import {
   ListItem,
   SwipeableDrawer,
   CircularProgress,
+  Hidden,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
-      paddingLeft: 15,
-      paddingRight: 15,
+      paddingLeft: 0,
+      paddingRight: 0,
     },
   },
   linkItems: {
@@ -71,14 +72,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
-  // const accountSC = "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448";
-  // const web3AuthSC = true;
-  // const active = true;
 
   const { headerMenuExpanded } = store.ui;
   const router = useRouter();
   const matches = useMediaQuery("(min-width:1153px)");
-  const md = useMediaQuery("md");
+  const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const theme = useTheme();
 
@@ -96,63 +94,108 @@ const Header = () => {
     <Box className={classes.background}>
       <Container>
         <header>
-          <Grid
+          <Box
             style={{
               color: theme.palette.primary.contrastText,
-              display: "flex",
+              display: !md && "flex",
               paddingTop: "1rem",
               paddingBottom: "1rem",
               alignItems: "center",
-              justifyContent: "flex-end",
+              justifyContent: !md && "flex-end",
             }}
           >
-            <Grid display="flex" alignItems="center">
-              <Box>
-                <Button
-                  style={{ textDecoration: "none", textTransform: "none" }}
-                >
-                  <Typography variant="small" fontWeight={600}>
-                    <Link
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent={"space-between"}
+            >
+              <Hidden smUp>
+                <Box display={"flex"} justifyContent={"start"}>
+                  <Box pr={1}>
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
                       style={{
-                        textDecoration: "none",
-                        textTransform: "none",
                         color: "white",
+                        height: 40,
+                        width: 40,
+                        borderRadius: 10,
                       }}
-                      href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
-                      passHref={true}
-                      target="_blank"
+                    />
+                  </Box>
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"center"}
+                  >
+                    <Typography
+                      variant="smallheading"
+                      style={{
+                        color: "white",
+                        fontWeight: 600,
+                      }}
                     >
-                      {"> "}GET USDT FAUCET
-                    </Link>{" "}
-                  </Typography>
-                </Button>
-              </Box>
-              <Link href="/activities" style={{ textDecoration: "none" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                      $23,435
+                    </Typography>
 
-                    height: 40,
-                    border: "2px solid" + theme.palette.secondary.main,
-                    borderRadius: "20px",
-                    marginRight: 1,
-                    fontWeight: 500,
-                    color: "white",
-                    fontSize: 12,
-                  }}
-                >
-                  <span style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    {/* <img
+                    <Typography
+                      variant="small"
+                      style={{ color: "#bdbdbd", lineHeight: 1 }}
+                    >
+                      Wallet Balance
+                    </Typography>
+                  </Box>
+                </Box>
+              </Hidden>
+              <Hidden mdDown>
+                <Box>
+                  <Button
+                    style={{ textDecoration: "none", textTransform: "none" }}
+                  >
+                    <Typography variant="small" fontWeight={600}>
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          textTransform: "none",
+                          color: "white",
+                        }}
+                        href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
+                        passHref={true}
+                        target="_blank"
+                      >
+                        {"> "}GET USDT FAUCET
+                      </Link>{" "}
+                    </Typography>
+                  </Button>
+                </Box>
+              </Hidden>
+              <Hidden mdDown>
+                <Link href="/activities" style={{ textDecoration: "none" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+
+                      height: 40,
+                      border: "2px solid" + theme.palette.secondary.main,
+                      borderRadius: "20px",
+                      marginRight: 1,
+                      fontWeight: 500,
+                      color: "white",
+                      fontSize: 12,
+                    }}
+                  >
+                    <span style={{ paddingLeft: 10, paddingRight: 10 }}>
+                      {/* <img
                       src="https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-6438383-5307752.png"
                       style={{ color: "yellow", height: 24, marginRight: 4 }}
                     /> */}
-                    <Redeem style={{ color: "yellow", height: 18 }} /> Claim 32
-                    SLEEP
-                  </span>
-                </Box>
-              </Link>
+                      <Redeem style={{ color: "yellow", height: 18 }} /> Claim
+                      32 SLEEP
+                    </span>
+                  </Box>
+                </Link>
+              </Hidden>
 
               {!accountSC ? (
                 <Box>
@@ -208,7 +251,7 @@ const Header = () => {
                     }}
                   >
                     {accountSC &&
-                      accountSC.slice(0, 5) + "..." + accountSC.slice(38, 42)}
+                      accountSC.slice(0, 3) + "..." + accountSC.slice(38, 42)}
                   </p>
 
                   <Button
@@ -287,8 +330,8 @@ const Header = () => {
                   {/* </Hidden> */}
                 </Box>
               </SwipeableDrawer>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </header>
       </Container>
     </Box>

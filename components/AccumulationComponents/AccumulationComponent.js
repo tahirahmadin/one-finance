@@ -11,6 +11,7 @@ import {
   useMediaQuery,
   Accordion,
   AccordionSummary,
+  Hidden,
 } from "@mui/material";
 import {
   checkUSDTApproved,
@@ -34,6 +35,7 @@ import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulateUserSummary from "./AccumulateUserSummary";
 import AccumulationTopHeader from "./AccumulationTopHeader";
 import AccumulateOrderBook from "./AccumulateOrderBook";
+import MobileBottomBar from "../../common/MobileBottomBar";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -47,9 +49,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
-      paddingTop: "10%",
-      paddingLeft: 15,
-      paddingRight: 15,
+      paddingTop: "2%",
+      paddingLeft: 0,
+      paddingRight: 0,
     },
   },
   pageTitle: {
@@ -377,101 +379,108 @@ export default function AccumulationComponent() {
     return totalAmountWillBeBought.toFixed(3);
   };
   return (
-    <Box className={classes.background}>
-      <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
+    <Box>
+      <Box className={classes.background}>
+        <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
 
-      <Container>
-        <Grid
-          container
-          display={"flex"}
-          justifyContent="space-between"
-          spacing={2}
-        >
-          <Grid item md={9}>
-            <AccumulationTopHeader />
+        <Container>
+          <Grid
+            container
+            display={"flex"}
+            justifyContent="space-between"
+            spacing={2}
+          >
+            <Grid item md={9} xs={12}>
+              <AccumulationTopHeader />
+            </Grid>
+            <Grid item md={3} xs={12}>
+              <AccumulateUserSummary />
+            </Grid>
           </Grid>
-          <Grid item md={3}>
-            <AccumulateUserSummary />
-          </Grid>
-        </Grid>
-        <Grid container mt={5} spacing={3}>
-          <Grid item md={4.5}>
-            <Box>
-              <div className="d-flex flex-column justify-content-around">
-                <div>
-                  <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
-                    Create strategy
-                  </Typography>
-                </div>
-
-                <Box mt={2}>
-                  <Accordion
-                    expanded={false}
-                    style={{
-                      width: "100%",
-                      backgroundColor: "transparent",
-                      border: "1px solid #2d2d32",
-                      borderRadius: 10,
-                      padding: 0,
-                    }}
-                    disableGutters={true}
-                  >
-                    <AccordionSummary
-                      expandIcon={
-                        <ExpandMore style={{ color: "#f9f9f9", padding: 0 }} />
-                      }
-                      aria-controls="panel2a-content"
-                      id="panel2a-header"
-                      onClick={() => setOpenTokenSelect(true)}
+          <Grid container mt={5} spacing={3}>
+            <Grid item md={4.5} xs={12}>
+              <Box>
+                <div className="d-flex flex-column justify-content-around">
+                  <div>
+                    <Typography
+                      fontWeight={600}
+                      fontSize={18}
+                      color={"#f9f9f9"}
                     >
-                      <Box>
-                        <Typography
-                          variant="small"
-                          textAlign={"left"}
-                          lineHeight={0.4}
-                        >
-                          Select token
-                        </Typography>
-                        <Box
-                          display="flex"
-                          flexDirection={"row"}
-                          justifyContent="flex-start"
-                          alignItems="center"
-                        >
-                          <img
-                            src={selectedToken.logoURI}
-                            alt={"TokenLogo"}
-                            height="28px"
+                      Create strategy
+                    </Typography>
+                  </div>
+
+                  <Box mt={2}>
+                    <Accordion
+                      expanded={false}
+                      style={{
+                        width: "100%",
+                        backgroundColor: "transparent",
+                        border: "1px solid #2d2d32",
+                        borderRadius: 10,
+                        padding: 0,
+                      }}
+                      disableGutters={true}
+                    >
+                      <AccordionSummary
+                        expandIcon={
+                          <ExpandMore
+                            style={{ color: "#f9f9f9", padding: 0 }}
                           />
-                          <Box ml={1}>
-                            <Typography
-                              variant="body2"
-                              fontWeight={600}
-                              color={"#e5e5e5"}
-                              lineHeight={1}
-                              padding={0}
-                            >
-                              {selectedToken.symbol}{" "}
-                              {tokenPrice?.price && (
-                                <small
-                                  className="blink_me"
-                                  style={{ color: "green", fontSize: 11 }}
-                                >
-                                  ${tokenPrice?.price}
-                                </small>
-                              )}
-                            </Typography>
+                        }
+                        aria-controls="panel2a-content"
+                        id="panel2a-header"
+                        onClick={() => setOpenTokenSelect(true)}
+                      >
+                        <Box>
+                          <Typography
+                            variant="small"
+                            textAlign={"left"}
+                            lineHeight={0.4}
+                          >
+                            Select token
+                          </Typography>
+                          <Box
+                            display="flex"
+                            flexDirection={"row"}
+                            justifyContent="flex-start"
+                            alignItems="center"
+                          >
+                            <img
+                              src={selectedToken.logoURI}
+                              alt={"TokenLogo"}
+                              height="28px"
+                            />
+                            <Box ml={1}>
+                              <Typography
+                                variant="body2"
+                                fontWeight={600}
+                                color={"#e5e5e5"}
+                                lineHeight={1}
+                                padding={0}
+                              >
+                                {selectedToken.symbol}{" "}
+                                {tokenPrice?.price && (
+                                  <small
+                                    className="blink_me"
+                                    style={{ color: "green", fontSize: 11 }}
+                                  >
+                                    ${tokenPrice?.price}
+                                  </small>
+                                )}
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </AccordionSummary>
-                    <SelectTokenDialog
-                      open={openTokenSelect}
-                      handleClose={() => setOpenTokenSelect(false)}
-                      handleTokenSelected={handleTokenSelected}
-                      disableToken={selectedToken}
-                    />
-                    {/* <AccordionDetails>
+                      </AccordionSummary>
+                      <SelectTokenDialog
+                        open={openTokenSelect}
+                        handleClose={() => setOpenTokenSelect(false)}
+                        handleTokenSelected={handleTokenSelected}
+                        disableToken={selectedToken}
+                      />
+                      {/* <AccordionDetails>
                       <Box
                         style={{
                           maxHeight: 100,
@@ -512,323 +521,331 @@ export default function AccumulationComponent() {
                         })}
                       </Box>
                     </AccordionDetails> */}
-                  </Accordion>
-                </Box>
-                <Box
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  mt={1}
-                  className={classes.inputWrapper}
-                >
-                  <Box>
-                    <Typography
-                      variant="small"
-                      textAlign={"left"}
-                      lineHeight={1}
-                    >
-                      Amount:
-                    </Typography>
-                    <Input
-                      value={amount}
-                      onInput={(event) => setAmount(event.target.value)}
-                      fullWidth
-                      placeholder="0"
-                      disableUnderline
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        color: "#e5e5e5",
-                      }}
-                      type="number"
-                    />
+                    </Accordion>
                   </Box>
                   <Box
                     display={"flex"}
-                    flexDirection="column"
-                    alignItems="flex-end"
-                    justifyContent={"center"}
+                    justifyContent={"space-between"}
+                    mt={1}
+                    className={classes.inputWrapper}
                   >
-                    <Typography
-                      variant="small"
-                      textAlign={"right"}
-                      style={{
-                        width: 200,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      Available: {usdtBalance}
-                    </Typography>
+                    <Box>
+                      <Typography
+                        variant="small"
+                        textAlign={"left"}
+                        lineHeight={1}
+                      >
+                        Amount:
+                      </Typography>
+                      <Input
+                        value={amount}
+                        onInput={(event) => setAmount(event.target.value)}
+                        fullWidth
+                        placeholder="0"
+                        disableUnderline
+                        style={{
+                          fontSize: 20,
+                          fontWeight: 600,
+                          color: "#e5e5e5",
+                        }}
+                        type="number"
+                      />
+                    </Box>
                     <Box
-                      display="flex"
-                      flexDirection={"row"}
-                      justifyContent="flex-end"
-                      alignItems="center"
+                      display={"flex"}
+                      flexDirection="column"
+                      alignItems="flex-end"
+                      justifyContent={"center"}
                     >
+                      <Typography
+                        variant="small"
+                        textAlign={"right"}
+                        style={{
+                          width: 200,
+                          display: "flex",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        Available: {usdtBalance}
+                      </Typography>
                       <Box
                         display="flex"
                         flexDirection={"row"}
-                        justifyContent="flex-start"
+                        justifyContent="flex-end"
                         alignItems="center"
                       >
-                        <img
-                          src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
-                          alt="USDT"
-                          height="28px"
-                        />
+                        <Box
+                          display="flex"
+                          flexDirection={"row"}
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <img
+                            src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
+                            alt="USDT"
+                            height="28px"
+                          />
+                        </Box>
+                        <Typography
+                          variant="body2"
+                          className={classes.para}
+                          fontSize={16}
+                          textAlign="left"
+                          fontWeight={600}
+                        >
+                          USDT
+                        </Typography>
                       </Box>
-                      <Typography
-                        variant="body2"
-                        className={classes.para}
-                        fontSize={16}
-                        textAlign="left"
-                        fontWeight={600}
-                      >
-                        USDT
-                      </Typography>
                     </Box>
                   </Box>
-                </Box>
 
-                <Grid container spacing={2}>
-                  <Grid item md={6}>
-                    <Box mt={1} className={classes.inputWrapper}>
-                      <Typography
-                        variant="small"
-                        textAlign={"left"}
-                        lineHeight={1}
-                      >
-                        Number of orders:
-                      </Typography>
-                      <Input
-                        value={grids}
-                        type="number"
-                        onInput={(event) =>
-                          setGrids(parseInt(event.target.value))
-                        }
-                        fullWidth
-                        placeholder="Enter grid count here"
-                        disableUnderline
-                        style={{ fontSize: 20, fontWeight: 600 }}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item md={6}>
-                    <Box mt={1} className={classes.inputWrapper}>
-                      <Typography
-                        variant="small"
-                        textAlign={"left"}
-                        lineHeight={1}
-                      >
-                        Buy on every drop of (%):
-                      </Typography>
-                      <Input
-                        type="number"
-                        disableUnderline
-                        value={percent}
-                        fullWidth
-                        placeholder="10"
-                        onChange={(e) => handlePercentage(e)}
-                        style={{ fontSize: 20, fontWeight: 600 }}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                <div className="text-center">
-                  <Button
-                    className={classes.actionButton}
-                    onClick={isApproved ? handleStake : handleApprove}
-                  >
-                    {isApproved ? "Place order" : "Approve Investment"}
-                  </Button>
-                </div>
-              </div>
-            </Box>
-          </Grid>
-          <Grid item md={3.5}>
-            <Typography
-              variant="body1"
-              mt={5}
-              mb={1}
-              fontWeight={600}
-              fontSize={13}
-              color={"#f9f9f9"}
-            >
-              My Investment summary
-            </Typography>
-
-            <Box>
-              <Box>
-                <Typography
-                  variant="body2"
-                  mb={1}
-                  fontWeight={500}
-                  fontSize={12}
-                  color={"#f9f9f9"}
-                >
-                  Orders
-                </Typography>
-                <Grid container py={0.5}>
-                  <Grid item md={4}>
-                    <Typography
-                      variant="body2"
-                      fontWeight={300}
-                      fontSize={10}
-                      color={"#bdbdbd"}
-                    >
-                      Price(USDT)
-                    </Typography>
-                  </Grid>
-                  <Grid item md={4}>
-                    <Typography
-                      variant="body2"
-                      fontWeight={300}
-                      fontSize={10}
-                      color={"#bdbdbd"}
-                    >
-                      Amount(USDT)
-                    </Typography>
-                  </Grid>
-                  <Grid item md={4}>
-                    <Typography
-                      variant="body2"
-                      fontWeight={300}
-                      fontSize={10}
-                      color={"#bdbdbd"}
-                    >
-                      Received(ETH)
-                    </Typography>
-                  </Grid>
-                </Grid>
-                {[...Array(grids)].map((singleOrder, index) => (
-                  <Grid container mt={1}>
-                    <Grid item md={4}>
-                      <Typography
-                        variant="body2"
-                        fontWeight={500}
-                        fontSize={13}
-                        color={"#fff"}
-                      >
-                        ${(2000 * (100 - (index + 1) * percent)) / 100}
-                      </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item md={6}>
+                      <Box mt={1} className={classes.inputWrapper}>
+                        <Typography
+                          variant="small"
+                          textAlign={"left"}
+                          lineHeight={1}
+                        >
+                          Number of orders:
+                        </Typography>
+                        <Input
+                          value={grids}
+                          type="number"
+                          onInput={(event) =>
+                            setGrids(parseInt(event.target.value))
+                          }
+                          fullWidth
+                          placeholder="Enter grid count here"
+                          disableUnderline
+                          style={{ fontSize: 20, fontWeight: 600 }}
+                        />
+                      </Box>
                     </Grid>
+                    <Grid item md={6}>
+                      <Box mt={1} className={classes.inputWrapper}>
+                        <Typography
+                          variant="small"
+                          textAlign={"left"}
+                          lineHeight={1}
+                        >
+                          Buy on every drop of (%):
+                        </Typography>
+                        <Input
+                          type="number"
+                          disableUnderline
+                          value={percent}
+                          fullWidth
+                          placeholder="10"
+                          onChange={(e) => handlePercentage(e)}
+                          style={{ fontSize: 20, fontWeight: 600 }}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+
+                  <div className="text-center">
+                    <Button
+                      className={classes.actionButton}
+                      onClick={isApproved ? handleStake : handleApprove}
+                    >
+                      {isApproved ? "Place order" : "Approve Investment"}
+                    </Button>
+                  </div>
+                </div>
+              </Box>
+            </Grid>
+            <Grid item md={3.5} xs={12}>
+              <Typography
+                variant="body1"
+                mt={5}
+                mb={1}
+                fontWeight={600}
+                fontSize={13}
+                color={"#f9f9f9"}
+              >
+                My Investment summary
+              </Typography>
+
+              <Box>
+                <Box>
+                  <Typography
+                    variant="body2"
+                    mb={1}
+                    fontWeight={500}
+                    fontSize={12}
+                    color={"#f9f9f9"}
+                  >
+                    Orders
+                  </Typography>
+                  <Grid container py={0.5}>
                     <Grid item md={4}>
                       <Typography
                         variant="body2"
-                        fontWeight={500}
-                        fontSize={13}
-                        color={"#fff"}
+                        fontWeight={300}
+                        fontSize={10}
+                        color={"#bdbdbd"}
                       >
-                        ${(amount / grids).toFixed(2)}
+                        Price(USDT)
                       </Typography>
                     </Grid>
                     <Grid item md={4}>
                       <Typography
                         variant="body2"
                         fontWeight={300}
-                        fontSize={13}
-                        color={"#fff"}
+                        fontSize={10}
+                        color={"#bdbdbd"}
                       >
-                        {(
-                          amount /
-                          grids /
-                          getPriceOfSingleOrder(index)
-                        ).toFixed(2)}{" "}
-                        ETH
+                        Amount(USDT)
+                      </Typography>
+                    </Grid>
+                    <Grid item md={4}>
+                      <Typography
+                        variant="body2"
+                        fontWeight={300}
+                        fontSize={10}
+                        color={"#bdbdbd"}
+                      >
+                        Received(ETH)
                       </Typography>
                     </Grid>
                   </Grid>
-                ))}
+                  {[...Array(grids)].map((singleOrder, index) => (
+                    <Grid container mt={1}>
+                      <Grid item md={4}>
+                        <Typography
+                          variant="body2"
+                          fontWeight={500}
+                          fontSize={13}
+                          color={"#fff"}
+                        >
+                          ${(2000 * (100 - (index + 1) * percent)) / 100}
+                        </Typography>
+                      </Grid>
+                      <Grid item md={4}>
+                        <Typography
+                          variant="body2"
+                          fontWeight={500}
+                          fontSize={13}
+                          color={"#fff"}
+                        >
+                          ${(amount / grids).toFixed(2)}
+                        </Typography>
+                      </Grid>
+                      <Grid item md={4}>
+                        <Typography
+                          variant="body2"
+                          fontWeight={300}
+                          fontSize={13}
+                          color={"#fff"}
+                        >
+                          {(
+                            amount /
+                            grids /
+                            getPriceOfSingleOrder(index)
+                          ).toFixed(2)}{" "}
+                          ETH
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  ))}
+                </Box>
               </Box>
-            </Box>
-            <Box>
-              <Typography
-                variant="body2"
-                fontWeight={400}
-                fontSize={11}
-                lineHeight={1.8}
-                color={"#f9f9f9"}
-                mt={2}
+              <Box>
+                <Typography
+                  variant="body2"
+                  fontWeight={400}
+                  fontSize={11}
+                  lineHeight={1.8}
+                  color={"#f9f9f9"}
+                  mt={2}
+                >
+                  - Total ETH :
+                  <strong> {getTotalTokenAccumulated()} ETH</strong>.
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={400}
+                  fontSize={11}
+                  lineHeight={1.8}
+                  color={"#f9f9f9"}
+                >
+                  - Expected ETH Price:
+                  <strong> $10,000</strong>
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={400}
+                  fontSize={11}
+                  lineHeight={1.8}
+                  color={"#f9f9f9"}
+                >
+                  - Your profit:
+                  <strong>
+                    {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
+                    <span style={{ color: "#28C59A" }}>
+                      ${" "}
+                      {(getTotalTokenAccumulated() * 10000 - amount).toFixed(2)}{" "}
+                    </span>
+                  </strong>
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={400}
+                  fontSize={14}
+                  lineHeight={1.8}
+                  color={"#bdbdbd"}
+                  mt={2}
+                >
+                  ROI:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={600}
+                  fontSize={23}
+                  color={"#28C59A"}
+                >
+                  <strong>
+                    {(
+                      ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
+                      amount
+                    ).toFixed()}
+                    %
+                  </strong>
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item md={4} xs={12}>
+              <Box
+                style={{
+                  height: "100%",
+                  width: "auto",
+                }}
               >
-                - Total ETH :<strong> {getTotalTokenAccumulated()} ETH</strong>.
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={400}
-                fontSize={11}
-                lineHeight={1.8}
-                color={"#f9f9f9"}
-              >
-                - Expected ETH Price:
-                <strong> $10,000</strong>
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={400}
-                fontSize={11}
-                lineHeight={1.8}
-                color={"#f9f9f9"}
-              >
-                - Your profit:
-                <strong>
-                  {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
-                  <span style={{ color: "#28C59A" }}>
-                    $ {(getTotalTokenAccumulated() * 10000 - amount).toFixed(2)}{" "}
-                  </span>
-                </strong>
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={400}
-                fontSize={14}
-                lineHeight={1.8}
-                color={"#bdbdbd"}
-                mt={2}
-              >
-                ROI:
-              </Typography>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                fontSize={23}
-                color={"#28C59A"}
-              >
-                <strong>
-                  {(
-                    ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
-                    amount
-                  ).toFixed()}
-                  %
-                </strong>
-              </Typography>
-            </Box>
+                <AccumulateOrderBook />
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item md={4}>
-            <Box
-              style={{
-                height: "100%",
-                width: "auto",
-              }}
-            >
-              <AccumulateOrderBook />
-            </Box>
-          </Grid>
-        </Grid>
 
-        <Box mt={5}>
-          <div>
-            <Typography
-              variant="h6"
-              className={classes.heading}
-              fontWeight={700}
-            >
-              My investments
-            </Typography>
-            <UserPoolOrders poolType={"ACCUMULATION"} />
-          </div>
-        </Box>
-      </Container>
+          <Box mt={5}>
+            <div>
+              <Typography
+                variant="h6"
+                className={classes.heading}
+                fontWeight={700}
+              >
+                My investments
+              </Typography>
+              <UserPoolOrders poolType={"ACCUMULATION"} />
+            </div>
+          </Box>
+        </Container>
+      </Box>
+      <Hidden mdUp>
+        <div style={{ position: "fixed" }}>
+          <MobileBottomBar />
+        </div>
+      </Hidden>
     </Box>
   );
 }

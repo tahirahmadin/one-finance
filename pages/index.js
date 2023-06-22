@@ -11,6 +11,7 @@ import Rewards from "../components/Rewards";
 import Leaderboard from "../components/Leaderboard";
 import Activities from "../components/Activities";
 import DashboardPage from "./dashboard";
+import MobileBottomBar from "../common/MobileBottomBar";
 
 const useStyles = makeStyles({
   background: {
@@ -76,6 +77,8 @@ export default function Home() {
           </Grid>
         </Grid>
       )}
+
+      <MobileBottomBar />
     </Box>
   );
 }

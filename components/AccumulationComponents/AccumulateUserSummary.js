@@ -3,9 +3,11 @@ import { makeStyles } from "@mui/styles";
 import {
   Box,
   Button,
+  Hidden,
   IconButton,
   Tooltip,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
@@ -89,6 +91,8 @@ export default function AccumulateUserSummary() {
 
   const [userPoolState, setUserPoolState] = useState(null);
 
+  const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
@@ -113,175 +117,177 @@ export default function AccumulateUserSummary() {
           My Investment (USDT)
         </Typography>
         <Typography
-          variant="h3"
-          fontSize={12}
+          variant="h2"
+          fontSize={md ? 26 : 22}
           fontWeight={700}
           lineHeight={1.3}
         >
           ${userPoolState ? userPoolState.totalInvestedUSDT : 0}
         </Typography>
       </Box>
-      <Box
-        display="flex"
-        flexDirection={"row"}
-        justifyContent="space-between"
-        alignItems="center"
-        mt={2}
-      >
-        <Typography
-          variant="body2"
-          color="#bdbdbd"
-          fontSize={12}
-          fontWeight={300}
+      <Hidden mdDown>
+        <Box
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="space-between"
+          alignItems="center"
+          mt={2}
         >
-          Balances in pool
-        </Typography>
-        <Typography
-          variant="small"
-          fontSize={12}
-          fontWeight={300}
-          color={constants.highlighColorDark}
-        >
-          View All
-        </Typography>
-      </Box>
+          <Typography
+            variant="body2"
+            color="#bdbdbd"
+            fontSize={12}
+            fontWeight={300}
+          >
+            Balances in pool
+          </Typography>
+          <Typography
+            variant="small"
+            fontSize={12}
+            fontWeight={300}
+            color={constants.highlighColorDark}
+          >
+            View All
+          </Typography>
+        </Box>
 
-      <Box>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          mt={3}
-          style={{
-            border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
-            borderRadius: 10,
-            backgroundColor: "rgba(106, 85, 234,0.03)",
-          }}
-        >
+        <Box>
           <Box
             display={"flex"}
             justifyContent={"space-between"}
-            alignItems={"center"}
+            mt={3}
+            style={{
+              border: "1px solid rgba(106, 85, 234,0.1)",
+              padding: "10px 10px 10px 10px",
+              borderRadius: 10,
+              backgroundColor: "rgba(106, 85, 234,0.03)",
+            }}
           >
-            <img
-              src="https://www.sleepswap.io/SleepSwap_Plain.png"
-              height="28px"
-            />
             <Box
-              ml={1}
               display={"flex"}
-              flexDirection="column"
-              justifyContent="center"
-              alignItems={"flex-start"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
             >
-              <Typography
-                variant="body2"
-                color={"#f9f9f9"}
-                fontSize={13}
-                fontWeight={500}
-                lineHeight={1.2}
+              <img
+                src="https://www.sleepswap.io/SleepSwap_Plain.png"
+                height="28px"
+              />
+              <Box
+                ml={1}
+                display={"flex"}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems={"flex-start"}
               >
-                SLEEPT
-              </Typography>
-              <Typography
-                variant="verysmall"
-                color={"#bdbdbd"}
-                fontSize={11}
-                fontWeight={300}
-                lineHeight={1.2}
+                <Typography
+                  variant="body2"
+                  color={"#f9f9f9"}
+                  fontSize={13}
+                  fontWeight={500}
+                  lineHeight={1.2}
+                >
+                  SLEEPT
+                </Typography>
+                <Typography
+                  variant="verysmall"
+                  color={"#bdbdbd"}
+                  fontSize={11}
+                  fontWeight={300}
+                  lineHeight={1.2}
+                >
+                  SleepSwap
+                </Typography>
+              </Box>
+            </Box>
+            <Box display={"flex"} justifyContent={"space-between"}>
+              <Box
+                ml={1}
+                display={"flex"}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems={"flex-end"}
               >
-                SleepSwap
-              </Typography>
+                <Typography
+                  variant="body2"
+                  color={"#ffffff"}
+                  fontSize={11}
+                  fontWeight={500}
+                  lineHeight={1.2}
+                >
+                  {userPoolState ? userPoolState.tokensAccumulated : 0}{" "}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box
-              ml={1}
-              display={"flex"}
-              flexDirection="column"
-              justifyContent="center"
-              alignItems={"flex-end"}
-            >
-              <Typography
-                variant="body2"
-                color={"#ffffff"}
-                fontSize={11}
-                fontWeight={500}
-                lineHeight={1.2}
-              >
-                {userPoolState ? userPoolState.tokensAccumulated : 0}{" "}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          mt={1}
-          style={{
-            border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
-            borderRadius: 10,
-            backgroundColor: "rgba(106, 85, 234,0.03)",
-          }}
-        >
           <Box
             display={"flex"}
             justifyContent={"space-between"}
-            alignItems={"center"}
+            mt={1}
+            style={{
+              border: "1px solid rgba(106, 85, 234,0.1)",
+              padding: "10px 10px 10px 10px",
+              borderRadius: 10,
+              backgroundColor: "rgba(106, 85, 234,0.03)",
+            }}
           >
-            <img
-              src="https://cdn.icon-icons.com/icons2/2429/PNG/512/ethereum_logo_icon_147293.png"
-              height="28px"
-            />
             <Box
-              ml={1}
               display={"flex"}
-              flexDirection="column"
-              justifyContent="center"
-              alignItems={"flex-start"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
             >
-              <Typography
-                variant="body2"
-                color={"#f9f9f9"}
-                fontSize={13}
-                fontWeight={500}
-                lineHeight={1.2}
+              <img
+                src="https://cdn.icon-icons.com/icons2/2429/PNG/512/ethereum_logo_icon_147293.png"
+                height="28px"
+              />
+              <Box
+                ml={1}
+                display={"flex"}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems={"flex-start"}
               >
-                ETH
-              </Typography>
-              <Typography
-                variant="verysmall"
-                color={"#bdbdbd"}
-                fontSize={11}
-                fontWeight={300}
-                lineHeight={1.2}
-              >
-                Ethereum
-              </Typography>
+                <Typography
+                  variant="body2"
+                  color={"#f9f9f9"}
+                  fontSize={13}
+                  fontWeight={500}
+                  lineHeight={1.2}
+                >
+                  ETH
+                </Typography>
+                <Typography
+                  variant="verysmall"
+                  color={"#bdbdbd"}
+                  fontSize={11}
+                  fontWeight={300}
+                  lineHeight={1.2}
+                >
+                  Ethereum
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box
-              ml={1}
-              display={"flex"}
-              flexDirection="column"
-              justifyContent="center"
-              alignItems={"flex-end"}
-            >
-              <Typography
-                variant="body2"
-                color={"#ffffff"}
-                fontSize={11}
-                fontWeight={500}
-                lineHeight={1.2}
+            <Box display={"flex"} justifyContent={"space-between"}>
+              <Box
+                ml={1}
+                display={"flex"}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems={"flex-end"}
               >
-                0
-              </Typography>
+                <Typography
+                  variant="body2"
+                  color={"#ffffff"}
+                  fontSize={11}
+                  fontWeight={500}
+                  lineHeight={1.2}
+                >
+                  0
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
+      </Hidden>
     </Box>
   );
 }

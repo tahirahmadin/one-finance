@@ -77,8 +77,6 @@ export default function Home() {
           </Grid>
         </Grid>
       )}
-
-      <MobileBottomBar />
     </Box>
   );
 }

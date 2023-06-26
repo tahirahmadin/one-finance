@@ -22,7 +22,13 @@ import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
-import { ExpandMore, KeyboardArrowRight } from "@mui/icons-material";
+import {
+  AvTimer,
+  BorderClear,
+  ExpandMore,
+  KeyboardArrowRight,
+  SentimentSatisfiedAlt,
+} from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -416,7 +422,17 @@ export default function AccumulationComponent() {
             </Grid>
 
             <Grid item md={4} xs={12}>
-              <Box>
+              <Box
+                style={{
+                  backgroundImage: "linear-gradient(to left, #0C0D11,#000000)",
+                  border: "1px solid #1b1d24",
+                  paddingTop: 15,
+                  paddingBottom: 15,
+                  paddingLeft: 15,
+                  paddingRight: 15,
+                  borderRadius: 14,
+                }}
+              >
                 <div className="d-flex flex-column justify-content-around">
                   <div>
                     <Typography
@@ -669,10 +685,6 @@ export default function AccumulationComponent() {
                       {isApproved ? "Place order" : "Approve Investment"}
                     </Button>
                   </div>
-                </div>
-              </Box>
-              <Box>
-                <Box>
                   <Box mt={2}>
                     <Typography
                       variant="body2"
@@ -757,73 +769,169 @@ export default function AccumulationComponent() {
                       ))}
                     </Box>
                   </Box>
-                </Box>
-                <Box>
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1.8}
-                    color={"#f9f9f9"}
-                    mt={2}
+                  <Box
+                    display={"flex"}
+                    flexDirection="row"
+                    justifyContent={"space-around"}
+                    alignItems={"center"}
+                    mt={3}
                   >
-                    - Total ETH :
-                    <strong> {getTotalTokenAccumulated()} ETH</strong>.
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1.8}
-                    color={"#f9f9f9"}
-                  >
-                    - Expected ETH Price:
-                    <strong> $10,000</strong>
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1.8}
-                    color={"#f9f9f9"}
-                  >
-                    - Your profit:
-                    <strong>
-                      {getTotalTokenAccumulated()} *10,000- ${amount} ={" "}
-                      <span style={{ color: "#28C59A" }}>
-                        ${" "}
-                        {(getTotalTokenAccumulated() * 10000 - amount).toFixed(
-                          2
-                        )}{" "}
-                      </span>
-                    </strong>
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={14}
-                    lineHeight={1.8}
-                    color={"#bdbdbd"}
-                    mt={2}
-                  >
-                    ROI:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={23}
-                    color={"#28C59A"}
-                  >
-                    <strong>
-                      {(
-                        ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
-                        amount
-                      ).toFixed()}
-                      %
-                    </strong>
-                  </Typography>
-                </Box>
+                    <Box
+                      display={"flex"}
+                      flexDirection="column"
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      <AvTimer style={{ color: "#bdbdbd" }} />
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={11}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                      >
+                        Accumulate
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={14}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                        mt={1}
+                      >
+                        <strong> {getTotalTokenAccumulated()} ETH</strong>
+                      </Typography>
+                    </Box>
+                    <Box
+                      display={"flex"}
+                      flexDirection="column"
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      <BorderClear style={{ color: "#bdbdbd" }} />
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={11}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                      >
+                        Target Price
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={14}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                        mt={1}
+                      >
+                        <strong> $10,000</strong>
+                      </Typography>
+                    </Box>
+                    <Box
+                      display={"flex"}
+                      flexDirection="column"
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      <SentimentSatisfiedAlt style={{ color: "#bdbdbd" }} />
+                      <Typography
+                        variant="body2"
+                        fontWeight={400}
+                        fontSize={11}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                      >
+                        You may receive
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={14}
+                        lineHeight={1}
+                        color={"#e5e5e5"}
+                        mt={1}
+                      >
+                        <strong>
+                          {" "}
+                          $ {(getTotalTokenAccumulated() * 10000).toFixed(
+                            1
+                          )}{" "}
+                        </strong>
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box display={"flex"} alignItems={"center"} mt={2}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      fontSize={14}
+                      lineHeight={1.8}
+                      color={"#bdbdbd"}
+                      paddingRight={1}
+                    >
+                      ROI:
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      fontSize={18}
+                      color={"#28C59A"}
+                    >
+                      <strong>
+                        {(
+                          ((getTotalTokenAccumulated() * 10000 - amount) *
+                            100) /
+                          amount
+                        ).toFixed()}
+                        %*
+                      </strong>
+                    </Typography>
+                  </Box>
+                  {/* <Box mt={2}>
+                    <AvTimer style={{ color: "#bdbdbd" }} />
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      fontSize={11}
+                      lineHeight={1.8}
+                      color={"#e5e5e5"}
+                      mt={2}
+                    >
+                      - Total ETH :
+                      <strong> {getTotalTokenAccumulated()} ETH</strong>.
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      fontSize={11}
+                      lineHeight={1.8}
+                      color={"#e5e5e5"}
+                    >
+                      - Expected ETH Price:
+                      <strong> $10,000</strong>
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      fontSize={11}
+                      lineHeight={1.8}
+                      color={"#e5e5e5"}
+                    >
+                      - Your may receive:
+                      <strong>
+                        {getTotalTokenAccumulated()} *10,000 ={" "}
+                        <span style={{ color: "#28C59A" }}>
+                          $ {(getTotalTokenAccumulated() * 10000).toFixed(2)}{" "}
+                        </span>
+                      </strong>
+                    </Typography>
+                  </Box> */}
+                </div>
               </Box>
+              <Box></Box>
             </Grid>
           </Grid>
 

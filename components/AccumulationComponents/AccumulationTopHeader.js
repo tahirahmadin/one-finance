@@ -7,8 +7,17 @@ import {
   useMediaQuery,
   Grid,
   Hidden,
+  Grow,
 } from "@mui/material";
-import { AccountBalance, TrendingUp } from "@mui/icons-material";
+import {
+  AccountBalance,
+  MonetizationOn,
+  Payment,
+  Savings,
+  Schedule,
+  TrendingUp,
+  Wallet,
+} from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import { constants, strategyType } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
@@ -39,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     minHeight: 220,
-    maxHeight: 270,
+    maxHeight: 250,
     backgroundImage: "linear-gradient(to left, #0C0D11,#000000)",
     border: "1px solid #1b1d24",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
@@ -157,7 +166,7 @@ export default function AccumulationTopHeader() {
           <Box
             display={"flex"}
             flexDirection={"column"}
-            justifyContent="space-between"
+            justifyContent="flex-start"
             alignItems="space-between"
             height={"100%"}
           >
@@ -243,11 +252,23 @@ export default function AccumulationTopHeader() {
               </Box>
             </Box>
             <Box style={{ width: "100%" }} mt={3}>
+              <Typography
+                variant="small"
+                color={"#f9f9f9"}
+                style={{ textAlign: "right" }}
+              >
+                <Schedule
+                  style={{ color: "#bdbdbd", fontSize: 18, marginRight: 5 }}
+                />
+                Time remaining
+              </Typography>
+
               <Box
                 display={"flex"}
                 justifyContent="space-between"
                 alignItems={"center"}
                 mb={1}
+                mt={2}
               >
                 <Typography
                   variant="small"
@@ -261,80 +282,10 @@ export default function AccumulationTopHeader() {
                   color={"#f9f9f9"}
                   style={{ textAlign: "right" }}
                 >
-                  18 months left
+                  214 days 41 hours
                 </Typography>
               </Box>
               <LinearProgressComponent value={32} />
-            </Box>
-            <Box
-              mt={3}
-              style={{ width: "80%" }}
-              display={"flex"}
-              flexDirection={"row"}
-              justifyContent={"space-between"}
-              alignItems={"flex-start"}
-            >
-              <Box>
-                <Typography
-                  variant="h6"
-                  color="#ffffff"
-                  textAlign={"center"}
-                  style={{ fontWeight: 600, lineHeight: 1.6 }}
-                >
-                  ${" "}
-                  {poolGraphData && poolGraphData.invested
-                    ? poolGraphData.invested
-                    : "-"}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="#bdbdbd"
-                  fontSize={12}
-                  textAlign={"center"}
-                >
-                  Pool Investment
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="h6"
-                  color="#ffffff"
-                  textAlign={"center"}
-                  fontWeight={600}
-                  style={{ lineHeight: 1.6 }}
-                >
-                  ${poolGraphData ? poolGraphData.allTimeVol : "-"}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="#bdbdbd"
-                  fontSize={12}
-                  textAlign={"center"}
-                >
-                  Trading Volume
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="h6"
-                  color="#ffffff"
-                  textAlign={"center"}
-                  fontWeight={600}
-                  style={{ lineHeight: 1.6 }}
-                >
-                  {poolGraphData && poolGraphData.totalOrders
-                    ? poolGraphData.totalOrders
-                    : "-"}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="#bdbdbd"
-                  fontSize={12}
-                  textAlign={"center"}
-                >
-                  Total trades
-                </Typography>
-              </Box>
             </Box>
           </Box>
         </Grid>
@@ -347,7 +298,7 @@ export default function AccumulationTopHeader() {
           >
             <Box>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                My Investments($)
+                <Wallet style={{ fontSize: 16 }} /> My Investments($)
               </Typography>
               <Typography
                 variant="h2"
@@ -362,7 +313,7 @@ export default function AccumulationTopHeader() {
             </Box>
             <Box mt={md ? 0 : 2}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                Expected PnL*
+                <TrendingUp style={{ fontSize: 16 }} /> Expected PnL*
               </Typography>
               <Typography
                 variant="body1"
@@ -370,12 +321,13 @@ export default function AccumulationTopHeader() {
                 fontSize={16}
                 fontWeight={600}
               >
-                $1273
+                +$1273 <span style={{ fontSize: 10, color: "green" }}>56%</span>
               </Typography>
             </Box>
-            <Box mt={md ? 0 : 2}>
+            <Box mt={md ? 0 : 3}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                Total trades
+                <Payment style={{ fontSize: 16 }} />
+                Total investment
               </Typography>
               <Typography
                 variant="body1"
@@ -383,8 +335,9 @@ export default function AccumulationTopHeader() {
                 fontSize={16}
                 fontWeight={600}
               >
-                {poolGraphData && poolGraphData.totalOrders
-                  ? poolGraphData.totalOrders
+                ${" "}
+                {poolGraphData && poolGraphData.invested
+                  ? poolGraphData.invested
                   : "-"}
               </Typography>
             </Box>
@@ -392,10 +345,10 @@ export default function AccumulationTopHeader() {
         </Grid>
       </Grid>
 
-      {/* <Typography variant="small" color="#ffffff" >
+      <Typography variant="small" color="#bdbdbd">
         * Investment for <strong>2 years</strong> is recommended for best
         results.
-      </Typography> */}
+      </Typography>
     </Box>
   );
 }

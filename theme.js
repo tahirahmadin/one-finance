@@ -107,7 +107,6 @@ let themes = createTheme({
       fontFamily: "Inter",
       fontSize: "0.8rem",
       color: "#bdbdbd",
-      lineHeight: 1,
     },
     small: {
       fontFamily: "Inter",

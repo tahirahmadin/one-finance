@@ -8,17 +8,19 @@ import {
   Grid,
   Hidden,
 } from "@mui/material";
-import { TrendingUp } from "@mui/icons-material";
+import { AccountBalance, TrendingUp } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import { constants, strategyType } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
     fontWeight: 600,
     color: "#f9f9f9",
     textAlign: "left",
-    fontSize: "1.6vw",
+    fontSize: "1.4vw",
     [theme.breakpoints.down("md")]: {
       fontSize: 15,
     },
@@ -37,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     minHeight: 220,
+    maxHeight: 270,
+    backgroundImage: "linear-gradient(to left, #0C0D11,#000000)",
     border: "1px solid #1b1d24",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: 14,
@@ -125,25 +129,37 @@ export default function AccumulationTopHeader() {
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
+  const { accountSC } = useWeb3Auth();
+
+  const [userPoolState, setUserPoolState] = useState(null);
 
   const { poolInfo: poolGraphData, loading } = usePoolInfo(
     strategyType.ACCUMULATION
   );
 
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
+          strategyType.ACCUMULATION
+        );
+        console.log(userPoolGraphData);
+        setUserPoolState(userPoolGraphData);
+      }
+      asyncFn();
+    }
+  }, [accountSC]);
+
   return (
-    <Box
-      className={classes.cardTop}
-      style={{
-        backgroundImage: "linear-gradient(to right, #212121,#000000)",
-      }}
-    >
-      <Grid container spacing={3}>
-        <Grid item md={9} xs={12}>
+    <Box className={classes.cardTop}>
+      <Grid container spacing={3} height={"100%"}>
+        <Grid item md={9} xs={12} height={"100%"}>
           <Box
             display={"flex"}
             flexDirection={"column"}
             justifyContent="space-between"
-            alignItems={"flex-start"}
+            alignItems="space-between"
+            height={"100%"}
           >
             <Box
               display={"flex"}
@@ -154,8 +170,8 @@ export default function AccumulationTopHeader() {
                 <Box
                   style={{
                     backgroundColor: "#0C0D11",
-                    height: 80,
-                    width: 80,
+                    height: 55,
+                    width: 55,
                     borderRadius: 8,
                   }}
                   display={"flex"}
@@ -164,8 +180,8 @@ export default function AccumulationTopHeader() {
                 >
                   <img
                     src="https://cdn-icons-png.flaticon.com/512/2936/2936952.png"
-                    height={50}
-                    width={50}
+                    height={36}
+                    width={36}
                   />
                 </Box>
               </Hidden>
@@ -173,8 +189,8 @@ export default function AccumulationTopHeader() {
                 <Box>
                   <img
                     src="https://cdn-icons-png.flaticon.com/512/2936/2936952.png"
-                    height={40}
-                    width={40}
+                    height={30}
+                    width={30}
                   />
                 </Box>
               </Hidden>
@@ -250,6 +266,76 @@ export default function AccumulationTopHeader() {
               </Box>
               <LinearProgressComponent value={32} />
             </Box>
+            <Box
+              mt={3}
+              style={{ width: "80%" }}
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"flex-start"}
+            >
+              <Box>
+                <Typography
+                  variant="h6"
+                  color="#ffffff"
+                  textAlign={"center"}
+                  style={{ fontWeight: 600, lineHeight: 1.6 }}
+                >
+                  ${" "}
+                  {poolGraphData && poolGraphData.invested
+                    ? poolGraphData.invested
+                    : "-"}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="#bdbdbd"
+                  fontSize={12}
+                  textAlign={"center"}
+                >
+                  Pool Investment
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  variant="h6"
+                  color="#ffffff"
+                  textAlign={"center"}
+                  fontWeight={600}
+                  style={{ lineHeight: 1.6 }}
+                >
+                  ${poolGraphData ? poolGraphData.allTimeVol : "-"}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="#bdbdbd"
+                  fontSize={12}
+                  textAlign={"center"}
+                >
+                  Trading Volume
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  variant="h6"
+                  color="#ffffff"
+                  textAlign={"center"}
+                  fontWeight={600}
+                  style={{ lineHeight: 1.6 }}
+                >
+                  {poolGraphData && poolGraphData.totalOrders
+                    ? poolGraphData.totalOrders
+                    : "-"}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="#bdbdbd"
+                  fontSize={12}
+                  textAlign={"center"}
+                >
+                  Total trades
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Grid>
         <Grid item md={3} xs={12}>
@@ -261,7 +347,7 @@ export default function AccumulationTopHeader() {
           >
             <Box>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                Pool Investment
+                My Investments($)
               </Typography>
               <Typography
                 variant="h2"
@@ -276,7 +362,7 @@ export default function AccumulationTopHeader() {
             </Box>
             <Box mt={md ? 0 : 2}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                Volume
+                Expected PnL*
               </Typography>
               <Typography
                 variant="body1"
@@ -284,7 +370,7 @@ export default function AccumulationTopHeader() {
                 fontSize={16}
                 fontWeight={600}
               >
-                {poolGraphData ? poolGraphData.allTimeVol : "-"}
+                $1273
               </Typography>
             </Box>
             <Box mt={md ? 0 : 2}>
@@ -306,10 +392,10 @@ export default function AccumulationTopHeader() {
         </Grid>
       </Grid>
 
-      <Typography variant="small" color="#ffffff">
+      {/* <Typography variant="small" color="#ffffff" >
         * Investment for <strong>2 years</strong> is recommended for best
         results.
-      </Typography>
+      </Typography> */}
     </Box>
   );
 }

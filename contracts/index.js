@@ -23,6 +23,7 @@ export const tokenInstance = (provider = "unavailable") => {
       ERC20RG,
       constants.contracts.fiat
     );
+
     return tokenContract;
   } catch (err) {
     console.log(err);

@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
-import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { fromWei, toDollarPrice } from "../../utils/helper";
 import { AccessTime, CheckBox, Close } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
@@ -36,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
 export default function UserPoolOrders({ poolType }) {
   const classes = useStyles();
   const theme = useTheme();
-  const { accountSC } = useWeb3Auth();
+  let accountSC = ethersServiceProvider.currentAccount;
+
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [trxCase, setTrxCase] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState({});

@@ -4,11 +4,11 @@ import { useLazyQuery } from "@apollo/client";
 
 import { GetPoolUserDataByAddress } from "../queries/graphQueries";
 import { strategyType } from "../utils/constants";
-import { useWeb3Auth } from "./useWeb3Auth";
 import Web3 from "web3";
+import ethersServiceProvider from "../services/ethersServiceProvider";
 
 export function useUserInfo() {
-  const { accountSC } = useWeb3Auth();
+  let accountSC = ethersServiceProvider.currentAccount;
 
   const [userData, setUserData] = useState({
     totalOrders: null,

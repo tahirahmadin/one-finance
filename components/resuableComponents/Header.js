@@ -24,6 +24,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { Redeem, Wallet } from "@mui/icons-material";
 import { Container } from "@mui/system";
+import { tokenInstance } from "../../contracts";
+import { constants } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -67,18 +69,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = () => {
+  const theme = useTheme();
   const store = useSelector((state) => state);
-
-  const dispatch = useDispatch();
-  const classes = useStyles();
-  const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
-
   const { headerMenuExpanded } = store.ui;
+  const dispatch = useDispatch();
   const router = useRouter();
   const matches = useMediaQuery("(min-width:1153px)");
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
-  const theme = useTheme();
+  const [success, setSuccess] = useState(0);
+  const classes = useStyles();
+  const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
 
   const handleClick = (word) => {
     dispatch(toggleHeaderMenuExpanded());
@@ -88,6 +89,35 @@ const Header = () => {
   // To connect the smart contract wallet
   const loginWallet = async () => {
     await connect();
+  };
+
+  const handleClaimFaucet = async () => {
+    if (accountSC) {
+      let provider = ethersServiceProvider.web3AuthInstance;
+      let tokenContract = await tokenInstance(provider.provider);
+      await tokenContract.cla;
+      const response = await tokenContract.methods
+        .claimFaucet()
+        .send(
+          {
+            from: accountSC,
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setSuccess(1);
+            } else {
+              setSuccess(0);
+            }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setSuccess(2);
+          window.location.reload();
+        })
+        .on("error", async function (error) {
+          setSuccess(0);
+        });
+    }
   };
 
   return (
@@ -152,25 +182,31 @@ const Header = () => {
                     style={{ textDecoration: "none", textTransform: "none" }}
                   >
                     <Typography variant="small" fontWeight={600}>
-                      <Link
-                        style={{
-                          textDecoration: "none",
-                          textTransform: "none",
-                          color: "white",
+                      <Box
+                        onClick={handleClaimFaucet}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: 40,
+                          borderRadius: "14px",
+                          marginRight: 0.5,
+                          fontWeight: 500,
+                          color: "#CB8141",
+                          fontSize: 13,
                         }}
-                        href="https://mumbai.polygonscan.com/address/0xE118429D095de1a93951c67D04B523fE5cbAB62c#writeContract"
-                        passHref={true}
-                        target="_blank"
                       >
-                        {"> "}GET USDT FAUCET
-                      </Link>{" "}
+                        {success === 0 && "Get USDT Faucet"}
+                        {success === 1 && "Receiving..."}
+                        {success === 2 && "Received"}
+                      </Box>{" "}
                     </Typography>
                   </Button>
                 </Box>
               </Hidden>
               <Hidden mdDown>
                 <Link href="/activities" style={{ textDecoration: "none" }}>
-                  <Box
+                  {/* <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -186,14 +222,13 @@ const Header = () => {
                     }}
                   >
                     <span style={{ paddingLeft: 10, paddingRight: 10 }}>
-                      {/* <img
-                      src="https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-6438383-5307752.png"
-                      style={{ color: "yellow", height: 24, marginRight: 4 }}
-                    /> */}
-                      <Redeem style={{ color: "yellow", height: 18 }} /> Claim
-                      32 SLEEP
+                      <img
+                        src="https://cdn3d.iconscout.com/3d/premium/thumb/gift-box-6438383-5307752.png"
+                        style={{ color: "yellow", height: 24, marginRight: 4 }}
+                      />
+                      Claim 32 SLEEP
                     </span>
-                  </Box>
+                  </Box> */}
                 </Link>
               </Hidden>
 

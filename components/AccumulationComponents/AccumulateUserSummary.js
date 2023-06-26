@@ -21,11 +21,12 @@ import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    backgroundColor: constants.baseColorLight,
+    // backgroundColor: constants.baseColorLight,
     paddingTop: 15,
     paddingBottom: 15,
     paddingLeft: 15,
     paddingRight: 15,
+    minHeight: 250,
     width: "100%",
     border: "1px solid #21232b",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
@@ -105,9 +106,10 @@ export default function AccumulateUserSummary() {
       asyncFn();
     }
   }, [accountSC]);
+
   return (
     <Box pt={0} className={classes.card}>
-      <Box>
+      {/* <Box>
         <Typography
           variant="body2"
           color="#bdbdbd"
@@ -124,9 +126,12 @@ export default function AccumulateUserSummary() {
         >
           ${userPoolState ? userPoolState.totalInvestedUSDT : 0}
         </Typography>
-      </Box>
+      </Box> */}
+      <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
+        My accumulations
+      </Typography>
       <Hidden mdDown>
-        <Box
+        {/* <Box
           display="flex"
           flexDirection={"row"}
           justifyContent="space-between"
@@ -149,7 +154,7 @@ export default function AccumulateUserSummary() {
           >
             View All
           </Typography>
-        </Box>
+        </Box> */}
 
         <Box>
           <Box

@@ -9,6 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { ArrowDropDown, ArrowRight, Circle } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -46,51 +47,39 @@ const AccumulateOrderBook = () => {
         <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
           Order book
         </Typography>
-        <Accordion
-          expanded={false}
-          style={{
-            width: "25%",
-            backgroundColor: "transparent",
-            border: "1px solid #2d2d32",
-            borderRadius: 14,
-            paddingLeft: 5,
-            paddingTop: 5,
-            paddingBottom: 5,
-          }}
-          disableGutters={true}
+        <Box
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="flex-start"
+          alignItems="center"
         >
-          <Box
-            display="flex"
-            flexDirection={"row"}
-            justifyContent="flex-start"
-            alignItems="center"
-          >
-            <img
-              src={
-                "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"
-              }
-              alt={"TokenLogo"}
-              height="28px"
-            />
-            <Box ml={1}>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                color={"#e5e5e5"}
-                lineHeight={1}
-                padding={0}
-              >
-                MATIC{" "}
-              </Typography>
-            </Box>
+          <img
+            src={
+              "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+            }
+            alt={"TokenLogo"}
+            height="18px"
+          />
+          <Box ml={1}>
+            <Typography
+              variant="body2"
+              fontWeight={600}
+              color={"#e5e5e5"}
+              lineHeight={1}
+              padding={0}
+            >
+              ETH{" "}
+            </Typography>
           </Box>
-        </Accordion>
+          <ArrowDropDown style={{ color: "#bdbdbd" }} />
+        </Box>
       </Box>
 
       <Box
+        mt={1}
         style={{
           border: "1px solid #0C0D12",
-          backgroundColor: "#111214",
+          // backgroundColor: "#111214",
           borderRadius: 14,
           padding: 6,
           paddingLeft: 20,
@@ -99,7 +88,7 @@ const AccumulateOrderBook = () => {
         }}
       >
         <Grid container py={0.5}>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -109,8 +98,17 @@ const AccumulateOrderBook = () => {
               Type
             </Typography>
           </Grid>
-
-          <Grid item md={4}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              Token
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -120,7 +118,7 @@ const AccumulateOrderBook = () => {
               Price(USDT)
             </Typography>
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -133,7 +131,7 @@ const AccumulateOrderBook = () => {
         </Grid>
 
         <Grid container mt={1} py={1}>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -143,8 +141,17 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-
-          <Grid item md={4}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              ETH
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -154,7 +161,8 @@ const AccumulateOrderBook = () => {
               $1500
             </Typography>
           </Grid>
-          <Grid item md={4}>
+
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -166,18 +174,29 @@ const AccumulateOrderBook = () => {
           </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
+              style={{ marginLeft: -15 }}
               variant="body2"
               fontWeight={500}
               fontSize={13}
               color={"#28C59A"}
             >
+              <ArrowRight style={{ fontSize: 16 }} />
               BUY
             </Typography>
           </Grid>
-
-          <Grid item md={4}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              ETH
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -187,7 +206,8 @@ const AccumulateOrderBook = () => {
               $1500
             </Typography>
           </Grid>
-          <Grid item md={4}>
+
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -199,7 +219,7 @@ const AccumulateOrderBook = () => {
           </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -209,8 +229,17 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-
-          <Grid item md={4}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              ETH
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -220,7 +249,8 @@ const AccumulateOrderBook = () => {
               $1500
             </Typography>
           </Grid>
-          <Grid item md={4}>
+
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -232,7 +262,7 @@ const AccumulateOrderBook = () => {
           </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={4}>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -242,8 +272,17 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-
-          <Grid item md={4}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              ETH
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -253,7 +292,51 @@ const AccumulateOrderBook = () => {
               $1500
             </Typography>
           </Grid>
-          <Grid item md={4}>
+
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $130
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              ETH
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              $1500
+            </Typography>
+          </Grid>
+
+          <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}

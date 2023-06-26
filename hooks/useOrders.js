@@ -4,10 +4,10 @@ import { gql, useLazyQuery } from "@apollo/client";
 
 import { getOrdersQuery } from "../queries/graphQueries";
 import { strategyType } from "../utils/constants";
-import { useWeb3Auth } from "./useWeb3Auth";
+import ethersServiceProvider from "../services/ethersServiceProvider";
 
 export function useOrders(strategy = strategyType.ACCUMULATION) {
-  const { accountSC: account } = useWeb3Auth();
+  let account = ethersServiceProvider.currentAccount;
   const ordersPage = 1;
   const pendingOrderGraphQuery = useMemo(() => {
     return getOrdersQuery(ordersPage, account, strategy, "pending");

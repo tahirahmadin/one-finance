@@ -88,7 +88,7 @@ const AccumulateOrderBook = () => {
         }}
       >
         <Grid container py={0.5}>
-          <Grid item md={3}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -98,7 +98,7 @@ const AccumulateOrderBook = () => {
               Type
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -108,7 +108,7 @@ const AccumulateOrderBook = () => {
               Token
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -118,7 +118,7 @@ const AccumulateOrderBook = () => {
               Price(USDT)
             </Typography>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={300}
@@ -128,10 +128,19 @@ const AccumulateOrderBook = () => {
               Amount(USDT)
             </Typography>
           </Grid>
-        </Grid>
-
-        <Grid container mt={1} py={1}>
           <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={300}
+              fontSize={11}
+              color={"#bdbdbd"}
+            >
+              User(Address)
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -141,17 +150,101 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#e5e5e5"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              $1500
+            </Typography>
+          </Grid>
+
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              $130
+            </Typography>
+          </Grid>
           <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
-              color={"#fff"}
+              color={"#e5e5e5"}
             >
-              ETH
+              0x9D...4F448
             </Typography>
           </Grid>
-          <Grid item md={3}>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={2}>
+            <Typography
+              style={{ marginLeft: -20 }}
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              <ArrowRight style={{ fontSize: 16 }} /> BUY
+            </Typography>
+          </Grid>
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#e5e5e5"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -162,7 +255,7 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -172,20 +265,6 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
-        </Grid>
-        <Grid container mt={1} py={1}>
-          <Grid item md={3}>
-            <Typography
-              style={{ marginLeft: -15 }}
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#28C59A"}
-            >
-              <ArrowRight style={{ fontSize: 16 }} />
-              BUY
-            </Typography>
-          </Grid>
           <Grid item md={3}>
             <Typography
               variant="body2"
@@ -193,10 +272,47 @@ const AccumulateOrderBook = () => {
               fontSize={13}
               color={"#fff"}
             >
-              ETH
+              0x9D...4F448
             </Typography>
           </Grid>
-          <Grid item md={3}>
+        </Grid>
+        <Grid container mt={1} py={1}>
+          <Grid item md={2}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#fff"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -207,7 +323,7 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -217,9 +333,19 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0x9D...4F448
+            </Typography>
+          </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -229,17 +355,32 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
             >
-              ETH
-            </Typography>
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#fff"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -250,7 +391,7 @@ const AccumulateOrderBook = () => {
             </Typography>
           </Grid>
 
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -260,9 +401,19 @@ const AccumulateOrderBook = () => {
               $130
             </Typography>
           </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#fff"}
+            >
+              0x9D...4F448
+            </Typography>
+          </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -272,40 +423,65 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
             >
-              ETH
-            </Typography>
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#e5e5e5"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
-              color={"#fff"}
+              color={"#e5e5e5"}
             >
               $1500
             </Typography>
           </Grid>
 
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              $130
+            </Typography>
+          </Grid>
           <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
-              color={"#fff"}
+              color={"#e5e5e5"}
             >
-              $130
+              0x9D...4F448
             </Typography>
           </Grid>
         </Grid>
         <Grid container mt={1} py={1}>
-          <Grid item md={3}>
+          <Grid item md={2}>
             <Typography
               variant="body2"
               fontWeight={500}
@@ -315,35 +491,128 @@ const AccumulateOrderBook = () => {
               BUY
             </Typography>
           </Grid>
-          <Grid item md={3}>
-            <Typography
-              variant="body2"
-              fontWeight={500}
-              fontSize={13}
-              color={"#fff"}
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
             >
-              ETH
-            </Typography>
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#e5e5e5"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={2.5}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
-              color={"#fff"}
+              color={"#e5e5e5"}
             >
               $1500
             </Typography>
           </Grid>
 
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              $130
+            </Typography>
+          </Grid>
           <Grid item md={3}>
             <Typography
               variant="body2"
               fontWeight={500}
               fontSize={13}
-              color={"#fff"}
+              color={"#e5e5e5"}
+            >
+              0x9D...4F448
+            </Typography>
+          </Grid>
+        </Grid>{" "}
+        <Grid container mt={1} py={1}>
+          <Grid item md={2}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#28C59A"}
+            >
+              BUY
+            </Typography>
+          </Grid>
+          <Grid item md={2}>
+            <Box
+              display="flex"
+              flexDirection={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <img
+                src={
+                  "https://cdn.iconscout.com/icon/free/png-256/free-ethereum-10-645903.png"
+                }
+                alt={"TokenLogo"}
+                height="16px"
+              />
+              <Typography
+                variant="body2"
+                fontWeight={500}
+                fontSize={13}
+                color={"#e5e5e5"}
+                ml={1}
+              >
+                ETH
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              $1500
+            </Typography>
+          </Grid>
+
+          <Grid item md={2.5}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
             >
               $130
+            </Typography>
+          </Grid>
+          <Grid item md={3}>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              fontSize={13}
+              color={"#e5e5e5"}
+            >
+              0x9D...4F448
             </Typography>
           </Grid>
         </Grid>

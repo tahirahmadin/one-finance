@@ -15,7 +15,7 @@ import { strategyType } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
-    marginTop: 20,
+    marginTop: 10,
   },
   actionButton: {
     borderRadius: 14,
@@ -130,7 +130,9 @@ export default function UserPoolOrders({ poolType }) {
         }}
       />
       {allOrders.length === 0 && (
-        <div style={{ color: "#bdbdbd", paddingTop: 10 }}>No orders found.</div>
+        <div style={{ color: "#bdbdbd", paddingBottom: 40, fontSize: 13 }}>
+          You did not invested in this strategy yet.
+        </div>
       )}
       {allOrders?.map((singleOrder, index) => {
         return (

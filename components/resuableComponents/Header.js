@@ -140,7 +140,16 @@ const Header = () => {
               justifyContent={"space-between"}
             >
               <Hidden smUp>
-                <Box display={"flex"} justifyContent={"start"}>
+                <Box>
+                  <Typography variant="body2" pb={1} style={{ color: "white" }}>
+                    <img
+                      src="https://www.sleepswap.io/SleepSwap_Plain.png"
+                      height="45px"
+                    />
+                    <strong>Sleep</strong>Swap
+                  </Typography>
+                </Box>
+                {/* <Box display={"flex"} justifyContent={"start"}>
                   <Box pr={1}>
                     <img
                       src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
@@ -174,7 +183,7 @@ const Header = () => {
                       Wallet Balance
                     </Typography>
                   </Box>
-                </Box>
+                </Box> */}
               </Hidden>
               <Hidden mdDown>
                 <Box>
@@ -237,7 +246,11 @@ const Header = () => {
                   {web3AuthSC ? (
                     <Button
                       color="primary"
-                      style={{ fontWeight: "bold", minWidth: 140 }}
+                      style={{
+                        fontWeight: "bold",
+                        minWidth: 100,
+                        borderRadius: 14,
+                      }}
                       onClick={loginWallet}
                       className={classes.buttonConnect}
                     >

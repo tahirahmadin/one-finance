@@ -42,6 +42,7 @@ import AccumulateUserSummary from "./AccumulateUserSummary";
 import AccumulationTopHeader from "./AccumulationTopHeader";
 import AccumulateOrderBook from "./AccumulateOrderBook";
 import MobileBottomBar from "../../common/MobileBottomBar";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -90,6 +91,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       height: "100%",
       width: "100%",
+    },
+  },
+  createCard: {
+    backgroundImage: "linear-gradient(to left, #0C0D11,#000000)",
+    border: "1px solid #1b1d24",
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 14,
+    [theme.breakpoints.down("md")]: {
+      paddingTop: 10,
+      paddingBottom: 10,
+      paddingLeft: 10,
+      paddingRight: 10,
     },
   },
   card: {
@@ -395,54 +411,47 @@ export default function AccumulationComponent() {
             fontWeight={300}
             fontSize={12}
             mb={2}
-            color={"#bdbdbdb"}
+            color={"#bdbdbd"}
           >
-            Home <KeyboardArrowRight style={{ fontSize: 18 }} />
+            <Link
+              href="/"
+              style={{
+                textDecoration: "none",
+                color: "#bdbdbd",
+                cursor: "pointer",
+              }}
+            >
+              Home
+            </Link>{" "}
+            <KeyboardArrowRight style={{ fontSize: 18 }} />
             Pools
             <KeyboardArrowRight style={{ fontSize: 18 }} />
             <span style={{ color: "#f9f9f9" }}>Accumulation Strategy</span>
           </Typography>
+          {/* Components for create order and top header */}
           <Grid
             container
             display={"flex"}
             justifyContent="space-between"
             spacing={4}
           >
-            <Grid item md={8} xs={12}>
+            <Grid item md={8} sm={12} xs={12}>
               <AccumulationTopHeader />
-              <Grid container mt={1} spacing={3}>
-                {/* <Grid item md={5} xs={12}>
-                  <AccumulateUserSummary />
-                </Grid> */}
-                <Grid item md={12} xs={12}>
-                  <AccumulateOrderBook />
+              <Hidden smDown>
+                <Grid container mt={1} spacing={3}>
+                  <Grid item md={12} xs={12}>
+                    <AccumulateOrderBook />
+                  </Grid>
                 </Grid>
-                <Grid item md={4} xs={12}></Grid>
-              </Grid>
+              </Hidden>
             </Grid>
 
-            <Grid item md={4} xs={12}>
-              <Box
-                style={{
-                  backgroundImage: "linear-gradient(to left, #0C0D11,#000000)",
-                  border: "1px solid #1b1d24",
-                  paddingTop: 15,
-                  paddingBottom: 15,
-                  paddingLeft: 15,
-                  paddingRight: 15,
-                  borderRadius: 14,
-                }}
-              >
+            <Grid item md={4} sm={12} xs={12}>
+              <Box className={classes.createCard}>
                 <div className="d-flex flex-column justify-content-around">
-                  <div>
-                    <Typography
-                      fontWeight={600}
-                      fontSize={18}
-                      color={"#f9f9f9"}
-                    >
-                      Create strategy
-                    </Typography>
-                  </div>
+                  <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
+                    Create strategy
+                  </Typography>
 
                   <Box mt={2}>
                     <Accordion
@@ -559,7 +568,7 @@ export default function AccumulationComponent() {
                   <Box
                     display={"flex"}
                     justifyContent={"space-between"}
-                    mt={1}
+                    my={1}
                     className={classes.inputWrapper}
                   >
                     <Box>
@@ -633,8 +642,8 @@ export default function AccumulationComponent() {
                   </Box>
 
                   <Grid container spacing={2}>
-                    <Grid item md={5}>
-                      <Box mt={1} className={classes.inputWrapper}>
+                    <Grid item md={6} sm={6} xs={6}>
+                      <Box className={classes.inputWrapper}>
                         <Typography
                           variant="small"
                           textAlign={"left"}
@@ -646,6 +655,8 @@ export default function AccumulationComponent() {
                           value={grids}
                           type="number"
                           onInput={(event) =>
+                            event.target.value > 0 &&
+                            event.target.value < 10 &&
                             setGrids(parseInt(event.target.value))
                           }
                           fullWidth
@@ -655,14 +666,14 @@ export default function AccumulationComponent() {
                         />
                       </Box>
                     </Grid>
-                    <Grid item md={7}>
-                      <Box mt={1} className={classes.inputWrapper}>
+                    <Grid item md={6} sm={6} xs={6}>
+                      <Box className={classes.inputWrapper}>
                         <Typography
                           variant="small"
                           textAlign={"left"}
                           lineHeight={1}
                         >
-                          Buy on every drop of (%):
+                          On every % drop of:
                         </Typography>
                         <Input
                           type="number"
@@ -685,7 +696,7 @@ export default function AccumulationComponent() {
                       {isApproved ? "Place order" : "Approve Investment"}
                     </Button>
                   </div>
-                  <Box mt={2}>
+                  <Box mt={3}>
                     <Typography
                       variant="body2"
                       mb={1}
@@ -696,7 +707,7 @@ export default function AccumulationComponent() {
                       My Investment summary
                     </Typography>
                     <Grid container py={0.5}>
-                      <Grid item md={4}>
+                      <Grid item md={4} sm={4} xs={4}>
                         <Typography
                           variant="body2"
                           fontWeight={300}
@@ -706,7 +717,7 @@ export default function AccumulationComponent() {
                           Price(USDT)
                         </Typography>
                       </Grid>
-                      <Grid item md={4}>
+                      <Grid item md={4} sm={4} xs={4}>
                         <Typography
                           variant="body2"
                           fontWeight={300}
@@ -716,7 +727,7 @@ export default function AccumulationComponent() {
                           Amount(USDT)
                         </Typography>
                       </Grid>
-                      <Grid item md={4}>
+                      <Grid item md={4} sm={4} xs={4}>
                         <Typography
                           variant="body2"
                           fontWeight={300}
@@ -727,10 +738,10 @@ export default function AccumulationComponent() {
                         </Typography>
                       </Grid>
                     </Grid>
-                    <Box style={{ height: "70px", overflowY: "auto" }}>
+                    <Box style={{ height: "80px", overflowY: "auto" }}>
                       {[...Array(grids)].map((singleOrder, index) => (
                         <Grid container mt={1}>
-                          <Grid item md={4}>
+                          <Grid item md={4} sm={4} xs={4}>
                             <Typography
                               variant="body2"
                               fontWeight={500}
@@ -740,7 +751,7 @@ export default function AccumulationComponent() {
                               ${(2000 * (100 - (index + 1) * percent)) / 100}
                             </Typography>
                           </Grid>
-                          <Grid item md={4}>
+                          <Grid item md={4} sm={4} xs={4}>
                             <Typography
                               variant="body2"
                               fontWeight={500}
@@ -750,7 +761,7 @@ export default function AccumulationComponent() {
                               ${(amount / grids).toFixed(2)}
                             </Typography>
                           </Grid>
-                          <Grid item md={4}>
+                          <Grid item md={4} sm={4} xs={4}>
                             <Typography
                               variant="body2"
                               fontWeight={300}
@@ -863,21 +874,17 @@ export default function AccumulationComponent() {
                       </Typography>
                     </Box>
                   </Box>
-                  <Box display={"flex"} alignItems={"center"} mt={2}>
-                    <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      fontSize={14}
-                      lineHeight={1.8}
-                      color={"#bdbdbd"}
-                      paddingRight={1}
-                    >
-                      ROI:
-                    </Typography>
+                  <Box
+                    display={"flex"}
+                    flexDirection={"column"}
+                    alignItems={"center"}
+                    justifyContent="center"
+                    mt={2}
+                  >
                     <Typography
                       variant="body2"
                       fontWeight={600}
-                      fontSize={18}
+                      fontSize={22}
                       color={"#28C59A"}
                     >
                       <strong>
@@ -886,55 +893,24 @@ export default function AccumulationComponent() {
                             100) /
                           amount
                         ).toFixed()}
-                        %*
+                        %
                       </strong>
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight={400}
+                      fontSize={12}
+                      lineHeight={1}
+                      color={"#bdbdbd"}
+                    >
+                      Return on investment*
                     </Typography>
                   </Box>
-                  {/* <Box mt={2}>
-                    <AvTimer style={{ color: "#bdbdbd" }} />
-                    <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      fontSize={11}
-                      lineHeight={1.8}
-                      color={"#e5e5e5"}
-                      mt={2}
-                    >
-                      - Total ETH :
-                      <strong> {getTotalTokenAccumulated()} ETH</strong>.
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      fontSize={11}
-                      lineHeight={1.8}
-                      color={"#e5e5e5"}
-                    >
-                      - Expected ETH Price:
-                      <strong> $10,000</strong>
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      fontSize={11}
-                      lineHeight={1.8}
-                      color={"#e5e5e5"}
-                    >
-                      - Your may receive:
-                      <strong>
-                        {getTotalTokenAccumulated()} *10,000 ={" "}
-                        <span style={{ color: "#28C59A" }}>
-                          $ {(getTotalTokenAccumulated() * 10000).toFixed(2)}{" "}
-                        </span>
-                      </strong>
-                    </Typography>
-                  </Box> */}
                 </div>
               </Box>
-              <Box></Box>
             </Grid>
           </Grid>
-
+          {/* Recent orders table */}
           <Box mt={5}>
             <div>
               <Typography

@@ -13,6 +13,7 @@ import {
   AccountBalance,
   MonetizationOn,
   Payment,
+  People,
   Savings,
   Schedule,
   TrendingUp,
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 20,
     paddingBottom: 20,
     paddingLeft: 20,
-    paddingRight: 40,
+    paddingRight: 30,
     width: "100%",
     height: "100%",
     minHeight: 220,
@@ -60,6 +61,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       height: "100%",
       width: "100%",
+      minHeight: 220,
+
+      paddingTop: 10,
+      paddingBottom: 10,
+      paddingLeft: 10,
+      paddingRight: 10,
     },
   },
   card: {
@@ -162,7 +169,7 @@ export default function AccumulationTopHeader() {
   return (
     <Box className={classes.cardTop}>
       <Grid container spacing={3} height={"100%"}>
-        <Grid item md={9} xs={12} height={"100%"}>
+        <Grid item md={9} sm={12} xs={12}>
           <Box
             display={"flex"}
             flexDirection={"column"}
@@ -206,9 +213,9 @@ export default function AccumulationTopHeader() {
               <Box ml={2}>
                 <Box
                   display={"flex"}
-                  flexDirection={md ? "column" : "row"}
+                  flexDirection={"row"}
                   justifyContent="flex-start"
-                  alignItems={md ? "flex-start" : "center"}
+                  alignItems={"flex-start"}
                 >
                   <Typography
                     variant="h3"
@@ -219,32 +226,30 @@ export default function AccumulationTopHeader() {
                   </Typography>
                   <Typography
                     style={{
-                      marginLeft: md ? 0 : 5,
+                      marginLeft: 5,
                       borderRadius: 10,
                       fontSize: 8,
-                      paddingLeft: 10,
-                      paddingRight: 10,
+                      paddingLeft: md ? 5 : 10,
+                      paddingRight: md ? 5 : 10,
                       color: "black",
                       fontWeight: 600,
                       paddingTop: 3,
                       paddingBottom: 3,
-
                       backgroundImage:
                         "linear-gradient(to right,#f9f9f9, #DADADA)",
                     }}
                   >
-                    <TrendingUp style={{ fontSize: 13 }} />{" "}
-                    {poolGraphData && poolGraphData.participants} people
-                    invested
+                    <People style={{ fontSize: 13 }} />{" "}
+                    {poolGraphData && poolGraphData.participants}{" "}
+                    {!md && "people invested"}
                   </Typography>
                 </Box>
 
                 <Typography
                   mt={1}
-                  variant="body4"
+                  variant="body2"
                   fontSize={md ? 10 : 12}
                   color={"#bdbdbd"}
-                  lineHeight={1}
                 >
                   Start the strategy and eat every dip automatically without any
                   hassle.
@@ -289,19 +294,21 @@ export default function AccumulationTopHeader() {
             </Box>
           </Box>
         </Grid>
-        <Grid item md={3} xs={12}>
+        <Grid item md={3} sm={12} xs={12}>
           <Box
+            width={"100%"}
             display={"flex"}
             flexDirection={md ? "row" : "column"}
-            justifyContent={"space-between"}
-            alignItems={"flex-start"}
+            justifyContent={md ? "space-between" : "space-between"}
+            alignItems={md ? "center" : "flex-start"}
           >
             <Box>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                <Wallet style={{ fontSize: 16 }} /> My Investments($)
+                <Wallet style={{ fontSize: 16 }} /> My{" "}
+                {!md ? "investment" : "share"}($)
               </Typography>
               <Typography
-                variant="h2"
+                variant={md ? "body1" : "h2"}
                 color="#ffffff"
                 style={{ fontWeight: 600, lineHeight: 1.6 }}
               >
@@ -313,7 +320,7 @@ export default function AccumulationTopHeader() {
             </Box>
             <Box mt={md ? 0 : 2}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                <TrendingUp style={{ fontSize: 16 }} /> Expected PnL*
+                <TrendingUp style={{ fontSize: 16 }} /> {!md && "Expected"} PnL*
               </Typography>
               <Typography
                 variant="body1"
@@ -321,13 +328,15 @@ export default function AccumulationTopHeader() {
                 fontSize={16}
                 fontWeight={600}
               >
-                +$1273 <span style={{ fontSize: 10, color: "green" }}>56%</span>
+                +$1273{" "}
+                {!md && (
+                  <span style={{ fontSize: 10, color: "green" }}>56%</span>
+                )}
               </Typography>
             </Box>
             <Box mt={md ? 0 : 3}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                <Payment style={{ fontSize: 16 }} />
-                Total investment
+                <Payment style={{ fontSize: 16 }} /> Total invested
               </Typography>
               <Typography
                 variant="body1"
@@ -345,10 +354,11 @@ export default function AccumulationTopHeader() {
         </Grid>
       </Grid>
 
-      <Typography variant="small" color="#bdbdbd">
-        * Investment for <strong>2 years</strong> is recommended for best
-        results.
-      </Typography>
+      {!md && (
+        <Typography variant="small" color="#bdbdbd">
+          * Investment for <strong>2 years</strong> is adviced for best results.
+        </Typography>
+      )}
     </Box>
   );
 }

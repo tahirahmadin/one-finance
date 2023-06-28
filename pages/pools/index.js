@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Hidden, Typography, useTheme } from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
-import PoolCard from "./PoolCard";
+import PoolCard from "../../components/Pools/PoolCard";
+import Seo from "../../common/Seo";
+import SideBar from "../../common/Sidebar";
+import Header from "../../components/resuableComponents/Header";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -37,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Pools() {
   const classes = useStyles();
   const theme = useTheme();
-
-  const { account } = useChain();
+  const [pageLoaded, setPageLoaded] = useState(false);
 
   let poolsData = [
     {
@@ -70,31 +72,53 @@ export default function Pools() {
     },
   ];
 
-  return (
-    <Box>
-      <Box className={classes.background}>
-        <Container>
-          <Typography variant="h2" className={classes.pageTitle}>
-            Strategy Pools
-          </Typography>
-          {/* <Typography variant="body2" className={classes.pageSubtitle}>
-            Place order inside the strategy pools and enjoy high yeilds
-          </Typography> */}
+  useEffect(() => setPageLoaded(true), []);
 
-          <Grid
-            container
-            display={"flex"}
-            justifyContent="space-between"
-            spacing={6}
-          >
-            {poolsData.map((singlePool, index) => (
-              <Grid item md={4} key={index}>
-                <PoolCard poolStaticData={singlePool} index={index} />
-              </Grid>
-            ))}
+  return (
+    <Box style={{ backgroundColor: "black" }}>
+      <Seo
+        title="Strategy Pools | Choose and Earn "
+        description="Trade like a pro"
+        keywords="sleepswap"
+        image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/gallery.jpg"
+      />
+      {pageLoaded && (
+        <Grid container>
+          <Hidden mdDown>
+            <Grid item md={2}>
+              <SideBar />
+            </Grid>
+          </Hidden>
+          <Grid item md={10}>
+            <Header />
+            <Box>
+              <Box className={classes.background}>
+                <Container>
+                  <Typography variant="h2" className={classes.pageTitle}>
+                    Strategy Pools
+                  </Typography>
+                  <Typography variant="small" className={classes.pageSubtitle}>
+                    Place order inside the strategy pools and enjoy high yeilds
+                  </Typography>
+
+                  <Grid
+                    container
+                    display={"flex"}
+                    justifyContent="space-between"
+                    spacing={6}
+                  >
+                    {poolsData.map((singlePool, index) => (
+                      <Grid item md={4} key={index}>
+                        <PoolCard poolStaticData={singlePool} index={index} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Container>
+              </Box>
+            </Box>
           </Grid>
-        </Container>
-      </Box>
+        </Grid>
+      )}
     </Box>
   );
 }

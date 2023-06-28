@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   BarChart,
+  Dashboard,
   EmojiEvents,
   Explore,
   Help,
@@ -16,6 +17,7 @@ import {
 import { setMenuIndex } from "../reducers/UiReducer";
 import Link from "next/link";
 import { constants } from "../utils/constants";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SideBar = ({}) => {
+  const router = useRouter();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -68,6 +71,44 @@ const SideBar = ({}) => {
   const sm = useMediaQuery(theme.breakpoints.down("md"));
   const { menuIndex } = store.ui;
 
+  const menuItems = [
+    {
+      title: "Dashboard",
+      url: "/",
+      icon: (
+        <Dashboard
+          style={{
+            marginRight: 10,
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+    {
+      title: "Strategy pools",
+      url: "/pools",
+      icon: (
+        <EmojiEvents
+          style={{
+            marginRight: 10,
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+    {
+      title: "Activities",
+      url: "/activities",
+      icon: (
+        <BarChart
+          style={{
+            marginRight: 10,
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+  ];
   return (
     <Box
       style={{ position: "fixed" }}
@@ -127,115 +168,68 @@ const SideBar = ({}) => {
             </Typography>
           </Box>
         </Box>
-        <Box pt={5}>
-          <Box
-            onClick={() => dispatch(setMenuIndex(0))}
-            key={0}
-            className={classes.selectedPaper}
-            sx={{
-              boxShadow: 0,
-              bgcolor:
-                menuIndex === 0 ? constants.highlighColor : "transparent",
-            }}
-          >
-            <Explore style={{ marginRight: 10, color: "white" }} />
 
-            <Typography
-              variant="smallheading"
-              className={
-                menuIndex === 0 ? classes.selectedMenuTitle : classes.menuTitle
-              }
-            >
-              Dashboard
-            </Typography>
-          </Box>
+        <Box pt={5}>
           <Link href="/" style={{ textDecoration: "none" }}>
             <Box
-              onClick={() => dispatch(setMenuIndex(1))}
-              key={1}
+              key={10}
               className={classes.selectedPaper}
               sx={{
                 boxShadow: 0,
                 bgcolor:
-                  menuIndex === 1 ? constants.highlighColor : "transparent",
+                  router.pathname === "/"
+                    ? constants.highlighColor
+                    : "transparent",
               }}
             >
-              <EmojiEvents
+              <Dashboard
                 style={{
                   marginRight: 10,
-                  color: menuIndex === 1 ? "white" : "#bdbdbd",
+                  color: "#bdbdbd",
                 }}
               />
+
               <Typography
                 variant="title1"
                 className={
-                  menuIndex === 1
+                  router.pathname === "/"
                     ? classes.selectedMenuTitle
                     : classes.menuTitle
                 }
               >
-                Strategy Pools
+                Dashboard
               </Typography>
             </Box>
           </Link>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Box
-              onClick={() => dispatch(setMenuIndex(2))}
-              key={1}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 2 ? constants.highlighColor : "transparent",
-              }}
-            >
-              <EmojiEvents
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 2 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 2
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Rewards
-              </Typography>
-            </Box>
-          </Link>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Paper
-              onClick={() => dispatch(setMenuIndex(3))}
-              key={1}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 3 ? constants.highlighColor : "transparent",
-              }}
-            >
-              <BarChart
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 3 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 3
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Leaderboard
-              </Typography>
-            </Paper>
-          </Link>
+          {menuItems.slice(1).map((singleMenu, index) => {
+            return (
+              <Link href={singleMenu.url} style={{ textDecoration: "none" }}>
+                <Box
+                  key={index}
+                  className={classes.selectedPaper}
+                  sx={{
+                    boxShadow: 0,
+                    bgcolor: router.asPath.includes(singleMenu.url)
+                      ? constants.highlighColor
+                      : "transparent",
+                  }}
+                >
+                  {singleMenu.icon}
+
+                  <Typography
+                    variant="title1"
+                    className={
+                      router.asPath.includes(singleMenu.url)
+                        ? classes.selectedMenuTitle
+                        : classes.menuTitle
+                    }
+                  >
+                    {singleMenu.title}
+                  </Typography>
+                </Box>
+              </Link>
+            );
+          })}
 
           <Link href="/" style={{ textDecoration: "none" }}>
             <Paper

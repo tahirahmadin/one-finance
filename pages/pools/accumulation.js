@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Grid, Hidden, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
-import SideBar from "../common/Sidebar";
-import Seo from "../common/Seo";
-import Header from "../components/resuableComponents/Header";
-import AccumulationComponent from "../components/AccumulationComponents/AccumulationComponent";
+import Seo from "../../common/Seo";
+import SideBar from "../../common/Sidebar";
+import Header from "../../components/resuableComponents/Header";
+import AccumulationComponent from "../../components/AccumulationComponents/AccumulationComponent";
 
 const useStyles = makeStyles({
   background: {

@@ -1,55 +1,105 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@mui/styles";
-import { Box, Grid, Hidden, useTheme } from "@mui/material";
-import { useSelector } from "react-redux";
-import SideBar from "../common/Sidebar";
+import {
+  Box,
+  Container,
+  Grid,
+  Hidden,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
-import Pools from "../components/Pools/Pools";
-import Portfolio from "../components/Portfolio/Portfolio";
-import Header from "./../components/resuableComponents/Header";
-import Rewards from "../components/Rewards";
-import Leaderboard from "../components/Leaderboard";
-import Activities from "../components/Activities";
-import DashboardPage from "./dashboard";
-import MobileBottomBar from "../common/MobileBottomBar";
 
-const useStyles = makeStyles({
+import WalletSummary from "../components/Dashboard/WalletSummary";
+import TrendingCard from "../components/Dashboard/TrendingCard";
+import DashboardActivities from "../components/Dashboard/DashboardActivities";
+import SideBar from "../common/Sidebar";
+import Header from "../components/resuableComponents/Header";
+
+const useStyles = makeStyles((theme) => ({
   background: {
+    // backgroundImage: 'url("images/network.png")',
     backgroundPosition: "center center,center center",
     backgroundRepeat: "no-repeat,no-repeat",
     backgroundSize: "cover,contain",
-    backgroundColor: "#16161A",
-    minHeight: "100vh",
-
-    paddingTop: "5%",
+    height: "100%",
+    width: "100%",
+    paddingTop: "2%",
     paddingLeft: "3%",
     paddingRight: "3%",
+    [theme.breakpoints.down("md")]: {
+      paddingLeft: 5,
+      paddingRight: 5,
+    },
   },
   pageTitle: {
     fontWeight: 600,
-    fontSize: 32,
-    letterSpacing: "0.02em",
-    color: "#ffffff",
+    color: "#f9f9f9",
     textAlign: "left",
   },
 
-  para: {
-    fontWeight: 400,
-    fontSize: 16,
-    letterSpacing: "0.02em",
-    color: "#414141",
-    textAlign: "center",
+  pageSubtitle: {
+    color: "#bdbdbd",
+    textAlign: "left",
   },
-});
+  card1: {
+    // backgroundColor: constants.baseColorLight,
+    backgroundImage:
+      "url(https://www.analyticsinsight.net/wp-content/uploads/2021/12/Top-10-cryptocurrencies-to-invest-for-US100-in-2022.jpg)",
+    height: 295,
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    marginTop: 20,
 
-export default function Home() {
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    width: "100%",
+    border: "1px solid #414141",
+    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
+    borderRadius: 14,
+    "&:hover": {
+      boxShadow: "0px 24px 33px -9px #0000005C",
+    },
+
+    [theme.breakpoints.down("md")]: {
+      height: 200,
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 5,
+      paddingRight: 5,
+      backgroundImage:
+        "url(https://cdn-scripbox-wordpress.scripbox.com/wp-content/uploads/2021/03/invest-rs-1000-every-month.jpg)",
+    },
+  },
+
+  title: {
+    fontWeight: 600,
+    color: "#f9f9f9",
+    textAlign: "left",
+    fontSize: 16,
+  },
+  description: {
+    fontWeight: 400,
+    color: "#bdbdbd",
+    textAlign: "left",
+    lineHeight: 1.5,
+    paddingTop: 5,
+  },
+}));
+
+const Home = () => {
+  const store = useSelector((state) => state);
+  const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
-  const store = useSelector((state) => state);
+  const md = useMediaQuery(theme.breakpoints.down("md"));
   const [pageLoaded, setPageLoaded] = useState(false);
-  useEffect(() => setPageLoaded(true), []);
 
-  const { menuIndex } = store.ui;
+  useEffect(() => setPageLoaded(true), []);
 
   return (
     <Box style={{ backgroundColor: "black" }}>
@@ -62,21 +112,55 @@ export default function Home() {
       {pageLoaded && (
         <Grid container>
           <Hidden mdDown>
-            <Grid item md={2}>
+            <Grid item md={2} sm={12} xs={12}>
               <SideBar />
             </Grid>
           </Hidden>
-          <Grid item md={10}>
+          <Grid item md={10} sm={12} xs={12}>
             <Header />
-            {menuIndex === 0 && <DashboardPage />}
-            {menuIndex === 1 && <Pools />}
-            {menuIndex === 2 && <Rewards />}
-            {menuIndex === 3 && <Leaderboard />}
-            {menuIndex === 4 && <Activities />}
-            {menuIndex === 5 && <Activities />}
+            <Box className={classes.background}>
+              <Container>
+                <Typography variant="h2" className={classes.pageTitle}>
+                  Overview Dashboard
+                </Typography>
+                <Grid container spacing={2} mb={4} mb={md ? 5 : 4}>
+                  <Grid item md={8} sm={12} xs={12}>
+                    <Box pt={0} className={classes.card1}></Box>
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <WalletSummary />
+                  </Grid>
+                </Grid>
+
+                <Typography variant="h5">Trending</Typography>
+                <Grid container spacing={2}>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <TrendingCard />
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <TrendingCard />
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <TrendingCard />
+                  </Grid>
+                </Grid>
+
+                {/*  Activities */}
+                {/* <Box mt={5}>
+                  <div>
+                    <Typography variant="h5">Recent Orders</Typography>
+                  </div>
+                  <div>
+                    <DashboardActivities />
+                  </div>
+                </Box> */}
+              </Container>
+            </Box>
           </Grid>
         </Grid>
       )}
     </Box>
   );
-}
+};
+
+export default Home;

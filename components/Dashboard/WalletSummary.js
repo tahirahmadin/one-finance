@@ -6,6 +6,7 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
@@ -20,8 +21,6 @@ import { Info } from "@mui/icons-material";
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: constants.baseColorLight,
-    marginTop: 20,
-    marginBottom: 20,
     paddingTop: 20,
     paddingBottom: 20,
     paddingLeft: 20,
@@ -87,9 +86,10 @@ const useStyles = makeStyles((theme) => ({
 export default function WalletSummary() {
   const classes = useStyles();
   const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Box pt={0} className={classes.card}>
+    <Box pt={0} className={classes.card} mt={md ? 0 : 2}>
       <Box>
         <Typography variant="body2">Your Balance</Typography>
         <Typography variant="h2" style={{ fontWeight: 600, lineHeight: 1.6 }}>

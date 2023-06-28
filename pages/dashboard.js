@@ -3,7 +3,6 @@ import {
   Box,
   Container,
   Grid,
-  Hidden,
   Typography,
   useMediaQuery,
   useTheme,
@@ -11,8 +10,7 @@ import {
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
-import ethersServiceProvider from "../services/ethersServiceProvider";
-import { constants } from "../utils/constants";
+
 import WalletSummary from "../components/Dashboard/WalletSummary";
 import TrendingCard from "../components/Dashboard/TrendingCard";
 import DashboardActivities from "../components/Dashboard/DashboardActivities";
@@ -66,8 +64,10 @@ const useStyles = makeStyles((theme) => ({
     },
 
     [theme.breakpoints.down("md")]: {
-      height: "100%",
-      width: "100%",
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 5,
+      paddingRight: 5,
     },
   },
 
@@ -107,23 +107,23 @@ const DashboardPage = () => {
             Overview Dashboard
           </Typography>
           <Grid container spacing={2} mb={4}>
-            <Grid item md={8}>
+            <Grid item md={8} sm={12} xs={12}>
               <Box pt={0} className={classes.card1}></Box>
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={4} sm={12} xs={12}>
               <WalletSummary />
             </Grid>
           </Grid>
           {/*  Trending cards */}
           <Typography variant="h5">Trending</Typography>
           <Grid container spacing={2}>
-            <Grid item md={4}>
+            <Grid item md={4} sm={12} xs={12}>
               <TrendingCard />
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={4} sm={12} xs={12}>
               <TrendingCard />
             </Grid>
-            <Grid item md={4}>
+            <Grid item md={4} sm={12} xs={12}>
               <TrendingCard />
             </Grid>
           </Grid>

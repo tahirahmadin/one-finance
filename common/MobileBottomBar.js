@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setDashboardMenuItem } from "../reducers/UiReducer";
 import { makeStyles } from "@mui/styles";
@@ -17,9 +17,13 @@ import {
   Home,
   StackedBarChart,
   Cookie,
+  BarChart,
+  EmojiEvents,
+  Dashboard,
 } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { constants } from "../utils/constants";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
@@ -54,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MobileBottomBar = () => {
+  const router = useRouter();
+
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { dashboardMenuItems, selectedDashboardMenuItem } = store.ui;
@@ -61,70 +67,104 @@ const MobileBottomBar = () => {
 
   const classes = useStyles();
   const sm = useMediaQuery(theme.breakpoints.down("md"));
-  const router = useRouter();
 
+  const menuItems = [
+    {
+      title: "Dashboard",
+      url: "/",
+      icon: (
+        <Dashboard
+          style={{
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+    {
+      title: "Pools",
+      url: "/pools",
+      icon: (
+        <EmojiEvents
+          style={{
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+    {
+      title: "Activities",
+      url: "/activities",
+      icon: (
+        <BarChart
+          style={{
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+    {
+      title: "Wallet",
+      url: "/wallet",
+      icon: (
+        <Wallet
+          style={{
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
+  ];
   return (
     <Grid container className={classes.tabs}>
       <Grid
+        key={10}
         item
+        sm={3}
         xs={3}
         className={classes.tab}
-        value={"DASHBOARD"}
-        onClick={() => dispatch(setDashboardMenuItem("DASHBOARD"))}
-        bgcolor={
-          selectedDashboardMenuItem === "DASHBOARD" && constants.highlighColor
-        }
+        bgcolor={router.pathname === "/" && constants.highlighColor}
       >
-        <Home style={{ color: "#f9f9f9" }} />
-        <Typography variant="body2" className={classes.tab_name}>
-          DASHBOARD
-        </Typography>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <Box display={"flex"} flexDirection="column" alignItems={"center"}>
+            <Dashboard
+              style={{
+                marginRight: 10,
+                color: "#bdbdbd",
+              }}
+            />
+            <Typography variant="body2" className={classes.tab_name}>
+              Dashboard
+            </Typography>
+          </Box>
+        </Link>
       </Grid>
-      <Grid
-        item
-        xs={3}
-        className={classes.tab}
-        value={"POOLS"}
-        onClick={() => dispatch(setDashboardMenuItem("POOLS"))}
-        bgcolor={
-          selectedDashboardMenuItem === "POOLS" && constants.highlighColor
-        }
-      >
-        <Cookie style={{ color: "#f9f9f9" }} />
-        <Typography variant="body2" className={classes.tab_name}>
-          Pools
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={3}
-        className={classes.tab}
-        value={"ACTIVITIES"}
-        onClick={() => dispatch(setDashboardMenuItem("ACTIVITIES"))}
-        bgcolor={
-          selectedDashboardMenuItem === "ACTIVITIES" && constants.highlighColor
-        }
-      >
-        <StackedBarChart style={{ color: "#f9f9f9" }} />
-        <Typography variant="body2" className={classes.tab_name}>
-          Activities
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={3}
-        className={classes.tab}
-        value={"WALLET"}
-        onClick={() => dispatch(setDashboardMenuItem("WALLET"))}
-        bgcolor={
-          selectedDashboardMenuItem === "WALLET" && constants.highlighColor
-        }
-      >
-        <Wallet style={{ color: "#f9f9f9" }} />
-        <Typography variant="body2" className={classes.tab_name}>
-          Wallet
-        </Typography>
-      </Grid>
+      {menuItems.slice(1).map((singleMenu, index) => {
+        return (
+          <Grid
+            key={index}
+            item
+            sm={3}
+            xs={3}
+            className={classes.tab}
+            bgcolor={
+              router.asPath.includes(singleMenu.url) && constants.highlighColor
+            }
+          >
+            <Link href={singleMenu.url} style={{ textDecoration: "none" }}>
+              <Box
+                display={"flex"}
+                flexDirection="column"
+                alignItems={"center"}
+              >
+                {singleMenu.icon}
+                <Typography variant="body2" className={classes.tab_name}>
+                  {singleMenu.title}
+                </Typography>
+              </Box>
+            </Link>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

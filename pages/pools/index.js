@@ -58,7 +58,7 @@ export default function Pools() {
       description:
         "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool instantly.",
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
-      url: "accumulation",
+      url: "pools/accumulation",
       contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
       type: "ACCUMULATION",
     },
@@ -67,9 +67,9 @@ export default function Pools() {
       description:
         "Strategy will be your favorite tokens at a specific interval to make your buy prices normalised.",
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
-      url: "accumulation",
+      url: "pools/dca",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
-      type: "GRID",
+      type: "DCA",
     },
     {
       title: "RSI Indicator Strategy",

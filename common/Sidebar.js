@@ -108,6 +108,18 @@ const SideBar = ({}) => {
         />
       ),
     },
+    {
+      title: "Portfolio",
+      url: "/portfolio",
+      icon: (
+        <Wallet
+          style={{
+            marginRight: 10,
+            color: "#bdbdbd",
+          }}
+        />
+      ),
+    },
   ];
   return (
     <Box
@@ -132,42 +144,43 @@ const SideBar = ({}) => {
             <strong>Sleep</strong>Swap
           </Typography>
         </Box>
-
-        <Box display={"flex"} justifyContent={"start"}>
-          <Box pr={1}>
-            <img
-              src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
-              style={{
-                color: "white",
-                height: 40,
-                width: 40,
-                borderRadius: 10,
-              }}
-            />
-          </Box>
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-          >
-            <Typography
-              variant="smallheading"
-              style={{
-                color: "white",
-                fontWeight: 600,
-              }}
+        <Link href="/portfolio" style={{ textDecoration: "none" }}>
+          <Box display={"flex"} justifyContent={"start"}>
+            <Box pr={1}>
+              <img
+                src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
+                style={{
+                  color: "white",
+                  height: 40,
+                  width: 40,
+                  borderRadius: 10,
+                }}
+              />
+            </Box>
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              justifyContent={"center"}
             >
-              $23,435
-            </Typography>
+              <Typography
+                variant="smallheading"
+                style={{
+                  color: "white",
+                  fontWeight: 600,
+                }}
+              >
+                $23,435
+              </Typography>
 
-            <Typography
-              variant="small"
-              style={{ color: "#bdbdbd", lineHeight: 1 }}
-            >
-              Wallet Balance
-            </Typography>
+              <Typography
+                variant="small"
+                style={{ color: "#bdbdbd", lineHeight: 1 }}
+              >
+                Wallet Balance
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        </Link>
 
         <Box pt={5}>
           <Link href="/" style={{ textDecoration: "none" }}>
@@ -231,35 +244,6 @@ const SideBar = ({}) => {
             );
           })}
 
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Paper
-              onClick={() => dispatch(setMenuIndex(4))}
-              key={1}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 4 ? constants.highlighColor : "transparent",
-              }}
-            >
-              <Timeline
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 4 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 4
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                My Activities
-              </Typography>
-            </Paper>
-          </Link>
           <Link href="/" style={{ textDecoration: "none" }}>
             <Paper
               onClick={() => dispatch(setMenuIndex(5))}

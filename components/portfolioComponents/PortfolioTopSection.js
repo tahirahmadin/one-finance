@@ -6,30 +6,18 @@ import {
   useTheme,
   useMediaQuery,
   Grid,
-  Hidden,
-  Grow,
   IconButton,
 } from "@mui/material";
 import {
-  AccountBalance,
   ArrowOutward,
   CallReceived,
   ContactSupport,
-  MonetizationOn,
-  Payment,
-  People,
-  Savings,
-  Schedule,
-  SystemUpdateAlt,
   TrendingUp,
-  Wallet,
 } from "@mui/icons-material";
-import LinearProgressComponent from "../../common/LinearProgressComponent";
 import { constants, strategyType } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { useUserInfo } from "../../hooks/useUserInfo";
-import { Tweet } from "react-twitter-widgets";
 
 const useStyles = makeStyles((theme) => ({
   heading: {

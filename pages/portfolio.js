@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
 import SideBar from "../common/Sidebar";
 import Header from "../components/resuableComponents/Header";
-import PortfolioTopSection from "../components/PortfolioComponents/PortfolioTopSection";
+import PortfolioTopSection from "../components/portfolioComponents/PortfolioTopSection";
 import { Tweet } from "react-twitter-widgets";
 import MobileBottomBar from "../common/MobileBottomBar";
 import AuthComponentChecker from "../components/resuableComponents/AuthComponentsChecker";

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Grid,
   Box,
   Button,
   Typography,
   useMediaQuery,
-  ListItem,
-  SwipeableDrawer,
   CircularProgress,
   Hidden,
 } from "@mui/material";
@@ -15,17 +12,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  toggleHeaderMenuExpanded,
-  updateMaticBalance,
-} from "../../reducers/UiReducer";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { Redeem, Wallet } from "@mui/icons-material";
 import { Container } from "@mui/system";
 import { tokenInstance } from "../../contracts";
-import { constants } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -80,11 +72,6 @@ const Header = () => {
   const [success, setSuccess] = useState(0);
   const classes = useStyles();
   const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
-
-  const handleClick = (word) => {
-    dispatch(toggleHeaderMenuExpanded());
-    router.push(word);
-  };
 
   // To connect the smart contract wallet
   const loginWallet = async () => {
@@ -314,70 +301,6 @@ const Header = () => {
                   </Button>
                 </Box>
               )}
-
-              <SwipeableDrawer
-                anchor="right"
-                open={headerMenuExpanded}
-                onOpen={() => dispatch(toggleHeaderMenuExpanded())}
-                onClose={() => dispatch(toggleHeaderMenuExpanded())}
-                classes={{ paper: classes.paper }}
-                hidden={matches}
-              >
-                <Box position="relative">
-                  <ListItem
-                    onClick={handleClick}
-                    sx={{ justifyContent: "flex-start", pb: 2.5, ml: 2.2 }}
-                  >
-                    <KeyboardArrowRightIcon
-                      style={{ color: "#fff", fontSize: 26 }}
-                    />
-                  </ListItem>
-
-                  <ListItem classes={{ root: classes.listItem }}>
-                    <Link href="/faq">
-                      <Typography
-                        onClick={handleClick}
-                        variant="body2"
-                        color="textSecondary"
-                        className={classes.linkItems}
-                        style={{
-                          color:
-                            router.asPath === "/faq"
-                              ? theme.palette.cyan.main
-                              : "white",
-                          padding: "3px 25px",
-                          width: 180,
-                        }}
-                      >
-                        FAQs
-                      </Typography>
-                    </Link>
-                  </ListItem>
-
-                  {/* <Hidden mdUp> d*/}
-                  <ListItem classes={{ root: classes.listItem }}>
-                    <Link href="/dashboard">
-                      <Typography
-                        onClick={handleClick}
-                        variant="body2"
-                        color="textSecondary"
-                        className={classes.linkItems}
-                        style={{
-                          color:
-                            router.asPath === "/dashboard"
-                              ? theme.palette.cyan.main
-                              : "white",
-                          padding: "3px 25px",
-                          width: 180,
-                        }}
-                      >
-                        VIEW DASHBOARD
-                      </Typography>
-                    </Link>
-                  </ListItem>
-                  {/* </Hidden> */}
-                </Box>
-              </SwipeableDrawer>
             </Box>
           </Box>
         </header>

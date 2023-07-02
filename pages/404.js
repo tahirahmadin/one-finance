@@ -29,24 +29,14 @@ const Error404Page = () => {
       <Grid container>
         <Grid item xs={12} sm={6} style={{ textAlign: "center" }}>
           <Typography variant="h1" style={{ marginBottom: theme.spacing(5) }}>
-            Oops ! We burnt the Bread .
+            Oops ! Something went wrong .
           </Typography>
-          <Hidden smUp>
-            {/* <Lottie options={defaultOptions} height={250} /> */}
-            {/* <img
-              src={Error404Icon}
-              alt='error icon'
-              style={{
-                marginBottom: theme.spacing(5),
-              }}
-            /> */}
-          </Hidden>
+
           <Typography
             variant="body1"
             style={{ marginBottom: theme.spacing(5) }}
           >
-            THE PAGE YOU ARE LOOKING FOR DOESN’T SEEM TO EXIST. LET’S GET YOU
-            COOKING AGAIN.
+            THE PAGE YOU ARE LOOKING FOR DOESN’T SEEM TO EXIST.
           </Typography>
           <Link href="/">
             <Button
@@ -64,12 +54,6 @@ const Error404Page = () => {
             </Button>
           </Link>
         </Grid>
-        <Hidden smDown>
-          <Grid item xs={12} sm={6} style={{ textAlign: "center" }}>
-            {/* <Lottie options={defaultOptions} /> */}
-            {/* <img src={Error404Icon} alt='error icon' height='100%' /> */}
-          </Grid>
-        </Hidden>
       </Grid>
     </Box>
   );

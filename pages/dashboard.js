@@ -34,8 +34,12 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     fontWeight: 600,
+    fontSize: 24,
     color: "#f9f9f9",
     textAlign: "left",
+    [theme.breakpoints.down("md")]: {
+      fontSize: 18,
+    },
   },
 
   pageSubtitle: {

@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       height: "100%",
       width: "100%",
+      marginTop: 10,
+      marginBottom: 10,
+      paddingTop: 14,
+      paddingBottom: 14,
+      paddingLeft: 14,
+      paddingRight: 14,
     },
   },
   title: {

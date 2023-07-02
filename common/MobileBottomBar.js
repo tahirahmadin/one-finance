@@ -103,8 +103,8 @@ const MobileBottomBar = () => {
       ),
     },
     {
-      title: "Wallet",
-      url: "/wallet",
+      title: "Portfolio",
+      url: "/portfolio",
       icon: (
         <Wallet
           style={{

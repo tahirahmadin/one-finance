@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import { Box, Grid, Hidden, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Hidden,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
 import PoolCard from "../../components/Pools/PoolCard";
 import Seo from "../../common/Seo";
 import SideBar from "../../common/Sidebar";
 import Header from "../../components/resuableComponents/Header";
+import MobileBottomBar from "../../common/MobileBottomBar";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -20,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
-      paddingTop: "10%",
+      paddingTop: 0,
       paddingLeft: 15,
       paddingRight: 15,
     },
@@ -40,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Pools() {
   const classes = useStyles();
   const theme = useTheme();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
+
   const [pageLoaded, setPageLoaded] = useState(false);
 
   let poolsData = [
@@ -97,18 +107,15 @@ export default function Pools() {
                   <Typography variant="h2" className={classes.pageTitle}>
                     Strategy Pools
                   </Typography>
-                  <Typography variant="small" className={classes.pageSubtitle}>
-                    Place order inside the strategy pools and enjoy high yeilds
-                  </Typography>
 
                   <Grid
                     container
                     display={"flex"}
                     justifyContent="space-between"
-                    spacing={6}
+                    spacing={md ? 2 : 6}
                   >
                     {poolsData.map((singlePool, index) => (
-                      <Grid item md={4} key={index}>
+                      <Grid item md={4} xs={12} sm={12} key={index}>
                         <PoolCard poolStaticData={singlePool} index={index} />
                       </Grid>
                     ))}
@@ -119,6 +126,11 @@ export default function Pools() {
           </Grid>
         </Grid>
       )}
+      <Hidden mdUp>
+        <div style={{ position: "fixed" }}>
+          <MobileBottomBar />
+        </div>
+      </Hidden>
     </Box>
   );
 }

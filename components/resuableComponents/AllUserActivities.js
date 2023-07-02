@@ -3,10 +3,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import {
-  GetActiveOrdersOfUser,
-  GetUserAllActivities,
-} from "../../queries/graphQueries";
+import { GetUserAllActivities } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import { fromWei, toDollarPrice } from "../../utils/helper";
 import { getTokenStaticDataByAddress } from "../../utils/helper";
@@ -23,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AllActivities() {
+export default function AllUserActivities() {
   const classes = useStyles();
   const theme = useTheme();
   const { accountSC } = useWeb3Auth();

@@ -11,12 +11,12 @@ import {
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
-import WalletSummary from "../components/Dashboard/WalletSummary";
-import TrendingCard from "../components/Dashboard/TrendingCard";
 import SideBar from "../common/Sidebar";
 import Header from "../components/resuableComponents/Header";
 import MobileBottomBar from "../common/MobileBottomBar";
-import ReactImageGallery from "react-image-gallery";
+import AllUserActivities from "../components/resuableComponents/AllUserActivities";
+import { useWeb3Auth } from "../hooks/useWeb3Auth";
+import AuthComponentChecker from "../components/resuableComponents/AuthComponentsChecker";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = () => {
+const Activities = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -95,23 +95,13 @@ const Home = () => {
   const md = useMediaQuery(theme.breakpoints.down("md"));
   const [pageLoaded, setPageLoaded] = useState(false);
 
+  const { accountSC, web3AuthSC } = useWeb3Auth();
   useEffect(() => setPageLoaded(true), []);
-
-  const images = [
-    {
-      original:
-        "https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg",
-    },
-    {
-      original:
-        "https://www.cronj.com/blog/wp-content/uploads/How-Crypto-in-Metaverse-is-Revolutionizing-the-Digital-World.png",
-    },
-  ];
 
   return (
     <Box style={{ backgroundColor: "black" }}>
       <Seo
-        title="SleepSwap | Track and Trade Smartly"
+        title="Activities | Track and Trade Smartly"
         description="Trade like a pro"
         keywords="sleepswap"
         image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/gallery.jpg"
@@ -127,44 +117,12 @@ const Home = () => {
             <Header />
             <Box className={classes.background}>
               <Container>
-                <Hidden mdDown>
-                  <Typography variant="h2" className={classes.pageTitle}>
-                    Overview Dashboard
-                  </Typography>
-                </Hidden>
-                <Grid container spacing={2} mb={md ? 5 : 4}>
-                  <Grid item md={8} sm={12} xs={12}>
-                    {/* <Box style={{ height: 100, borderRadius: 100 }}>
-                      <ReactImageGallery
-                        items={images}
-                        autoPlay={true}
-                        infinite={true}
-                        showBullets={true}
-                        showThumbnails={false}
-                        showNav={false}
-                        showFullscreenButton={false}
-                        showPlayButton={false}
-                      />
-                    </Box> */}
-                    <Box className={classes.card1}></Box>
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <WalletSummary />
-                  </Grid>
-                </Grid>
-
-                <Typography variant="h5">Trending</Typography>
-                <Grid container spacing={2}>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
-                  </Grid>
-                </Grid>
+                <Typography variant="h2" className={classes.pageTitle}>
+                  My activities
+                </Typography>
+                <AuthComponentChecker>
+                  <AllUserActivities />
+                </AuthComponentChecker>
               </Container>
             </Box>
           </Grid>
@@ -179,4 +137,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Activities;

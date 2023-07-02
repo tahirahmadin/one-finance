@@ -201,7 +201,7 @@ const Header = () => {
                           borderRadius: "14px",
                           marginRight: 0.5,
                           fontWeight: 500,
-                          color: "#CB8141",
+                          color: "#6EC046",
                           fontSize: 13,
                         }}
                       >

@@ -11,12 +11,12 @@ import {
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
-import WalletSummary from "../components/Dashboard/WalletSummary";
-import TrendingCard from "../components/Dashboard/TrendingCard";
 import SideBar from "../common/Sidebar";
 import Header from "../components/resuableComponents/Header";
+import PortfolioTopSection from "../components/PortfolioComponents/PortfolioTopSection";
+import { Tweet } from "react-twitter-widgets";
 import MobileBottomBar from "../common/MobileBottomBar";
-import ReactImageGallery from "react-image-gallery";
+import AuthComponentChecker from "../components/resuableComponents/AuthComponentsChecker";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
-      paddingTop: 0,
       paddingLeft: 5,
       paddingRight: 5,
     },
@@ -50,11 +49,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
   },
   card1: {
-    height: 295,
-    marginTop: 15,
-    backgroundSize: "cover",
     backgroundImage:
-      "url(https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg)",
+      "url(https://www.analyticsinsight.net/wp-content/uploads/2021/12/Top-10-cryptocurrencies-to-invest-for-US100-in-2022.jpg)",
+    height: 295,
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    marginTop: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
     width: "100%",
     border: "1px solid #414141",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
@@ -69,6 +73,8 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: 5,
       paddingLeft: 5,
       paddingRight: 5,
+      backgroundImage:
+        "url(https://cdn-scripbox-wordpress.scripbox.com/wp-content/uploads/2021/03/invest-rs-1000-every-month.jpg)",
     },
   },
 
@@ -97,21 +103,10 @@ const Home = () => {
 
   useEffect(() => setPageLoaded(true), []);
 
-  const images = [
-    {
-      original:
-        "https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg",
-    },
-    {
-      original:
-        "https://www.cronj.com/blog/wp-content/uploads/How-Crypto-in-Metaverse-is-Revolutionizing-the-Digital-World.png",
-    },
-  ];
-
   return (
     <Box style={{ backgroundColor: "black" }}>
       <Seo
-        title="SleepSwap | Track and Trade Smartly"
+        title="Portfolio | Track and Trade Smartly"
         description="Trade like a pro"
         keywords="sleepswap"
         image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/gallery.jpg"
@@ -129,40 +124,22 @@ const Home = () => {
               <Container>
                 <Hidden mdDown>
                   <Typography variant="h2" className={classes.pageTitle}>
-                    Overview Dashboard
+                    Portfolio
                   </Typography>
                 </Hidden>
-                <Grid container spacing={2} mb={md ? 5 : 4}>
+                <Grid container spacing={2} mb={4} mt={md ? 0 : 1}>
                   <Grid item md={8} sm={12} xs={12}>
-                    {/* <Box style={{ height: 100, borderRadius: 100 }}>
-                      <ReactImageGallery
-                        items={images}
-                        autoPlay={true}
-                        infinite={true}
-                        showBullets={true}
-                        showThumbnails={false}
-                        showNav={false}
-                        showFullscreenButton={false}
-                        showPlayButton={false}
+                    <AuthComponentChecker>
+                      <PortfolioTopSection />
+                    </AuthComponentChecker>
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <Hidden mdDown>
+                      <Tweet
+                        tweetId="1675361153138999299"
+                        options={{ theme: "dark" }}
                       />
-                    </Box> */}
-                    <Box className={classes.card1}></Box>
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <WalletSummary />
-                  </Grid>
-                </Grid>
-
-                <Typography variant="h5">Trending</Typography>
-                <Grid container spacing={2}>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
-                  </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
+                    </Hidden>
                   </Grid>
                 </Grid>
               </Container>

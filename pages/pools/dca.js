@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Grid, Hidden, useTheme } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Hidden,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import Seo from "../../common/Seo";
 import SideBar from "../../common/Sidebar";
 import Header from "../../components/resuableComponents/Header";
 import AccumulationComponent from "../../components/AccumulationComponents/AccumulationComponent";
 import DCAComponent from "../../components/dcaComponents/DCAComponent";
+import Link from "next/link";
+import { KeyboardArrowRight } from "@mui/icons-material";
+import MobileBottomBar from "../../common/MobileBottomBar";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   background: {
+    // backgroundImage: 'url("images/network.png")',
     backgroundPosition: "center center,center center",
     backgroundRepeat: "no-repeat,no-repeat",
     backgroundSize: "cover,contain",
-    backgroundColor: "#16161A",
-    minHeight: "100vh",
-
-    paddingTop: "5%",
+    height: "100%",
+    width: "100%",
+    paddingTop: 5,
     paddingLeft: "3%",
     paddingRight: "3%",
+    [theme.breakpoints.down("md")]: {
+      paddingTop: "2%",
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
   },
   pageTitle: {
     fontWeight: 600,
@@ -35,7 +50,7 @@ const useStyles = makeStyles({
     color: "#414141",
     textAlign: "center",
   },
-});
+}));
 
 export default function DCA() {
   const classes = useStyles();
@@ -61,10 +76,42 @@ export default function DCA() {
           </Hidden>
           <Grid item md={10} style={{ backgroundColor: "black" }}>
             <Header />
-            <DCAComponent />
+            <Box className={classes.background}>
+              <Container>
+                <Typography
+                  variant={"body2"}
+                  fontWeight={300}
+                  fontSize={12}
+                  mb={2}
+                  color={"#bdbdbd"}
+                >
+                  <Link
+                    href="/"
+                    style={{
+                      textDecoration: "none",
+                      color: "#bdbdbd",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Home
+                  </Link>{" "}
+                  <KeyboardArrowRight style={{ fontSize: 18 }} />
+                  Pools
+                  <KeyboardArrowRight style={{ fontSize: 18 }} />
+                  <span style={{ color: "#f9f9f9" }}>DCA Strategy</span>
+                </Typography>
+                {/* Component Starts from here */}
+                <DCAComponent />
+              </Container>
+            </Box>
           </Grid>
         </Grid>
       )}
+      <Hidden mdUp>
+        <div style={{ position: "fixed" }}>
+          <MobileBottomBar />
+        </div>
+      </Hidden>
     </Box>
   );
 }

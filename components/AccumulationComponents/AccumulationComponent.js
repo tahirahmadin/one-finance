@@ -692,6 +692,7 @@ export default function AccumulationComponent() {
                     <Button
                       className={classes.actionButton}
                       onClick={isApproved ? handleStake : handleApprove}
+                      disabled={!accountSC}
                     >
                       {isApproved ? "Place order" : "Approve Investment"}
                     </Button>

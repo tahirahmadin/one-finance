@@ -400,128 +400,102 @@ export default function DCAComponent() {
   };
   return (
     <Box>
-      <Box className={classes.background}>
-        <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
+      <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
 
-        <Container>
-          <Typography
-            variant={"body2"}
-            fontWeight={300}
-            fontSize={12}
-            mb={2}
-            color={"#bdbdbd"}
-          >
-            <Link
-              href="/"
-              style={{
-                textDecoration: "none",
-                color: "#bdbdbd",
-                cursor: "pointer",
-              }}
-            >
-              Home
-            </Link>{" "}
-            <KeyboardArrowRight style={{ fontSize: 18 }} />
-            Pools
-            <KeyboardArrowRight style={{ fontSize: 18 }} />
-            <span style={{ color: "#f9f9f9" }}>DCA Strategy</span>
-          </Typography>
-          {/* Components for create order and top header */}
-          <Grid
-            container
-            display={"flex"}
-            justifyContent="space-between"
-            spacing={4}
-          >
-            <Grid item md={8} sm={12} xs={12}>
-              <DCATopHeader />
-              <Hidden smDown>
-                <Grid container mt={1} spacing={3}>
-                  <Grid item md={12} xs={12}>
-                    dsds
-                    {/* <AccumulateOrderBook /> */}
-                  </Grid>
-                </Grid>
-              </Hidden>
+      {/* Components for create order and top header */}
+      <Grid
+        container
+        display={"flex"}
+        justifyContent="space-between"
+        spacing={4}
+      >
+        <Grid item md={8} sm={12} xs={12}>
+          <DCATopHeader />
+          <Hidden smDown>
+            <Grid container mt={1} spacing={3}>
+              <Grid item md={12} xs={12}>
+                OrderBook
+                {/* <AccumulateOrderBook /> */}
+              </Grid>
             </Grid>
+          </Hidden>
+        </Grid>
 
-            <Grid item md={4} sm={12} xs={12}>
-              <Box className={classes.createCard}>
-                <div className="d-flex flex-column justify-content-around">
-                  <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
-                    Create strategy
-                  </Typography>
+        <Grid item md={4} sm={12} xs={12}>
+          <Box className={classes.createCard}>
+            <div className="d-flex flex-column justify-content-around">
+              <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
+                Create strategy
+              </Typography>
 
-                  <Box mt={2}>
-                    <Accordion
-                      expanded={false}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        border: "1px solid #2d2d32",
-                        borderRadius: 10,
-                        padding: 0,
-                      }}
-                      disableGutters={true}
-                    >
-                      <AccordionSummary
-                        expandIcon={
-                          <ExpandMore
-                            style={{ color: "#f9f9f9", padding: 0 }}
-                          />
-                        }
-                        aria-controls="panel2a-content"
-                        id="panel2a-header"
-                        onClick={() => setOpenTokenSelect(true)}
+              <Box mt={2}>
+                <Accordion
+                  expanded={false}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    border: "1px solid #2d2d32",
+                    borderRadius: 10,
+                    padding: 0,
+                  }}
+                  disableGutters={true}
+                >
+                  <AccordionSummary
+                    expandIcon={
+                      <ExpandMore style={{ color: "#f9f9f9", padding: 0 }} />
+                    }
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                    onClick={() => setOpenTokenSelect(true)}
+                  >
+                    <Box>
+                      <Typography
+                        variant="small"
+                        textAlign={"left"}
+                        lineHeight={0.4}
                       >
-                        <Box>
+                        Select token
+                      </Typography>
+                      <Box
+                        display="flex"
+                        flexDirection={"row"}
+                        justifyContent="flex-start"
+                        alignItems="center"
+                      >
+                        <img
+                          src={selectedToken.logoURI}
+                          alt={"TokenLogo"}
+                          height="28px"
+                        />
+                        <Box ml={1}>
                           <Typography
-                            variant="small"
-                            textAlign={"left"}
-                            lineHeight={0.4}
+                            variant="body2"
+                            fontWeight={600}
+                            color={"#e5e5e5"}
+                            lineHeight={1}
+                            padding={0}
                           >
-                            Select token
-                          </Typography>
-                          <Box
-                            display="flex"
-                            flexDirection={"row"}
-                            justifyContent="flex-start"
-                            alignItems="center"
-                          >
-                            <img
-                              src={selectedToken.logoURI}
-                              alt={"TokenLogo"}
-                              height="28px"
-                            />
-                            <Box ml={1}>
-                              <Typography
-                                variant="body2"
-                                fontWeight={600}
-                                color={"#e5e5e5"}
-                                lineHeight={1}
-                                padding={0}
+                            {selectedToken.symbol}{" "}
+                            {tokenPrice?.price && (
+                              <small
+                                className="blink_me"
+                                style={{ color: "green", fontSize: 11 }}
                               >
-                                {selectedToken.symbol}{" "}
-                                {tokenPrice?.price && (
-                                  <small
-                                    className="blink_me"
-                                    style={{ color: "green", fontSize: 11 }}
-                                  >
-                                    ${tokenPrice?.price}
-                                  </small>
-                                )}
-                              </Typography>
-                            </Box>
-                          </Box>
+                                ${tokenPrice?.price}
+                              </small>
+                            )}
+                          </Typography>
                         </Box>
-                      </AccordionSummary>
-                      <SelectTokenDialog
-                        open={openTokenSelect}
-                        handleClose={() => setOpenTokenSelect(false)}
-                        handleTokenSelected={handleTokenSelected}
-                        disableToken={selectedToken}
-                      />
-                      {/* <AccordionDetails>
+                      </Box>
+                    </Box>
+                  </AccordionSummary>
+                  <SelectTokenDialog
+                    open={openTokenSelect}
+                    handleClose={() => setOpenTokenSelect(false)}
+                    handleTokenSelected={handleTokenSelected}
+                    disableToken={selectedToken}
+                  />
+                  {/* <AccordionDetails>
                       <Box
                         style={{
                           maxHeight: 100,
@@ -562,321 +536,304 @@ export default function DCAComponent() {
                         })}
                       </Box>
                     </AccordionDetails> */}
-                    </Accordion>
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                    my={1}
-                    className={classes.inputWrapper}
-                  >
-                    <Box>
-                      <Typography
-                        variant="small"
-                        textAlign={"left"}
-                        lineHeight={1}
-                      >
-                        Amount:
-                      </Typography>
-                      <Input
-                        value={amount}
-                        onInput={(event) => setAmount(event.target.value)}
-                        fullWidth
-                        placeholder="0"
-                        disableUnderline
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 600,
-                          color: "#e5e5e5",
-                        }}
-                        type="number"
-                      />
-                    </Box>
-                    <Box
-                      display={"flex"}
-                      flexDirection="column"
-                      alignItems="flex-end"
-                      justifyContent={"center"}
-                    >
-                      <Typography
-                        variant="small"
-                        textAlign={"right"}
-                        style={{
-                          width: 200,
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        Available: {usdtBalance}
-                      </Typography>
-                      <Box
-                        display="flex"
-                        flexDirection={"row"}
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <Box
-                          display="flex"
-                          flexDirection={"row"}
-                          justifyContent="flex-start"
-                          alignItems="center"
-                        >
-                          <img
-                            src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
-                            alt="USDT"
-                            height="28px"
-                          />
-                        </Box>
-                        <Typography
-                          variant="body2"
-                          className={classes.para}
-                          fontSize={16}
-                          textAlign="left"
-                          fontWeight={600}
-                        >
-                          USDT
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-
-                  <Grid container spacing={2}>
-                    <Grid item md={6} sm={6} xs={6}>
-                      <Box className={classes.inputWrapper}>
-                        <Typography
-                          variant="small"
-                          textAlign={"left"}
-                          lineHeight={1}
-                        >
-                          Number of orders:
-                        </Typography>
-                        <Input
-                          value={grids}
-                          type="number"
-                          onInput={(event) =>
-                            event.target.value > 0 &&
-                            event.target.value < 10 &&
-                            setGrids(parseInt(event.target.value))
-                          }
-                          fullWidth
-                          placeholder="Enter grid count here"
-                          disableUnderline
-                          style={{ fontSize: 20, fontWeight: 600 }}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid item md={6} sm={6} xs={6}>
-                      <Box className={classes.inputWrapper}>
-                        <Typography
-                          variant="small"
-                          textAlign={"left"}
-                          lineHeight={1}
-                        >
-                          Buy on every(hr):
-                        </Typography>
-                        <Input
-                          type="number"
-                          disableUnderline
-                          value={percent}
-                          fullWidth
-                          placeholder="10"
-                          onChange={(e) => handlePercentage(e)}
-                          style={{ fontSize: 20, fontWeight: 600 }}
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-
-                  <div className="text-center">
-                    <Button
-                      className={classes.actionButton}
-                      onClick={isApproved ? handleStake : handleApprove}
-                    >
-                      {isApproved ? "Place order" : "Approve Investment"}
-                    </Button>
-                  </div>
-                  <Box mt={3}>
-                    <Typography
-                      variant="body2"
-                      mb={1}
-                      fontWeight={500}
-                      fontSize={12}
-                      color={"#f9f9f9"}
-                    >
-                      My Investment summary
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      fontWeight={300}
-                      fontSize={11}
-                      color={"#bdbdbd"}
-                    >
-                      Strategy will buy tokens for amount{" "}
-                      <strong style={{ color: "white" }}>
-                        {amount / grids} USDT{" "}
-                      </strong>{" "}
-                      on every {grids} hours.
-                    </Typography>
-                  </Box>
+                </Accordion>
+              </Box>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                my={1}
+                className={classes.inputWrapper}
+              >
+                <Box>
+                  <Typography variant="small" textAlign={"left"} lineHeight={1}>
+                    Amount:
+                  </Typography>
+                  <Input
+                    value={amount}
+                    onInput={(event) => setAmount(event.target.value)}
+                    fullWidth
+                    placeholder="0"
+                    disableUnderline
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 600,
+                      color: "#e5e5e5",
+                    }}
+                    type="number"
+                  />
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection="column"
+                  alignItems="flex-end"
+                  justifyContent={"center"}
+                >
                   <Typography
-                    mt={1}
-                    variant="body2"
-                    fontWeight={500}
-                    fontSize={12}
-                    color={"white"}
+                    variant="small"
+                    textAlign={"right"}
+                    style={{
+                      width: 200,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
                   >
-                    Expected results:
+                    Available: {usdtBalance}
                   </Typography>
                   <Box
-                    display={"flex"}
-                    flexDirection="row"
-                    justifyContent={"space-around"}
-                    alignItems={"center"}
-                    mt={3}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="flex-end"
+                    alignItems="center"
                   >
                     <Box
-                      display={"flex"}
-                      flexDirection="column"
-                      justifyContent={"center"}
-                      alignItems={"center"}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="flex-start"
+                      alignItems="center"
                     >
-                      <AvTimer style={{ color: "#bdbdbd" }} />
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                      >
-                        Accumulate
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        fontSize={14}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                        mt={1}
-                      >
-                        <strong> {getTotalTokenAccumulated()} ETH</strong>
-                      </Typography>
+                      <img
+                        src="https://cdn3d.iconscout.com/3d/premium/thumb/usdt-coin-4999518-4160019.png"
+                        alt="USDT"
+                        height="28px"
+                      />
                     </Box>
-                    <Box
-                      display={"flex"}
-                      flexDirection="column"
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                    >
-                      <BorderClear style={{ color: "#bdbdbd" }} />
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                      >
-                        Target Price
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        fontSize={14}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                        mt={1}
-                      >
-                        <strong> $10,000</strong>
-                      </Typography>
-                    </Box>
-                    <Box
-                      display={"flex"}
-                      flexDirection="column"
-                      justifyContent={"center"}
-                      alignItems={"center"}
-                    >
-                      <SentimentSatisfiedAlt style={{ color: "#bdbdbd" }} />
-                      <Typography
-                        variant="body2"
-                        fontWeight={400}
-                        fontSize={11}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                      >
-                        You may receive
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        fontSize={14}
-                        lineHeight={1}
-                        color={"#e5e5e5"}
-                        mt={1}
-                      >
-                        <strong>
-                          {" "}
-                          $ {(getTotalTokenAccumulated() * 10000).toFixed(
-                            1
-                          )}{" "}
-                        </strong>
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Box
-                    display={"flex"}
-                    flexDirection={"column"}
-                    alignItems={"center"}
-                    justifyContent="center"
-                    mt={2}
-                  >
                     <Typography
                       variant="body2"
+                      className={classes.para}
+                      fontSize={16}
+                      textAlign="left"
                       fontWeight={600}
-                      fontSize={22}
-                      color={"#28C59A"}
                     >
-                      <strong>
-                        {(
-                          ((getTotalTokenAccumulated() * 10000 - amount) *
-                            100) /
-                          amount
-                        ).toFixed()}
-                        %
-                      </strong>
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      fontWeight={400}
-                      fontSize={12}
-                      lineHeight={1}
-                      color={"#bdbdbd"}
-                    >
-                      Return on investment*
+                      USDT
                     </Typography>
                   </Box>
-                </div>
+                </Box>
               </Box>
-            </Grid>
-          </Grid>
-          {/* Recent orders table */}
-          <Box mt={5}>
-            <div>
+
+              <Grid container spacing={2}>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Box className={classes.inputWrapper}>
+                    <Typography
+                      variant="small"
+                      textAlign={"left"}
+                      lineHeight={1}
+                    >
+                      Number of orders:
+                    </Typography>
+                    <Input
+                      value={grids}
+                      type="number"
+                      onInput={(event) =>
+                        event.target.value > 0 &&
+                        event.target.value < 10 &&
+                        setGrids(parseInt(event.target.value))
+                      }
+                      fullWidth
+                      placeholder="Enter grid count here"
+                      disableUnderline
+                      style={{ fontSize: 20, fontWeight: 600 }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item md={6} sm={6} xs={6}>
+                  <Box className={classes.inputWrapper}>
+                    <Typography
+                      variant="small"
+                      textAlign={"left"}
+                      lineHeight={1}
+                    >
+                      Buy on every(hr):
+                    </Typography>
+                    <Input
+                      type="number"
+                      disableUnderline
+                      value={percent}
+                      fullWidth
+                      placeholder="10"
+                      onChange={(e) => handlePercentage(e)}
+                      style={{ fontSize: 20, fontWeight: 600 }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <div className="text-center">
+                <Button
+                  className={classes.actionButton}
+                  onClick={isApproved ? handleStake : handleApprove}
+                  disabled={!accountSC}
+                >
+                  {isApproved ? "Place order" : "Approve Investment"}
+                </Button>
+              </div>
+              <Box mt={3}>
+                <Typography
+                  variant="body2"
+                  mb={1}
+                  fontWeight={500}
+                  fontSize={12}
+                  color={"#f9f9f9"}
+                >
+                  My Investment summary
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={300}
+                  fontSize={11}
+                  color={"#bdbdbd"}
+                >
+                  Strategy will buy tokens for amount{" "}
+                  <strong style={{ color: "white" }}>
+                    {amount / grids} USDT{" "}
+                  </strong>{" "}
+                  on every {grids} hours.
+                </Typography>
+              </Box>
               <Typography
-                variant="h6"
-                className={classes.heading}
-                fontWeight={700}
+                mt={1}
+                variant="body2"
+                fontWeight={500}
+                fontSize={12}
+                color={"white"}
               >
-                My investments
+                Expected results:
               </Typography>
-              {/* <UserPoolOrders poolType={"ACCUMULATION"} /> */}
+              <Box
+                display={"flex"}
+                flexDirection="row"
+                justifyContent={"space-around"}
+                alignItems={"center"}
+                mt={3}
+              >
+                <Box
+                  display={"flex"}
+                  flexDirection="column"
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <AvTimer style={{ color: "#bdbdbd" }} />
+                  <Typography
+                    variant="body2"
+                    fontWeight={400}
+                    fontSize={11}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                  >
+                    Accumulate
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                    mt={1}
+                  >
+                    <strong> {getTotalTokenAccumulated()} ETH</strong>
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection="column"
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <BorderClear style={{ color: "#bdbdbd" }} />
+                  <Typography
+                    variant="body2"
+                    fontWeight={400}
+                    fontSize={11}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                  >
+                    Target Price
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                    mt={1}
+                  >
+                    <strong> $10,000</strong>
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection="column"
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <SentimentSatisfiedAlt style={{ color: "#bdbdbd" }} />
+                  <Typography
+                    variant="body2"
+                    fontWeight={400}
+                    fontSize={11}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                  >
+                    You may receive
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    lineHeight={1}
+                    color={"#e5e5e5"}
+                    mt={1}
+                  >
+                    <strong>
+                      {" "}
+                      $ {(getTotalTokenAccumulated() * 10000).toFixed(1)}{" "}
+                    </strong>
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"center"}
+                justifyContent="center"
+                mt={2}
+              >
+                <Typography
+                  variant="body2"
+                  fontWeight={600}
+                  fontSize={22}
+                  color={"#28C59A"}
+                >
+                  <strong>
+                    {(
+                      ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
+                      amount
+                    ).toFixed()}
+                    %
+                  </strong>
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight={400}
+                  fontSize={12}
+                  lineHeight={1}
+                  color={"#bdbdbd"}
+                >
+                  Return on investment*
+                </Typography>
+              </Box>
             </div>
           </Box>
-        </Container>
-      </Box>
-      <Hidden mdUp>
-        <div style={{ position: "fixed" }}>
-          <MobileBottomBar />
+        </Grid>
+      </Grid>
+      {/* Recent orders table */}
+      <Box mt={5}>
+        <div>
+          <Typography variant="h6" className={classes.heading} fontWeight={700}>
+            My investments
+          </Typography>
+          {/* <UserPoolOrders poolType={"ACCUMULATION"} /> */}
         </div>
-      </Hidden>
+      </Box>
     </Box>
   );
 }

@@ -13,11 +13,13 @@ import {
   Telegram,
   Timeline,
   Wallet,
+  YouTube,
 } from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
 import Link from "next/link";
 import { constants } from "../utils/constants";
 import { useRouter } from "next/router";
+import { useWeb3Auth } from "../hooks/useWeb3Auth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,6 +72,8 @@ const SideBar = ({}) => {
 
   const sm = useMediaQuery(theme.breakpoints.down("md"));
   const { menuIndex } = store.ui;
+
+  const { disconnect } = useWeb3Auth();
 
   const menuItems = [
     {
@@ -286,7 +290,7 @@ const SideBar = ({}) => {
                   menuIndex === 6 ? constants.highlighColor : "transparent",
               }}
             >
-              <Help
+              <YouTube
                 style={{
                   marginRight: 10,
                   color: menuIndex === 6 ? "white" : "#bdbdbd",
@@ -300,39 +304,35 @@ const SideBar = ({}) => {
                     : classes.menuTitle
                 }
               >
-                How To Use
+                Academy
               </Typography>
             </Paper>
           </Link>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Paper
-              onClick={() => dispatch(setMenuIndex(7))}
-              key={0}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 7 ? constants.highlighColor : "transparent",
+          <Paper
+            onClick={disconnect}
+            key={0}
+            className={classes.selectedPaper}
+            sx={{
+              boxShadow: 0,
+              bgcolor:
+                menuIndex === 7 ? constants.highlighColor : "transparent",
+            }}
+          >
+            <Logout
+              style={{
+                marginRight: 10,
+                color: menuIndex === 7 ? "white" : "#bdbdbd",
               }}
+            />
+            <Typography
+              variant="title1"
+              className={
+                menuIndex === 7 ? classes.selectedMenuTitle : classes.menuTitle
+              }
             >
-              <Logout
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 7 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 7
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Logout
-              </Typography>
-            </Paper>
-          </Link>
+              Logout
+            </Typography>
+          </Paper>
         </Box>
       </Box>
     </Box>

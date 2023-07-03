@@ -44,47 +44,6 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 18,
     },
   },
-
-  pageSubtitle: {
-    color: "#bdbdbd",
-    textAlign: "left",
-  },
-  card1: {
-    height: 295,
-    marginTop: 15,
-    backgroundSize: "cover",
-    backgroundImage:
-      "url(https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg)",
-    width: "100%",
-    border: "1px solid #414141",
-    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
-    borderRadius: 14,
-    "&:hover": {
-      boxShadow: "0px 24px 33px -9px #0000005C",
-    },
-
-    [theme.breakpoints.down("md")]: {
-      height: 200,
-      paddingTop: 5,
-      paddingBottom: 5,
-      paddingLeft: 5,
-      paddingRight: 5,
-    },
-  },
-
-  title: {
-    fontWeight: 600,
-    color: "#f9f9f9",
-    textAlign: "left",
-    fontSize: 16,
-  },
-  description: {
-    fontWeight: 400,
-    color: "#bdbdbd",
-    textAlign: "left",
-    lineHeight: 1.5,
-    paddingTop: 5,
-  },
 }));
 
 const Activities = () => {
@@ -120,9 +79,7 @@ const Activities = () => {
                 <Typography variant="h2" className={classes.pageTitle}>
                   My activities
                 </Typography>
-                <AuthComponentChecker>
-                  <AllUserActivities />
-                </AuthComponentChecker>
+                <AuthComponentChecker childComponent={<AllUserActivities />} />
               </Container>
             </Box>
           </Grid>

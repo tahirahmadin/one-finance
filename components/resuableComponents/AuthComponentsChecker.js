@@ -92,7 +92,7 @@ const AuthComponentChecker = (props) => {
         <>
           {web3AuthSC && (
             <>
-              {accountSC && props}
+              {accountSC && props.childComponent}
               {!accountSC && <LoginComponent />}
             </>
           )}

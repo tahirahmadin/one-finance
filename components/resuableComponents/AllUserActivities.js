@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import TimeAgo from "timeago-react";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { GetUserAllActivities } from "../../queries/graphQueries";
@@ -24,6 +24,7 @@ export default function AllUserActivities() {
   const classes = useStyles();
   const theme = useTheme();
   const { accountSC } = useWeb3Auth();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
 
   const [activities, setActivities] = useState(null);
 
@@ -56,138 +57,119 @@ export default function AllUserActivities() {
 
   return (
     <Box className={classes.boxCard}>
-      <Grid px={2} container py={1}>
-        <Grid item md={2}>
-          <Box>
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              TOKEN
-            </Typography>
-          </Box>
+      <Grid px={md ? 0 : 2} container py={1}>
+        <Grid item md={2} sm={2} xs={2}>
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
+          >
+            Token
+          </Typography>
         </Grid>
         <Grid
           item
           md={2}
+          sm={2}
+          xs={2}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Box>
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              ACTION
-            </Typography>
-          </Box>
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
+          >
+            Action
+          </Typography>
         </Grid>
 
         <Grid
           item
           md={2}
+          sm={2}
+          xs={2}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Box>
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              Price($)
-            </Typography>
-          </Box>
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
+          >
+            Price($)
+          </Typography>
         </Grid>
         <Grid
           item
           md={2}
+          sm={2}
+          xs={2}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="center"
-            alignItems="flex-start"
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
           >
-            <Box>
-              <Typography
-                variant="body2"
-                textAlign="left"
-                fontWeight={400}
-                color={"#bdbdbd"}
-                fontSize={14}
-              >
-                TYPE
-              </Typography>
-            </Box>
-          </Box>
+            Type
+          </Typography>
         </Grid>
 
         <Grid
           item
           md={2}
+          sm={2}
+          xs={2}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-start"
-            alignItems="flex-start"
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
           >
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              Avg Buy Price($)
-            </Typography>
-          </Box>
+            Amount
+          </Typography>
         </Grid>
         <Grid
           item
           md={2}
+          sm={2}
+          xs={2}
           display="flex"
           flexDirection={"row"}
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-start"
-            alignItems="flex-start"
+          <Typography
+            variant="body2"
+            textAlign="left"
+            fontWeight={400}
+            color={"#bdbdbd"}
+            fontSize={md ? 10 : 12}
           >
-            <Typography
-              variant="body2"
-              textAlign="left"
-              fontWeight={400}
-              color={"#bdbdbd"}
-              fontSize={14}
-            >
-              Time
-            </Typography>
-          </Box>
+            Time
+          </Typography>
         </Grid>
       </Grid>
       {activities &&
@@ -234,7 +216,7 @@ export default function AllUserActivities() {
                     textAlign="left"
                     fontWeight={400}
                     color={"rgba(130, 71, 229, 1)"}
-                    fontSize={14}
+                    fontSize={12}
                   >
                     {getSentence(activity.action)}
                   </Typography>
@@ -260,7 +242,7 @@ export default function AllUserActivities() {
                       textAlign="left"
                       fontWeight={400}
                       color={"#bdbdbd"}
-                      fontSize={14}
+                      fontSize={12}
                     >
                       ${toDollarPrice(activity.price)}
                     </Typography>
@@ -286,7 +268,7 @@ export default function AllUserActivities() {
                     textAlign="left"
                     fontWeight={400}
                     color={"#bdbdbd"}
-                    fontSize={14}
+                    fontSize={12}
                   >
                     {activity.strategyType}
                   </Typography>
@@ -312,7 +294,7 @@ export default function AllUserActivities() {
                     textAlign="left"
                     fontWeight={400}
                     color={"#bdbdbd"}
-                    fontSize={14}
+                    fontSize={12}
                   >
                     $0.73
                   </Typography>
@@ -337,7 +319,7 @@ export default function AllUserActivities() {
                     textAlign="left"
                     fontWeight={400}
                     color={"#bdbdbd"}
-                    fontSize={14}
+                    fontSize={12}
                   >
                     <TimeAgo datetime={parseInt(activity.timestamp) * 1000} />
                   </Typography>

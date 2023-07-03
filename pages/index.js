@@ -12,11 +12,18 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
 import Seo from "../common/Seo";
 import WalletSummary from "../components/Dashboard/WalletSummary";
-import TrendingCard from "../components/Dashboard/TrendingCard";
 import SideBar from "../common/Sidebar";
 import Header from "../components/resuableComponents/Header";
 import MobileBottomBar from "../common/MobileBottomBar";
 import ReactImageGallery from "react-image-gallery";
+import TopPoolCard from "../components/Dashboard/TopPoolCard";
+import {
+  AccessTime,
+  Architecture,
+  Pix,
+  Savings,
+  TrendingUp,
+} from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -153,18 +160,46 @@ const Home = () => {
                   </Grid>
                 </Grid>
 
-                <Typography variant="h5">Trending</Typography>
+                <Typography variant="h6" fontWeight={600}>
+                  Top pools this week
+                </Typography>
                 <Grid container spacing={2}>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
+                  <Grid item md={3} sm={12} xs={12}>
+                    <TopPoolCard
+                      title={"Accumulation"}
+                      invested={"112,324"}
+                      change={"12.32"}
+                      icon={<TrendingUp />}
+                    />
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
+                  <Grid item md={3} sm={12} xs={12}>
+                    <TopPoolCard
+                      title={"RSI"}
+                      invested={"93,324"}
+                      change={"9.32"}
+                      icon={<Architecture />}
+                    />
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
-                    <TrendingCard />
+                  <Grid item md={3} sm={12} xs={12}>
+                    <TopPoolCard
+                      title={"Spot Grid"}
+                      invested={"73,324"}
+                      change={"7.11"}
+                      icon={<Pix />}
+                    />
+                  </Grid>
+                  <Grid item md={3} sm={12} xs={12}>
+                    <TopPoolCard
+                      title={"DCA"}
+                      invested={"53,324"}
+                      change={"6.32"}
+                      icon={<AccessTime />}
+                    />
                   </Grid>
                 </Grid>
+                <Typography variant="h6" fontWeight={600} mt={3}>
+                  Top tokens
+                </Typography>
               </Container>
             </Box>
           </Grid>

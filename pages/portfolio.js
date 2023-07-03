@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "3%",
     paddingRight: "3%",
     [theme.breakpoints.down("md")]: {
+      paddingTop: 0,
+
       paddingLeft: 5,
       paddingRight: 5,
     },
@@ -122,16 +124,16 @@ const Home = () => {
             <Header />
             <Box className={classes.background}>
               <Container>
-                <Hidden mdDown>
-                  <Typography variant="h2" className={classes.pageTitle}>
-                    Portfolio
-                  </Typography>
-                </Hidden>
+                <Typography variant="h2" className={classes.pageTitle}>
+                  Portfolio
+                </Typography>
+
                 <Grid container spacing={2} mb={4} mt={md ? 0 : 1}>
                   <Grid item md={8} sm={12} xs={12}>
-                    <AuthComponentChecker>
-                      <PortfolioTopSection />
-                    </AuthComponentChecker>
+                    {/* <AuthComponentChecker
+                      childComponent={<PortfolioTopSection />}
+                    /> */}
+                    <PortfolioTopSection />
                   </Grid>
                   <Grid item md={4} sm={12} xs={12}>
                     <Hidden mdDown>

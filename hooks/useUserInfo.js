@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { useLazyQuery } from "@apollo/client";
-
 import { GetPoolUserDataByAddress } from "../queries/graphQueries";
 import { strategyType } from "../utils/constants";
 import Web3 from "web3";

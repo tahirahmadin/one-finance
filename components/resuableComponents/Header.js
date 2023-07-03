@@ -263,43 +263,45 @@ const Header = () => {
                   )}
                 </Box>
               ) : (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    height: 40,
-                    border: "2px solid" + theme.palette.secondary.main,
-                    borderRadius: "20px",
-                    marginRight: 1,
-                    fontWeight: 500,
-                  }}
-                >
-                  <p
-                    style={{
-                      color: "white",
-                      marginLeft: 10,
-                      marginRight: 5,
-                      marginTop: 15,
+                <Link href="/portfolio" style={{ textDecoration: "none" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      height: 40,
+                      border: "2px solid" + theme.palette.secondary.main,
+                      borderRadius: "20px",
+                      marginRight: 1,
                       fontWeight: 500,
-                      fontSize: matches ? 14 : 12,
                     }}
                   >
-                    {accountSC &&
-                      accountSC.slice(0, 3) + "..." + accountSC.slice(38, 42)}
-                  </p>
+                    <p
+                      style={{
+                        color: "white",
+                        marginLeft: 10,
+                        marginRight: 5,
+                        marginTop: 15,
+                        fontWeight: 500,
+                        fontSize: matches ? 14 : 12,
+                      }}
+                    >
+                      {accountSC &&
+                        accountSC.slice(0, 3) + "..." + accountSC.slice(38, 42)}
+                    </p>
 
-                  <Button
-                    color="secondary"
-                    style={{
-                      borderTopRightRadius: "20px",
-                      borderBottomRightRadius: "20px",
-                    }}
-                    className={classes.buttonConnect}
-                  >
-                    <Wallet />
-                  </Button>
-                </Box>
+                    <Button
+                      color="secondary"
+                      style={{
+                        borderTopRightRadius: "20px",
+                        borderBottomRightRadius: "20px",
+                      }}
+                      className={classes.buttonConnect}
+                    >
+                      <Wallet />
+                    </Button>
+                  </Box>
+                </Link>
               )}
             </Box>
           </Box>

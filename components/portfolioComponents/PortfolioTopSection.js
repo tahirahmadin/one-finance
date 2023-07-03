@@ -89,26 +89,6 @@ export default function PortfolioTopSection() {
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
-  const { accountSC } = useWeb3Auth();
-
-  const [userPoolState, setUserPoolState] = useState(null);
-
-  const { poolInfo: poolGraphData, loading } = usePoolInfo(
-    strategyType.ACCUMULATION
-  );
-
-  useEffect(() => {
-    if (accountSC) {
-      async function asyncFn() {
-        let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
-          strategyType.ACCUMULATION
-        );
-        console.log(userPoolGraphData);
-        setUserPoolState(userPoolGraphData);
-      }
-      asyncFn();
-    }
-  }, [accountSC]);
 
   return (
     <Box className={classes.card}>

@@ -16,7 +16,15 @@ import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { constants, strategyType } from "../../utils/constants";
-import { Info } from "@mui/icons-material";
+import {
+  AccessTime,
+  Info,
+  LockClock,
+  MoodTwoTone,
+  Pix,
+  ShoppingBasket,
+  TramRounded,
+} from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -91,24 +99,15 @@ export default function WalletSummary() {
   return (
     <Box pt={0} className={classes.card} mt={md ? 0 : 2}>
       <Box>
-        <Typography variant="body2">Your Balance</Typography>
-        <Typography variant="h2" style={{ fontWeight: 600, lineHeight: 1.6 }}>
-          $25,434
+        <Typography variant="body2" color="#bdbdbd" fontSize={12}>
+          My Investments
         </Typography>
-      </Box>
-      <Box
-        display="flex"
-        flexDirection={"row"}
-        justifyContent="space-between"
-        alignItems="center"
-        mt={2}
-      >
-        <Typography variant="body2">Recent Transaction</Typography>
         <Typography
-          variant="small"
-          style={{ color: constants.highlighColorDark }}
+          variant="h2"
+          style={{ fontWeight: 600, lineHeight: 1.6 }}
+          fontSize={21}
         >
-          View All
+          $2,434
         </Typography>
       </Box>
 
@@ -116,10 +115,10 @@ export default function WalletSummary() {
         <Box
           display={"flex"}
           justifyContent={"space-between"}
-          mt={3}
+          mt={1}
           style={{
             border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
+            padding: "7px 7px 7px 7px",
             borderRadius: 10,
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
@@ -129,10 +128,7 @@ export default function WalletSummary() {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
-              height="35px"
-            />
+            <ShoppingBasket style={{ color: "#e5e5e5" }} />
             <Box
               ml={1}
               display={"flex"}
@@ -145,16 +141,7 @@ export default function WalletSummary() {
                 color={"#ffffff"}
                 style={{ lineHeight: 1.4 }}
               >
-                DEPOSIT
-              </Typography>
-              <Typography
-                variant="verysmall"
-                textAlign="left"
-                fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
-              >
-                Accumulation Strategy
+                Accumulation
               </Typography>
             </Box>
           </Box>
@@ -191,7 +178,7 @@ export default function WalletSummary() {
           mt={1}
           style={{
             border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
+            padding: "7px 7px 7px 7px",
             borderRadius: 10,
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
@@ -201,10 +188,7 @@ export default function WalletSummary() {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
-              height="35px"
-            />
+            <LockClock style={{ color: "#e5e5e5" }} />
             <Box
               ml={1}
               display={"flex"}
@@ -217,16 +201,7 @@ export default function WalletSummary() {
                 color={"#ffffff"}
                 style={{ lineHeight: 1.4 }}
               >
-                DEPOSIT
-              </Typography>
-              <Typography
-                variant="verysmall"
-                textAlign="left"
-                fontWeight={500}
-                color={"#757575"}
-                style={{ lineHeight: 1.4 }}
-              >
-                Accumulation Strategy
+                DCA
               </Typography>
             </Box>
           </Box>
@@ -244,6 +219,66 @@ export default function WalletSummary() {
                 style={{ lineHeight: 1.4 }}
               >
                 $1000
+              </Typography>
+              <Typography
+                variant="verysmall"
+                textAlign="left"
+                fontWeight={500}
+                color={"#757575"}
+                style={{ lineHeight: 1.4 }}
+              >
+                01/03/23
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          display={"flex"}
+          justifyContent={"space-between"}
+          mt={1}
+          style={{
+            border: "1px solid rgba(106, 85, 234,0.1)",
+            padding: "7px 7px 7px 7px",
+            borderRadius: 10,
+            backgroundColor: "rgba(106, 85, 234,0.03)",
+          }}
+        >
+          <Box
+            display={"flex"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <TramRounded style={{ color: "#e5e5e5" }} />
+            <Box
+              ml={1}
+              display={"flex"}
+              flexDirection="column"
+              justifyContent="center"
+              alignItems={"flex-start"}
+            >
+              <Typography
+                variant="body2"
+                color={"#ffffff"}
+                style={{ lineHeight: 1.4 }}
+              >
+                RSI Strategy
+              </Typography>
+            </Box>
+          </Box>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Box
+              ml={1}
+              display={"flex"}
+              flexDirection="column"
+              justifyContent="center"
+              alignItems={"flex-end"}
+            >
+              <Typography
+                variant="body2"
+                color={"#ffffff"}
+                style={{ lineHeight: 1.4 }}
+              >
+                $540
               </Typography>
               <Typography
                 variant="verysmall"

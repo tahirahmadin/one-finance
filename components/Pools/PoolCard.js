@@ -190,7 +190,7 @@ export default function PoolCard({ poolStaticData, index }) {
           <Typography variant="small" className={classes.field}>
             Invested($)
           </Typography>
-          <Typography variant="body3" className={classes.value}>
+          <Typography variant="body3" className={classes.value} fontSize={14}>
             $
             {poolGraphData.invested &&
               parseFloat(
@@ -209,7 +209,7 @@ export default function PoolCard({ poolStaticData, index }) {
           <Typography variant="small" className={classes.field}>
             Volume($)
           </Typography>
-          <Typography variant="body3" className={classes.value}>
+          <Typography variant="body3" className={classes.value} fontSize={14}>
             $43K
           </Typography>
         </Box>
@@ -224,7 +224,7 @@ export default function PoolCard({ poolStaticData, index }) {
           <Typography variant="small" className={classes.field}>
             Participants
           </Typography>
-          <Typography variant="body3" className={classes.value}>
+          <Typography variant="body3" className={classes.value} fontSize={14}>
             {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
           </Typography>
         </Box>
@@ -233,15 +233,21 @@ export default function PoolCard({ poolStaticData, index }) {
         <Box
           display={"flex"}
           justifyContent={"space-between"}
+          alignItems={"center"}
           mt={3}
           style={{
             border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
+            padding: "8px 8px 8px 8px",
             borderRadius: 10,
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
         >
-          <Typography variant="body2" className={classes.field} ml={1}>
+          <Typography
+            variant="body2"
+            className={classes.field}
+            ml={1}
+            fontSize={13}
+          >
             Your stake
           </Typography>
           <Typography
@@ -249,7 +255,7 @@ export default function PoolCard({ poolStaticData, index }) {
             className={classes.value}
             textAlign="center"
             fontWeight={700}
-            ml={1}
+            mr={1}
           >
             $
             {poolUserGraphData
@@ -271,7 +277,12 @@ export default function PoolCard({ poolStaticData, index }) {
             backgroundColor: "rgba(106, 85, 234,0.03)",
           }}
         >
-          <Typography variant="body2" className={classes.field} ml={1}>
+          <Typography
+            variant="body2"
+            className={classes.field}
+            ml={1}
+            fontSize={13}
+          >
             In order
           </Typography>
           <Typography
@@ -279,7 +290,7 @@ export default function PoolCard({ poolStaticData, index }) {
             className={classes.para}
             textAlign="center"
             fontWeight={700}
-            ml={1}
+            mr={1}
           >
             $
             {poolUserGraphData

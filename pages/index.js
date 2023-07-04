@@ -20,10 +20,14 @@ import TopPoolCard from "../components/Dashboard/TopPoolCard";
 import {
   AccessTime,
   Architecture,
+  LockClock,
   Pix,
   Savings,
+  ShoppingBasket,
+  Train,
   TrendingUp,
 } from "@mui/icons-material";
+import ArticleCard from "../components/Dashboard/ArticleCard";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -139,7 +143,7 @@ const Home = () => {
                     Overview Dashboard
                   </Typography>
                 </Hidden>
-                <Grid container spacing={2} mb={md ? 5 : 4}>
+                <Grid container spacing={2} mb={md ? 5 : 6}>
                   <Grid item md={8} sm={12} xs={12}>
                     {/* <Box style={{ height: 100, borderRadius: 100 }}>
                       <ReactImageGallery
@@ -163,13 +167,13 @@ const Home = () => {
                 <Typography variant="h6" fontWeight={600}>
                   Top pools this week
                 </Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={md ? 0 : 2} mb={md ? 5 : 6}>
                   <Grid item md={3} sm={12} xs={12}>
                     <TopPoolCard
                       title={"Accumulation"}
                       invested={"112,324"}
                       change={"12.32"}
-                      icon={<TrendingUp />}
+                      icon={<ShoppingBasket />}
                     />
                   </Grid>
                   <Grid item md={3} sm={12} xs={12}>
@@ -177,7 +181,7 @@ const Home = () => {
                       title={"RSI"}
                       invested={"93,324"}
                       change={"9.32"}
-                      icon={<Architecture />}
+                      icon={<Train />}
                     />
                   </Grid>
                   <Grid item md={3} sm={12} xs={12}>
@@ -185,7 +189,7 @@ const Home = () => {
                       title={"Spot Grid"}
                       invested={"73,324"}
                       change={"7.11"}
-                      icon={<Pix />}
+                      icon={<LockClock />}
                     />
                   </Grid>
                   <Grid item md={3} sm={12} xs={12}>
@@ -193,13 +197,41 @@ const Home = () => {
                       title={"DCA"}
                       invested={"53,324"}
                       change={"6.32"}
-                      icon={<AccessTime />}
+                      icon={<LockClock />}
                     />
                   </Grid>
                 </Grid>
                 <Typography variant="h6" fontWeight={600} mt={3}>
-                  Top tokens
+                  Learning booth
                 </Typography>
+                <Grid container spacing={md ? 2 : 4}>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <ArticleCard
+                      title={
+                        "Why Dollar Cost Averaging is the best bet to accumulate your favourite crypto for long term"
+                      }
+                      image="https://zebpay.com/in/wp-content/uploads/2022/09/Dollar-Cost-Average.jpg"
+                    />
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <ArticleCard
+                      title={
+                        "How accumulation strategy works, and give returns in one bull cycle"
+                      }
+                      image={
+                        "https://public.bnbstatic.com/static/academy/uploads-original/db73faaafcff40a19b1d8e952d75562b.png"
+                      }
+                    />
+                  </Grid>
+                  <Grid item md={4} sm={12} xs={12}>
+                    <ArticleCard
+                      title={
+                        "Why trading with indicators is the best way to avoid rist in investment"
+                      }
+                      image="https://en.cryptonomist.ch/wp-content/uploads/2019/06/RSI-indicator-cryptocurrency-trading.jpg"
+                    />
+                  </Grid>
+                </Grid>
               </Container>
             </Box>
           </Grid>

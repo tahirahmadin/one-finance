@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { GetPoolUserDataByAddress } from "../queries/graphQueries";
-import { strategyType } from "../utils/constants";
 import Web3 from "web3";
 import ethersServiceProvider from "../services/ethersServiceProvider";
 
@@ -27,7 +26,7 @@ export function useUserInfo() {
   useEffect(() => {
     if (accountSC) {
       getPoolUserDataQuery({
-        variables: { user: accountSC, type: strategyType.ACCUMULATION },
+        variables: { user: accountSC, type: STRATEGY_TYPE_ENUM.ACCUMULATION },
       });
     }
   }, [accountSC]);

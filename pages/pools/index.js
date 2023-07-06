@@ -8,13 +8,13 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useChain } from "react-moralis";
 import { Container } from "@mui/system";
 import PoolCard from "../../components/Pools/PoolCard";
 import Seo from "../../common/Seo";
 import SideBar from "../../common/Sidebar";
 import Header from "../../components/resuableComponents/Header";
 import MobileBottomBar from "../../common/MobileBottomBar";
+import { STRATEGY_TYPE_ENUM } from "./../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -60,7 +60,7 @@ export default function Pools() {
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
       url: "pools/accumulation",
       contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
-      type: "ACCUMULATION",
+      type: STRATEGY_TYPE_ENUM.ACCUMULATION,
     },
     {
       title: "DCA Strategy",
@@ -69,7 +69,7 @@ export default function Pools() {
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/blockchain-6841751-5607102.png",
       url: "pools/dca",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
-      type: "DCA",
+      type: STRATEGY_TYPE_ENUM.DCA,
     },
     {
       title: "RSI Indicator Strategy",
@@ -78,7 +78,7 @@ export default function Pools() {
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/growth-chart-3943015-3273369.png",
       url: "accumulation",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
-      type: "ACCUMULATION",
+      type: STRATEGY_TYPE_ENUM.DCA,
     },
   ];
 

@@ -13,9 +13,6 @@ import {
 import Link from "next/link";
 import { useUserInfo } from "../../hooks/useUserInfo";
 
-import Web3 from "web3";
-
-import { constants, strategyType } from "../../utils/constants";
 import { Info } from "@mui/icons-material";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 
@@ -98,7 +95,7 @@ export default function AccumulateUserSummary() {
     if (accountSC) {
       async function asyncFn() {
         let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
-          strategyType.ACCUMULATION
+          STRATEGY_TYPE_ENUM.ACCUMULATION
         );
         console.log(userPoolGraphData);
         setUserPoolState(userPoolGraphData);

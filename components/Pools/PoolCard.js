@@ -14,8 +14,8 @@ import { GetPoolUserDataByAddress } from "./../../queries/graphQueries";
 import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { constants, strategyType } from "../../utils/constants";
-import { Info } from "@mui/icons-material";
+import { constants, STRATEGY_TYPE_ENUM } from "../../utils/constants";
+import { Info, TrendingUp } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     color: "#f9f9f9",
     textAlign: "left",
-    fontSize: 16,
+    fontSize: 17,
   },
   description: {
     fontWeight: 400,
@@ -68,18 +68,15 @@ const useStyles = makeStyles((theme) => ({
     color: "#f9f9f9",
     textAlign: "center",
     lineHeight: 1.5,
-    paddingTop: 5,
+    paddingTop: 3,
   },
   infoCard: {
-    backgroundColor: "rgba(130, 71, 229, 0.1)",
-    // borderTopRightRadius: 10,
-    // borderTopLeftRadius: 10,
     borderRadius: 10,
     padding: "4%",
     width: "100%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   tokenDescription: {
@@ -93,19 +90,17 @@ const useStyles = makeStyles((theme) => ({
 export default function PoolCard({ poolStaticData, index }) {
   const classes = useStyles();
   const theme = useTheme();
-
+  const { accountSC } = useWeb3Auth();
   const [poolUserGraphData, setPoolUserGraphData] = useState(null);
 
-  const { accountSC } = useWeb3Auth();
-
-  const { poolInfo: poolGraphData, loading } = usePoolInfo(
-    strategyType.ACCUMULATION
-  );
+  // Graph calls
+  const { poolInfo: poolGraphData, loading } = usePoolInfo(poolStaticData.type);
 
   const [getPoolUserDataByAddress, { data: userPoolData }] = useLazyQuery(
     GetPoolUserDataByAddress
   );
 
+  // Functions to fetch user pool data
   useEffect(() => {
     if (poolStaticData && accountSC) {
       getPoolUserDataByAddress({
@@ -116,11 +111,11 @@ export default function PoolCard({ poolStaticData, index }) {
         // pollInterval: 5000,
       });
     }
-  }, [poolStaticData, accountSC, getPoolUserDataByAddress]);
+  }, [poolStaticData, accountSC]);
 
+  // Functions to update user pool data
   useEffect(() => {
     if (userPoolData) {
-      console.log(userPoolData);
       let userPoolGraphData = userPoolData.poolUsers;
       if (userPoolGraphData.length > 0) {
         setPoolUserGraphData(userPoolGraphData[0]);
@@ -154,11 +149,6 @@ export default function PoolCard({ poolStaticData, index }) {
             </Typography>
           </Box>
         </Box>
-        {/* <div>
-          <Typography variant="body3" style={{ color: "#24A582" }}>
-            Add
-          </Typography>
-        </div> */}
       </Box>
       <Box
         display="flex"
@@ -187,15 +177,11 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="small" className={classes.field}>
+          <Typography variant="body3" className={classes.field}>
             Invested($)
           </Typography>
-          <Typography variant="body3" className={classes.value} fontSize={14}>
-            $
-            {poolGraphData.invested &&
-              parseFloat(
-                Web3.utils.fromWei(poolGraphData.invested, "ether")
-              ).toFixed(2)}
+          <Typography variant="body2" className={classes.value} fontSize={15}>
+            {poolGraphData.invested ? "$" + poolGraphData.invested : "-"}
           </Typography>
         </Box>
         <Box
@@ -206,11 +192,11 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="small" className={classes.field}>
+          <Typography variant="body3" className={classes.field}>
             Volume($)
           </Typography>
-          <Typography variant="body3" className={classes.value} fontSize={14}>
-            $43K
+          <Typography variant="body2" className={classes.value} fontSize={15}>
+            {poolGraphData.allTimeVol ? "$" + poolGraphData.allTimeVol : "-"}
           </Typography>
         </Box>
         <Box
@@ -221,10 +207,10 @@ export default function PoolCard({ poolStaticData, index }) {
             alignItems: "center",
           }}
         >
-          <Typography variant="small" className={classes.field}>
-            Participants
+          <Typography variant="body3" className={classes.field}>
+            Users
           </Typography>
-          <Typography variant="body3" className={classes.value} fontSize={14}>
+          <Typography variant="body2" className={classes.value} fontSize={15}>
             {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
           </Typography>
         </Box>
@@ -287,7 +273,7 @@ export default function PoolCard({ poolStaticData, index }) {
           </Typography>
           <Typography
             variant="body2"
-            className={classes.para}
+            className={classes.value}
             textAlign="center"
             fontWeight={700}
             mr={1}
@@ -311,23 +297,33 @@ export default function PoolCard({ poolStaticData, index }) {
         py={2}
       >
         <Box className={classes.infoCard}>
-          <Typography variant="small" className={classes.field}>
-            Total Invested($)
+          <Typography variant="body2" color="white" fontSize={12}>
+            <TrendingUp style={{ fontSize: 18, color: "yellow" }} /> Trending
+            tokens
           </Typography>
-          <Typography variant="body1" className={classes.value}>
-            ${" "}
-            {poolGraphData.invested &&
-              parseFloat(
-                Web3.utils.fromWei(poolGraphData.invested, "ether")
-              ).toFixed(2)}
-          </Typography>
-        </Box>
-        <Box className={classes.infoCard}>
-          <Typography variant="small" className={classes.field}>
-            Participants
-          </Typography>
-          <Typography variant="body1" className={classes.value}>
-            {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
+          <Typography variant="small" className={classes.value}>
+            <img
+              src={"https://cryptologos.cc/logos/decentraland-mana-logo.png"}
+              alt={"TokenLogo"}
+              height="28px"
+              style={{ marginRight: -5 }}
+            />
+            <img
+              src={
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
+              }
+              alt={"TokenLogo"}
+              height="28px"
+              style={{ marginRight: -5 }}
+            />
+            <img
+              src={
+                "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3516739/ethereum-logo-icon-md.png"
+              }
+              alt={"TokenLogo"}
+              height="28px"
+            />{" "}
+            + 3 more
           </Typography>
         </Box>
       </Box>

@@ -9,13 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Link from "next/link";
-import { useLazyQuery } from "@apollo/client";
-import { GetPoolUserDataByAddress } from "./../../queries/graphQueries";
-import Web3 from "web3";
-import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { constants, strategyType } from "../../utils/constants";
+import { constants } from "../../utils/constants";
 import {
   AccessTime,
   Info,

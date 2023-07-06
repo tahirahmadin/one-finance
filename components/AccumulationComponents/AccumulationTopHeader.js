@@ -20,10 +20,10 @@ import {
   Wallet,
 } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
-import { constants, strategyType } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { useUserInfo } from "../../hooks/useUserInfo";
+import { STRATEGY_TYPE_ENUM } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
@@ -150,14 +150,14 @@ export default function AccumulationTopHeader() {
   const [userPoolState, setUserPoolState] = useState(null);
 
   const { poolInfo: poolGraphData, loading } = usePoolInfo(
-    strategyType.ACCUMULATION
+    STRATEGY_TYPE_ENUM.ACCUMULATION
   );
 
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
         let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
-          strategyType.ACCUMULATION
+          STRATEGY_TYPE_ENUM.ACCUMULATION
         );
         console.log(userPoolGraphData);
         setUserPoolState(userPoolGraphData);
@@ -336,7 +336,7 @@ export default function AccumulationTopHeader() {
             </Box>
             <Box mt={md ? 0 : 3}>
               <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-                <Payment style={{ fontSize: 16 }} /> Total invested
+                <Payment style={{ fontSize: 16 }} /> Total invested($)
               </Typography>
               <Typography
                 variant="body1"

@@ -26,21 +26,18 @@ import {
   AvTimer,
   BorderClear,
   ExpandMore,
-  KeyboardArrowRight,
   SentimentSatisfiedAlt,
 } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
-import { constants, strategyType } from "../../utils/constants";
+import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
-import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import DCATopHeader from "./DCATopHeader";
-import MobileBottomBar from "../../common/MobileBottomBar";
-import Link from "next/link";
+import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -195,17 +192,12 @@ export default function DCAComponent() {
   const [stakeCase, setStakeCase] = useState(0);
   const [isApproved, setIsApproved] = useState(false);
   const [resetFlag, setResetFlag] = useState(0);
-  const [orderPrices, setOrderPrices] = useState([]);
-  const [orderTokenReceived, setOrderTokenReceived] = useState([]);
   const [tokenPriceData, setTokenPriceData] = useState(null);
-  const [loaded, setLoaded] = useState(false);
   const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
-  // Get Pool User Graph Data
 
   // Get USDT Balance in account
   useEffect(() => {
@@ -411,13 +403,17 @@ export default function DCAComponent() {
       >
         <Grid item md={8} sm={12} xs={12}>
           <DCATopHeader />
-          <Hidden smDown>
-            <Grid container mt={1} spacing={3}>
-              <Grid item md={12} xs={12}>
-                OrderBook
-                {/* <AccumulateOrderBook /> */}
-              </Grid>
-            </Grid>
+          <Hidden mdDown>
+            <Box mb={4} mt={4}>
+              <Typography
+                variant="h6"
+                className={classes.heading}
+                fontWeight={700}
+              >
+                My investments
+              </Typography>
+              <UserPoolOrders poolTypeProp={STRATEGY_TYPE_ENUM.DCA} />
+            </Box>
           </Hidden>
         </Grid>
 
@@ -825,15 +821,20 @@ export default function DCAComponent() {
           </Box>
         </Grid>
       </Grid>
-      {/* Recent orders table */}
-      <Box mt={5}>
-        <div>
-          <Typography variant="h6" className={classes.heading} fontWeight={700}>
-            My investments
-          </Typography>
-          {/* <UserPoolOrders poolType={"ACCUMULATION"} /> */}
-        </div>
-      </Box>
+      <Hidden smUp>
+        <Box mb={5}>
+          <div>
+            <Typography
+              variant="h6"
+              className={classes.heading}
+              fontWeight={700}
+            >
+              My investments
+            </Typography>
+            <UserPoolOrders poolTypeProp={STRATEGY_TYPE_ENUM.DCA} />
+          </div>
+        </Box>
+      </Hidden>
     </Box>
   );
 }

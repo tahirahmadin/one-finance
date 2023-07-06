@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Typography, useTheme } from "@mui/material";
 
-import { constants, strategyType } from "../../utils/constants";
+import { constants } from "../../utils/constants";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 
 const useStyles = makeStyles((theme) => ({

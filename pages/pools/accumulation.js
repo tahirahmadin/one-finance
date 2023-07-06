@@ -97,7 +97,9 @@ export default function Acculumation() {
                   <KeyboardArrowRight style={{ fontSize: 18 }} />
                   Pools
                   <KeyboardArrowRight style={{ fontSize: 18 }} />
-                  <span style={{ color: "#f9f9f9" }}>DCA Strategy</span>
+                  <span style={{ color: "#f9f9f9" }}>
+                    Accumulation Strategy
+                  </span>
                 </Typography>
                 {/* Component Starts from here */}
                 <AccumulationComponent />

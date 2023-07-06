@@ -7,6 +7,7 @@ import LinearProgress, {
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 6,
+
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor:

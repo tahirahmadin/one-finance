@@ -14,7 +14,7 @@ import {
   ContactSupport,
   TrendingUp,
 } from "@mui/icons-material";
-import { constants, strategyType } from "../../utils/constants";
+import { constants, STRATEGY_TYPE_ENUM } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { useUserInfo } from "../../hooks/useUserInfo";

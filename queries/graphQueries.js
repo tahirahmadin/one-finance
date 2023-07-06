@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GetPoolDataById = gql`
-  query GetPoolDataById($type: String) {
-    pools(where: { strategyType: $type }) {
+  query GetPoolDataById($id: String) {
+    pool(id: $id) {
       id
       strategyType
       usersCount
@@ -164,6 +164,8 @@ export const getOrdersQuery = (
         tokenAddress
         strategyType
         remainingToken
+        dcaFrequencyInHours
+        dcaAmountPerTrade
         timestamp
       }
     }

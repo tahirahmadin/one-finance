@@ -9,7 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { constants, strategyType } from "../../utils/constants";
+import { constants } from "../../utils/constants";
 import { Add, LocalConvenienceStore, TrendingUp } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({

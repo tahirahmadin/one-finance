@@ -3,18 +3,21 @@ import { useCallback, useEffect, useMemo } from "react";
 import { gql, useLazyQuery } from "@apollo/client";
 
 import { getOrdersQuery } from "../queries/graphQueries";
-import { strategyType } from "../utils/constants";
+import { STRATEGY_TYPE_ENUM } from "../utils/constants";
 import ethersServiceProvider from "../services/ethersServiceProvider";
 
-export function useOrders(strategy = strategyType.ACCUMULATION) {
-  let account = ethersServiceProvider.currentAccount;
+export function useOrders(strategyType = STRATEGY_TYPE_ENUM.ACCUMULATION) {
+  let userAccount = ethersServiceProvider.currentAccount;
   const ordersPage = 1;
+  // Graph query for pending orders
   const pendingOrderGraphQuery = useMemo(() => {
-    return getOrdersQuery(ordersPage, account, strategy, "pending");
-  }, [account]);
+    return getOrdersQuery(ordersPage, userAccount, strategyType, "pending");
+  }, [userAccount]);
+
+  // Graph query for completed orders
   const completedOrderGraphQuery = useMemo(() => {
-    return getOrdersQuery(ordersPage, account, strategy, "completed");
-  }, [account]);
+    return getOrdersQuery(ordersPage, userAccount, strategyType, "completed");
+  }, [userAccount]);
 
   const [
     getPendingOrders,
@@ -39,7 +42,7 @@ export function useOrders(strategy = strategyType.ACCUMULATION) {
   useEffect(() => {
     getPendingOrders();
     getCompletedOrders();
-  }, [account]);
+  }, [userAccount]);
 
   return {
     loading: pendingLoading || compledLoading,

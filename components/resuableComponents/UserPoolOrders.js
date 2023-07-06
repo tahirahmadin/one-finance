@@ -11,28 +11,29 @@ import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance } from "../../contracts";
 import web3 from "../../web3";
 import { useOrders } from "../../hooks/useOrders";
-import { strategyType } from "../../utils/constants";
+import { STRATEGY_TYPE_ENUM } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
     marginTop: 20,
   },
   actionButton: {
-    borderRadius: 14,
+    borderRadius: 10,
+    textTransform: "none",
     background: "rgba(130, 71, 229, 0.3)",
-    padding: "10px 20px 10px 20px",
+    padding: "5px 15px 5px 15px",
     color: "white",
     width: "100%",
     maxWidth: "fit-content",
-    fontWeight: 600,
-    fontSize: 14,
+    fontWeight: 400,
+    fontSize: 12,
     "&:hover": {
       background: "rgba(130, 71, 229, 0.9)",
     },
   },
 }));
 
-export default function UserPoolOrders({ poolType }) {
+export default function UserPoolOrders({ poolTypeProp }) {
   const classes = useStyles();
   const theme = useTheme();
   let accountSC = ethersServiceProvider.currentAccount;
@@ -41,9 +42,8 @@ export default function UserPoolOrders({ poolType }) {
   const [trxCase, setTrxCase] = useState(0);
   const [selectedOrder, setSelectedOrder] = useState({});
 
-  const { pendingOrders, completedOrders, loading, error } = useOrders(
-    strategyType.ACCUMULATION
-  );
+  const { pendingOrders, completedOrders, loading, error } =
+    useOrders(poolTypeProp);
 
   const allOrders = useMemo(() => {
     const pending = !pendingOrders?.orders ? [] : pendingOrders?.orders;
@@ -155,15 +155,16 @@ export default function UserPoolOrders({ poolType }) {
             container
             p={2}
             style={{
-              borderRadius: 20,
+              borderRadius: 14,
               marginTop: 10,
               backgroundColor: "#15171c",
             }}
             key={1}
           >
+            {console.log(singleOrder)}
             <Grid
               item
-              md={2}
+              md={2.5}
               display="flex"
               flexDirection={"row"}
               justifyContent="flex-start"
@@ -173,7 +174,7 @@ export default function UserPoolOrders({ poolType }) {
                 <img
                   src="https://www.sleepswap.io/SleepSwap_Plain.png"
                   alt="Token"
-                  height="32px"
+                  height="28px"
                 />
               </Box>
               <Box>
@@ -184,6 +185,7 @@ export default function UserPoolOrders({ poolType }) {
                   color={"#f9f9f9"}
                   pl={1}
                   lineHeight={1}
+                  fontSize={13}
                 >
                   SLEEPT
                 </Typography>
@@ -203,17 +205,18 @@ export default function UserPoolOrders({ poolType }) {
 
             <Grid
               item
-              md={5}
+              md={5.5}
               display="flex"
               flexDirection={"column"}
-              justifyContent="center"
+              justifyContent="flex-start"
               alignItems="flex-start"
             >
               <Typography
-                variant="h6"
+                variant="body2"
                 textAlign="left"
                 fontWeight={600}
                 color={"#f9f9f9"}
+                fontSize={13}
               >
                 Order placed for ${fromWei(singleOrder.deposit)}
               </Typography>
@@ -224,48 +227,83 @@ export default function UserPoolOrders({ poolType }) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
+                {poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION && [
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={300}
+                    color={"#c7cad9"}
+                    fontSize={11}
+                  >
+                    Entry Price: ${toDollarPrice(singleOrder.entryPrice)}
+                  </Typography>,
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={400}
+                    color={"#c7cad9"}
+                    px={0.5}
+                  >
+                    -
+                  </Typography>,
+                ]}
+
+                {poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION && (
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={300}
+                    color={"#c7cad9"}
+                    fontSize={11}
+                  >
+                    Change: {singleOrder.percentage}%
+                  </Typography>
+                )}
+
+                {poolTypeProp === STRATEGY_TYPE_ENUM.DCA && (
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={300}
+                    color={"#c7cad9"}
+                    fontSize={11}
+                  >
+                    Period: {singleOrder.dcaFrequencyInHours}hrs
+                  </Typography>
+                )}
+
                 <Typography
                   variant="small"
                   textAlign="left"
                   fontWeight={400}
                   color={"#c7cad9"}
+                  px={0.5}
                 >
-                  Price: ${toDollarPrice(singleOrder.entryPrice)}
+                  -
                 </Typography>
-                <Typography
-                  variant="small"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#c7cad9"}
-                  px={1}
-                >
-                  |
-                </Typography>
-                <Typography
-                  variant="small"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#c7cad9"}
-                >
-                  Percetage: {singleOrder.percentage}%
-                </Typography>
-                <Typography
-                  variant="small"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#c7cad9"}
-                  px={1}
-                >
-                  |
-                </Typography>
-                <Typography
-                  variant="small"
-                  textAlign="left"
-                  fontWeight={400}
-                  color={"#c7cad9"}
-                >
-                  Orders: {singleOrder.grids}
-                </Typography>
+                {poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION && (
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={300}
+                    color={"#c7cad9"}
+                    fontSize={11}
+                  >
+                    Amount: {singleOrder.grids}
+                  </Typography>
+                )}
+
+                {poolTypeProp === STRATEGY_TYPE_ENUM.DCA && (
+                  <Typography
+                    variant="small"
+                    textAlign="left"
+                    fontWeight={300}
+                    color={"#c7cad9"}
+                    fontSize={11}
+                  >
+                    Order amount: ${fromWei(singleOrder.dcaAmountPerTrade)}
+                  </Typography>
+                )}
               </Box>
             </Grid>
             <Grid
@@ -285,8 +323,8 @@ export default function UserPoolOrders({ poolType }) {
                   textAlign="left"
                   fontWeight={400}
                   color={"#bdbdbd"}
-                  fontSize={15}
-                  pt={1}
+                  fontSize={12}
+                  pt={0.5}
                 >
                   {getExecutedPercentage(singleOrder)}% Complete
                 </Typography>
@@ -295,7 +333,7 @@ export default function UserPoolOrders({ poolType }) {
 
             <Grid
               item
-              md={2}
+              md={1}
               display="flex"
               flexDirection={"row"}
               justifyContent="center"
@@ -306,12 +344,16 @@ export default function UserPoolOrders({ poolType }) {
                   className={classes.actionButton}
                   onClick={() => handleWithdraw(singleOrder)}
                 >
-                  <Close style={{ marginRight: 5 }} /> Cancel
+                  Cancel
                 </Button>
               )}
               {!singleOrder?.open && (
-                <Button className={classes.actionButton} disabled={true}>
-                  <CheckBox style={{ marginRight: 5 }} /> Completed
+                <Button
+                  className={classes.actionButton}
+                  disabled={true}
+                  style={{ backgroundColor: "#6ec046" }}
+                >
+                  Completed
                 </Button>
               )}
             </Grid>

@@ -6,6 +6,7 @@ const initialState = {
   tokenData: [],
   menuIndex: 0,
   walletStatus: 0,
+  refetchValue: 0,
   accumulationPoolData: null,
   usdtBalance: 0,
   selectedDashboardMenuItem: "DASHBOARD",
@@ -38,6 +39,9 @@ const UiReducer = createSlice({
     setWalletStatus(state, action) {
       state.walletStatus = action.payload;
     },
+    setRefetchValue(state, action) {
+      state.refetchValue = action.payload;
+    },
     setUsdtBalanceOfUser(state, action) {
       state.usdtBalance = action.payload;
     },
@@ -62,6 +66,7 @@ export const {
   setMenuIndex,
   setTokenData,
   setWalletStatus,
+  setRefetchValue,
   setUsdtBalanceOfUser,
   setDashboardMenuItem,
 } = actions;

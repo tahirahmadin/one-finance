@@ -20,7 +20,7 @@ import {
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
-import { accumulationInstance, tokenInstance } from "../../contracts";
+import { dcaInstance, tokenInstance } from "../../contracts";
 import web3 from "../../web3";
 import {
   AvTimer,
@@ -31,7 +31,10 @@ import {
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
-import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
+import {
+  setRefetchValue,
+  setUsdtBalanceOfUser,
+} from "../../reducers/UiReducer";
 import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
@@ -184,31 +187,23 @@ export default function DCAComponent() {
 
   const { accountSC } = useWeb3Auth();
 
-  const { usdtBalance } = store.ui;
+  const { usdtBalance, refetchValue } = store.ui;
 
   const [amount, setAmount] = useState(1000);
-  const [percent, setPercent] = useState(24);
-  const [grids, setGrids] = useState(10);
+  const [frequency, setFrequency] = useState(24);
+  const [amountPerTradeState, setAmountPerTradeState] = useState(100);
   const [stakeCase, setStakeCase] = useState(0);
   const [isApproved, setIsApproved] = useState(false);
   const [resetFlag, setResetFlag] = useState(0);
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
-  // Get USDT Balance in account
-  useEffect(() => {
-    if (accountSC) {
-      async function asyncFn() {
-        let res = await getUserUSDTBalance(accountSC);
-        await dispatch(setUsdtBalanceOfUser(res));
-      }
-      asyncFn();
-    }
-  }, [accountSC, dispatch]);
+  const tokenPrice = { price: 2000 };
 
   // Check price of token
   useEffect(() => {
@@ -230,21 +225,23 @@ export default function DCAComponent() {
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
-        let accumulation_contract = constants.contracts.accumulation;
-        let res = await checkUSDTApproved(accountSC, accumulation_contract);
-
+        let dca_contract = constants.contracts.dca;
+        let res = await checkUSDTApproved(accountSC, dca_contract);
         setIsApproved(parseInt(res) > 0);
       }
       asyncFn();
     }
   }, [accountSC, resetFlag]);
 
-  const handlePercentage = (event) => {
+  const handleFrequency = (event) => {
     let { value } = event.target;
-    let min = 0;
-    let max = 50;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-    setPercent(value);
+    if (value) {
+      let min = 0;
+      let max = 720;
+      value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+      setFrequency(value);
+    }
+    setFrequency(value);
   };
 
   // Approve token
@@ -252,18 +249,18 @@ export default function DCAComponent() {
     setStakeCase(1);
 
     let userAddress = accountSC;
-    let accumulation_contract = constants.contracts.accumulation;
+    let dca_contract_address = constants.contracts.dca;
     let provider = ethersServiceProvider.web3AuthInstance;
 
     let tokenContract = tokenInstance(provider.provider);
     try {
       let estimateGas = await tokenContract.methods
-        .approve(accumulation_contract, "100000000000000000000000000")
+        .approve(dca_contract_address, "100000000000000000000000000")
         .estimateGas({ from: userAddress });
 
       let estimateGasPrice = await web3.eth.getGasPrice();
       const response = await tokenContract.methods
-        .approve(accumulation_contract, "100000000000000000000000000")
+        .approve(dca_contract_address, "100000000000000000000000000")
         .send(
           {
             from: userAddress,
@@ -300,32 +297,44 @@ export default function DCAComponent() {
 
   // Write functions
   const handleStake = async () => {
-    if (amount > 0 && percent > 0 && grids > 0) {
-      let price = tokenPriceData
-        ? parseFloat(tokenPriceData.usd) * 100000000
-        : 0; // Making it 8 decimal price
+    if (
+      amount <= usdtBalance &&
+      amount > 0 &&
+      amountPerTradeState > 0 &&
+      frequency > 0 &&
+      amount >= amountPerTradeState
+    ) {
+      setErrorMsg(null);
       let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      console.log(price);
-      // let ordersData = await calculateOrdersData;
+      let amountOfSingleOrder = await Web3.utils.toWei(
+        amountPerTradeState.toString(),
+        "ether"
+      );
 
+      // Enabling popup
       setStakeCase(1);
       let userAddress = accountSC;
       let provider = ethersServiceProvider.web3AuthInstance;
 
-      let accumulateContract = accumulationInstance(provider.provider);
+      // Instance of DCA Contract
+      let dcaContract = dcaInstance(provider.provider);
       try {
-        let estimateGas = await accumulateContract.methods
-          .invest(fiatAmount, grids, percent, price, selectedToken.address)
+        let estimateGas = await dcaContract.methods
+          .invest(
+            fiatAmount,
+            amountOfSingleOrder,
+            frequency,
+            selectedToken.address
+          )
           .estimateGas({ from: userAddress });
 
         let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await accumulateContract.methods
+        const response = await dcaContract.methods
           .invest(
-            ordersData.fiatAmount,
-            grids,
-            percent,
-            price,
-            ordersData.selectedTokenAddress
+            fiatAmount,
+            amountOfSingleOrder,
+            frequency,
+            selectedToken.address
           )
           .send(
             {
@@ -347,6 +356,7 @@ export default function DCAComponent() {
           .on("receipt", async function (receipt) {
             setStakeCase(3);
             setResetFlag(resetFlag + 1);
+            dispatch(setRefetchValue(refetchValue + 1));
           })
           .on("error", async function (error) {
             if (error?.code === 4001) {
@@ -358,6 +368,19 @@ export default function DCAComponent() {
       } catch (err) {
         console.log(err);
         setStakeCase(4);
+      }
+    } else {
+      if (amount > usdtBalance) {
+        setErrorMsg("Amount is exceeding the balance.");
+      }
+      if (amountPerTradeState > amount) {
+        setErrorMsg("Amount per trade is exceeding the invested amount.");
+      }
+      if (amount === 0) {
+        setErrorMsg("Amount should be greater than 0.");
+      }
+      if (amountPerTradeState === 0) {
+        setErrorMsg("Amount Amount per trade should be greater than 0.");
       }
     }
   };
@@ -373,23 +396,6 @@ export default function DCAComponent() {
     console.log("selected token ", token);
   };
 
-  // const tokenPrice = useUpdatePrice();
-  const tokenPrice = { price: 2000 };
-
-  const getPriceOfSingleOrder = (index) => {
-    return parseFloat((2000 * (100 - (index + 1) * percent)) / 100);
-  };
-  const getTotalTokenAccumulated = () => {
-    let amountToBuy = amount / grids;
-    let totalAmountWillBeBought = 0;
-    {
-      [...Array(grids)].map((singleOrder, index) => {
-        let amountOfSingleOrder = amountToBuy / getPriceOfSingleOrder(index);
-        totalAmountWillBeBought += amountOfSingleOrder;
-      });
-    }
-    return totalAmountWillBeBought.toFixed(3);
-  };
   return (
     <Box>
       <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
@@ -423,7 +429,6 @@ export default function DCAComponent() {
               <Typography fontWeight={600} fontSize={18} color={"#f9f9f9"}>
                 Create strategy
               </Typography>
-
               <Box mt={2}>
                 <Accordion
                   expanded={false}
@@ -491,47 +496,6 @@ export default function DCAComponent() {
                     handleTokenSelected={handleTokenSelected}
                     disableToken={selectedToken}
                   />
-                  {/* <AccordionDetails>
-                      <Box
-                        style={{
-                          maxHeight: 100,
-                          overflowY: "auto",
-                          borderTop: "0.5px solid #414141",
-                        }}
-                      >
-                        {tokenList.map((singleToken, index) => {
-                          return (
-                            <Box
-                              key={index}
-                              display="flex"
-                              flexDirection={"row"}
-                              justifyContent="flex-start"
-                              alignItems="center"
-                              py={1}
-                              onClick={() => handleTokenSelect(index)}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <img
-                                src={singleToken.logoURI}
-                                alt={"TokenLogo"}
-                                height="28px"
-                              />
-                              <Box ml={1}>
-                                <Typography
-                                  variant="body2"
-                                  fontWeight={600}
-                                  color={"#e5e5e5"}
-                                  lineHeight={1}
-                                  noWrap
-                                >
-                                  {singleToken.symbol}{" "}
-                                </Typography>
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    </AccordionDetails> */}
                 </Accordion>
               </Box>
               <Box
@@ -605,7 +569,6 @@ export default function DCAComponent() {
                   </Box>
                 </Box>
               </Box>
-
               <Grid container spacing={2}>
                 <Grid item md={6} sm={6} xs={6}>
                   <Box className={classes.inputWrapper}>
@@ -614,18 +577,17 @@ export default function DCAComponent() {
                       textAlign={"left"}
                       lineHeight={1}
                     >
-                      Number of orders:
+                      Amount per trade:
                     </Typography>
                     <Input
-                      value={grids}
+                      value={amountPerTradeState}
                       type="number"
                       onInput={(event) =>
-                        event.target.value > 0 &&
-                        event.target.value < 10 &&
-                        setGrids(parseInt(event.target.value))
+                        event.target.value >= 0 &&
+                        event.target.value < amount &&
+                        setAmountPerTradeState(parseInt(event.target.value))
                       }
                       fullWidth
-                      placeholder="Enter grid count here"
                       disableUnderline
                       style={{ fontSize: 20, fontWeight: 600 }}
                     />
@@ -643,16 +605,27 @@ export default function DCAComponent() {
                     <Input
                       type="number"
                       disableUnderline
-                      value={percent}
+                      value={frequency}
                       fullWidth
-                      placeholder="10"
-                      onChange={(e) => handlePercentage(e)}
+                      placeholder="24"
+                      onChange={(e) => handleFrequency(e)}
                       style={{ fontSize: 20, fontWeight: 600 }}
                     />
                   </Box>
                 </Grid>
               </Grid>
 
+              {errorMsg && (
+                <Typography
+                  variant="small"
+                  textAlign={"left"}
+                  color={"#ef5350"}
+                  lineHeight={1}
+                  mt={1}
+                >
+                  * {errorMsg}
+                </Typography>
+              )}
               <div className="text-center">
                 <Button
                   className={classes.actionButton}
@@ -667,7 +640,7 @@ export default function DCAComponent() {
                   variant="body2"
                   mb={1}
                   fontWeight={500}
-                  fontSize={12}
+                  fontSize={13}
                   color={"#f9f9f9"}
                 >
                   My Investment summary
@@ -675,148 +648,34 @@ export default function DCAComponent() {
                 <Typography
                   variant="body2"
                   fontWeight={300}
-                  fontSize={11}
-                  color={"#bdbdbd"}
+                  fontSize={12}
+                  color={"#e5e5e5"}
                 >
                   Strategy will buy tokens for amount{" "}
                   <strong style={{ color: "white" }}>
-                    {amount / grids} USDT{" "}
+                    {amountPerTradeState} USDT{" "}
                   </strong>{" "}
-                  on every {grids} hours.
+                  on every{" "}
+                  <strong style={{ color: "white" }}>{frequency}</strong> hours.
                 </Typography>
               </Box>
               <Typography
-                mt={1}
+                mt={3}
                 variant="body2"
                 fontWeight={500}
-                fontSize={12}
+                fontSize={13}
                 color={"white"}
               >
                 Expected results:
               </Typography>
-              <Box
-                display={"flex"}
-                flexDirection="row"
-                justifyContent={"space-around"}
-                alignItems={"center"}
-                mt={3}
+              <Typography
+                variant="body2"
+                fontWeight={300}
+                fontSize={12}
+                color={"#e5e5e5"}
               >
-                <Box
-                  display={"flex"}
-                  flexDirection="column"
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <AvTimer style={{ color: "#bdbdbd" }} />
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                  >
-                    Accumulate
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={14}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                    mt={1}
-                  >
-                    <strong> {getTotalTokenAccumulated()} ETH</strong>
-                  </Typography>
-                </Box>
-                <Box
-                  display={"flex"}
-                  flexDirection="column"
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <BorderClear style={{ color: "#bdbdbd" }} />
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                  >
-                    Target Price
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={14}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                    mt={1}
-                  >
-                    <strong> $10,000</strong>
-                  </Typography>
-                </Box>
-                <Box
-                  display={"flex"}
-                  flexDirection="column"
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <SentimentSatisfiedAlt style={{ color: "#bdbdbd" }} />
-                  <Typography
-                    variant="body2"
-                    fontWeight={400}
-                    fontSize={11}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                  >
-                    You may receive
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={14}
-                    lineHeight={1}
-                    color={"#e5e5e5"}
-                    mt={1}
-                  >
-                    <strong>
-                      {" "}
-                      $ {(getTotalTokenAccumulated() * 10000).toFixed(1)}{" "}
-                    </strong>
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display={"flex"}
-                flexDirection={"column"}
-                alignItems={"center"}
-                justifyContent="center"
-                mt={2}
-              >
-                <Typography
-                  variant="body2"
-                  fontWeight={600}
-                  fontSize={22}
-                  color={"#28C59A"}
-                >
-                  <strong>
-                    {(
-                      ((getTotalTokenAccumulated() * 10000 - amount) * 100) /
-                      amount
-                    ).toFixed()}
-                    %
-                  </strong>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  fontWeight={400}
-                  fontSize={12}
-                  lineHeight={1}
-                  color={"#bdbdbd"}
-                >
-                  Return on investment*
-                </Typography>
-              </Box>
+                You will accumulate your favourite tokens with average price.
+              </Typography>
             </div>
           </Box>
         </Grid>

@@ -8,10 +8,12 @@ import LinearProgressComponent from "../../common/LinearProgressComponent";
 import WithdrawPopup from "../../common/WithdrawPopup";
 import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
-import { accumulationInstance } from "../../contracts";
+import { accumulationInstance, dcaInstance } from "../../contracts";
 import web3 from "../../web3";
 import { useOrders } from "../../hooks/useOrders";
 import { STRATEGY_TYPE_ENUM } from "../../utils/constants";
+import { setRefetchValue } from "../../reducers/UiReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -36,6 +38,10 @@ const useStyles = makeStyles((theme) => ({
 export default function UserPoolOrders({ poolTypeProp }) {
   const classes = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state);
+  const { refetchValue } = store.ui;
+
   let accountSC = ethersServiceProvider.currentAccount;
 
   const [showWithdraw, setShowWithdraw] = useState(false);
@@ -70,15 +76,21 @@ export default function UserPoolOrders({ poolTypeProp }) {
     let userAddress = accountSC;
     let provider = ethersServiceProvider.web3AuthInstance;
 
-    let accumulateContract = accumulationInstance(provider.provider);
+    let contractInstance;
+    if (poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION) {
+      contractInstance = await accumulationInstance(provider.provider);
+    } else {
+      contractInstance = await dcaInstance(provider.provider);
+    }
+
     if (selectedOrder) {
       try {
-        let estimateGas = await accumulateContract.methods
+        let estimateGas = await contractInstance.methods
           .withdrawByOrderId(selectedOrder?.id)
           .estimateGas({ from: userAddress });
 
         let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await accumulateContract.methods
+        const response = await contractInstance.methods
           .withdrawByOrderId(selectedOrder?.id)
           .send(
             {
@@ -99,6 +111,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
           )
           .on("receipt", async function (receipt) {
             setTrxCase(3);
+            dispatch(setRefetchValue(refetchValue + 1));
           })
           .on("error", async function (error) {
             if (error?.code === 4001) {
@@ -161,7 +174,6 @@ export default function UserPoolOrders({ poolTypeProp }) {
             }}
             key={1}
           >
-            {console.log(singleOrder)}
             <Grid
               item
               md={2.5}
@@ -190,6 +202,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
                   SLEEPT
                 </Typography>
                 <Typography
+                  fontSize={11}
                   variant="small"
                   textAlign="left"
                   fontWeight={300}

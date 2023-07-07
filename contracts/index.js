@@ -2,6 +2,8 @@ import Web3 from "web3";
 import ERC20RG from "../abi/ERC20RG.json";
 import TradingContractABI from "../abi/ERC20Trading.json";
 import AccumulationContractABI from "../abi/AccumulationABI.json";
+import DcaContractABI from "../abi/DcaABI.json";
+
 import { constants } from "../utils/constants";
 
 const web3Instance = (provider) => {
@@ -55,6 +57,19 @@ export const accumulationInstance = (provider = "unavailable") => {
       contract_address
     );
     return accumulationContract;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+// DCA Contract
+export const dcaInstance = (provider = "unavailable") => {
+  let contract_address = constants.contracts.dca;
+  try {
+    var web3 = web3Instance(provider);
+    var dcaContract = new web3.eth.Contract(DcaContractABI, contract_address);
+    return dcaContract;
   } catch (err) {
     console.log(err);
     return null;

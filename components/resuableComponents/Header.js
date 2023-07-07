@@ -18,6 +18,8 @@ import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { Redeem, Wallet } from "@mui/icons-material";
 import { Container } from "@mui/system";
 import { tokenInstance } from "../../contracts";
+import { getUserUSDTBalance } from "../../actions/smartActions";
+import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -63,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const theme = useTheme();
   const store = useSelector((state) => state);
-  const { headerMenuExpanded } = store.ui;
+  const { refetchValue } = store.ui;
   const dispatch = useDispatch();
   const router = useRouter();
   const matches = useMediaQuery("(min-width:1153px)");
@@ -72,6 +74,17 @@ const Header = () => {
   const [success, setSuccess] = useState(0);
   const classes = useStyles();
   const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
+
+  // Get USDT Balance in account
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let res = await getUserUSDTBalance(accountSC);
+        await dispatch(setUsdtBalanceOfUser(res));
+      }
+      asyncFn();
+    }
+  }, [accountSC, refetchValue]);
 
   // To connect the smart contract wallet
   const loginWallet = async () => {

@@ -620,7 +620,7 @@ export default function AccumulationComponent() {
                   variant="body2"
                   mb={1}
                   fontWeight={500}
-                  fontSize={12}
+                  fontSize={13}
                   color={"#f9f9f9"}
                 >
                   My Investment summary

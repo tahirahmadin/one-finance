@@ -15,6 +15,7 @@ export const constants = {
   contracts: {
     fiat: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
     accumulation: "0xD26E48de5356162E72CE66cF94075D205B196d7a",
+    dca: "0xF9456B6070404f948Ba18D459791AB9176e5396e",
   },
 };
 

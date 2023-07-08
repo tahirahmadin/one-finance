@@ -6,12 +6,11 @@ import { fromWei, toDollarPrice } from "../../utils/helper";
 import { AccessTime, CheckBox, Close } from "@mui/icons-material";
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import WithdrawPopup from "../../common/WithdrawPopup";
-import TxPopup from "../../common/TxPopup";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import { accumulationInstance, dcaInstance } from "../../contracts";
 import web3 from "../../web3";
 import { useOrders } from "../../hooks/useOrders";
-import { STRATEGY_TYPE_ENUM } from "../../utils/constants";
+import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import { setRefetchValue } from "../../reducers/UiReducer";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   actionButton: {
     borderRadius: 10,
     textTransform: "none",
-    background: "rgba(130, 71, 229, 0.3)",
+    background: constants.buttonColor,
     padding: "5px 15px 5px 15px",
     color: "white",
     width: "100%",
@@ -42,10 +41,8 @@ export default function UserPoolOrders({ poolTypeProp }) {
   const store = useSelector((state) => state);
   const { refetchValue } = store.ui;
 
-  let accountSC = ethersServiceProvider.currentAccount;
-
   const [showWithdraw, setShowWithdraw] = useState(false);
-  const [trxCase, setTrxCase] = useState(0);
+
   const [selectedOrder, setSelectedOrder] = useState({});
 
   const { pendingOrders, completedOrders, loading, error } =
@@ -70,78 +67,15 @@ export default function UserPoolOrders({ poolTypeProp }) {
     setShowWithdraw(true);
   };
 
-  // Write functions
-  const handleConfirm = async () => {
-    setTrxCase(1);
-    let userAddress = accountSC;
-    let provider = ethersServiceProvider.web3AuthInstance;
-
-    let contractInstance;
-    if (poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION) {
-      contractInstance = await accumulationInstance(provider.provider);
-    } else {
-      contractInstance = await dcaInstance(provider.provider);
-    }
-
-    if (selectedOrder) {
-      try {
-        let estimateGas = await contractInstance.methods
-          .withdrawByOrderId(selectedOrder?.id)
-          .estimateGas({ from: userAddress });
-
-        let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await contractInstance.methods
-          .withdrawByOrderId(selectedOrder?.id)
-          .send(
-            {
-              from: userAddress,
-              maxPriorityFeePerGas: "50000000000",
-              gasPrice: parseInt(
-                (parseInt(estimateGasPrice) * 10) / 9
-              ).toString(),
-              gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
-            },
-            async function (error, transactionHash) {
-              if (transactionHash) {
-                setTrxCase(2);
-              } else {
-                setTrxCase(4);
-              }
-            }
-          )
-          .on("receipt", async function (receipt) {
-            setTrxCase(3);
-            dispatch(setRefetchValue(refetchValue + 1));
-          })
-          .on("error", async function (error) {
-            if (error?.code === 4001) {
-              setTrxCase(4);
-            } else {
-              setTrxCase(4);
-            }
-          });
-      } catch (err) {
-        console.log("withdraw error  ", err);
-        setTrxCase(4);
-      }
-    }
-  };
-
   return (
     <Box className={classes.boxCard}>
       <WithdrawPopup
         order={selectedOrder}
-        handleWithdraw={handleConfirm}
         open={showWithdraw}
         resetPopup={() => setShowWithdraw(false)}
+        poolTypeProp={poolTypeProp}
       />
-      <TxPopup
-        txCase={trxCase}
-        resetPopup={() => {
-          setShowWithdraw(false);
-          setTrxCase(0);
-        }}
-      />
+
       {allOrders.length === 0 && (
         <Box
           display={"flex"}
@@ -172,7 +106,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
               marginTop: 10,
               backgroundColor: "#15171c",
             }}
-            key={1}
+            key={index}
           >
             <Grid
               item

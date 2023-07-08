@@ -1,5 +1,5 @@
 //done
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Slide,
@@ -8,12 +8,20 @@ import {
   Button,
   Box,
   Grid,
+  IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { AccessTime, Close } from "@mui/icons-material";
 import TimeAgo from "timeago-react";
 import { fromWei, toDollarPrice } from "../utils/helper";
 import LinearProgressComponent from "./LinearProgressComponent";
+import { STRATEGY_TYPE_ENUM, constants } from "../utils/constants";
+import ethersServiceProvider from "../services/ethersServiceProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { setRefetchValue } from "../reducers/UiReducer";
+import { accumulationInstance, dcaInstance } from "../contracts";
+import web3 from "../web3";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,19 +43,21 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     width: "100%",
-    height: "fit-content",
-    padding: 10,
     minHeight: 400,
-    maxWidth: 540,
-    position: "relative",
-    background: "#000000",
-    border: "2px solid #bdbdbd",
+    maxWidth: 480,
+    padding: 21,
+    backgroundColor: "#ffffff",
+    borderRadius: "1rem",
     display: "flex",
     alignItems: "center",
     zIndex: 11,
-    borderRadius: 10,
+    borderRadius: 21,
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
     [theme.breakpoints.down("md")]: {
-      border: "10px solid #D1FE1D",
       width: "100%",
       maxWidth: "95%",
       height: 350,
@@ -56,72 +66,119 @@ const useStyles = makeStyles((theme) => ({
       height: "max-content",
     },
   },
-  closeIcon: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    height: 22,
-    width: 22,
-    cursor: "pointer",
-    color: "white",
-    [theme.breakpoints.down("md")]: {
-      top: 5,
-      right: 5,
-      height: 18,
-      width: 18,
-    },
-  },
 
-  heading: {
-    color: "#f9f9f9",
-    textAlign: "center",
-    fontSize: 30,
-    lineHeight: 1,
-    paddingTop: 5,
-    [theme.breakpoints.down("md")]: {
-      fontSize: 24,
-    },
-  },
-
-  para: {
-    color: "#bdbdbd",
-    textAlign: "center",
-    fontSize: 13,
-    fontWeight: 300,
-    paddingTop: 5,
-
-    [theme.breakpoints.down("md")]: {
-      fontSize: 13,
-      paddingTop: 15,
-    },
-  },
-  actionButton: {
+  confirmButton: {
     borderRadius: 14,
-    background: "rgba(130, 71, 229, 0.3)",
-    padding: "10px 20px 10px 20px",
+    background: constants.highlighColorDark,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "10px 40px 10px 40px",
     color: "white",
     width: "100%",
-
+    textTransform: "capitalize",
     maxWidth: "fit-content",
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 16,
     "&:hover": {
       background: "rgba(130, 71, 229, 0.9)",
     },
   },
+  cancelButton: {
+    color: "black",
+    padding: "10px 20px 10px 20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    textTransform: "capitalize",
+    maxWidth: "fit-content",
+    fontWeight: 600,
+    borderRadius: 14,
+    fontSize: 16,
+    "&:hover": {
+      color: "rgba(130, 71, 229, 0.9)",
+    },
+  },
+  statsCard: {
+    width: 120,
+    border: "1px solid #919191",
+    borderRadius: 14,
+    padding: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
 }));
 
-const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
+const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state);
+  const { refetchValue } = store.ui;
+  let accountSC = ethersServiceProvider.currentAccount;
 
-  const getExecutedPercentage = (singleOrder) => {
-    if (singleOrder && singleOrder.executedGrids && singleOrder.grids) {
-      return (singleOrder.executedGrids * 100) / singleOrder.grids;
+  const [txCase, setTxCase] = useState(4);
+
+  // Write functions
+  const handleConfirmWithdraw = async () => {
+    let selectedOrder = order;
+    setTxCase(1);
+    let userAddress = accountSC;
+    let provider = ethersServiceProvider.web3AuthInstance;
+
+    let contractInstance;
+    if (poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION) {
+      contractInstance = await accumulationInstance(provider.provider);
     } else {
-      return 0;
+      contractInstance = await dcaInstance(provider.provider);
+    }
+
+    if (selectedOrder) {
+      try {
+        let estimateGas = await contractInstance.methods
+          .withdrawByOrderId(selectedOrder?.orderId)
+          .estimateGas({ from: userAddress });
+
+        let estimateGasPrice = await web3.eth.getGasPrice();
+        const response = await contractInstance.methods
+          .withdrawByOrderId(selectedOrder?.orderId)
+          .send(
+            {
+              from: userAddress,
+              maxPriorityFeePerGas: "50000000000",
+              gasPrice: parseInt(
+                (parseInt(estimateGasPrice) * 10) / 9
+              ).toString(),
+              gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+            },
+            async function (error, transactionHash) {
+              if (transactionHash) {
+                setTxCase(2);
+              } else {
+                setTxCase(3);
+              }
+            }
+          )
+          .on("receipt", async function (receipt) {
+            setTxCase(4);
+            dispatch(setRefetchValue(refetchValue + 1));
+          })
+          .on("error", async function (error) {
+            setTxCase(5);
+          });
+      } catch (err) {
+        console.log("withdraw error  ", err);
+        setTxCase(5);
+      }
     }
   };
 
+  const handleResetPopup = () => {
+    setTxCase(0);
+    resetPopup();
+  };
   return (
     <Dialog
       open={open}
@@ -138,152 +195,242 @@ const WithdrawPopup = ({ open, resetPopup, handleWithdraw, order }) => {
     >
       <div className={classes.background}>
         <div className={classes.container}>
-          <div className="h-100 w-100">
-            <div
-              className="h-100 w-100 d-flex flex-column justify-content-between"
-              style={{ minHeight: 400 }}
-            >
-              <div
-                className="d-flex justify-content-end align-items-start"
-                onClick={resetPopup}
+          <IconButton
+            style={{ position: "absolute", right: 10, top: 10 }}
+            onClick={handleResetPopup}
+          >
+            <Close style={{ cursor: "pointer", color: "black" }} />
+          </IconButton>
+
+          {txCase != 4 && (
+            <>
+              <Typography
+                variant="h5"
+                textAlign="center"
+                fontWeight={600}
+                color={"#000000"}
+                mb={2}
               >
-                <Close style={{ cursor: "pointer", color: "white" }} />
-              </div>
-              <div className="w-100">
-                <Grid
-                  container
-                  p={2}
-                  style={{
-                    borderRadius: 20,
-                    marginTop: 10,
-                    backgroundColor: "#000000",
-                  }}
-                  key={1}
-                >
-                  <Grid
-                    width={"100%"}
-                    item
-                    md={3}
-                    // display="flex"
-                    // flexDirection={"row"}
-                    // justifyContent="flex-center"
-                    // alignItems="center"
-                  ></Grid>
+                Cancel strategy
+              </Typography>
 
-                  <Grid
-                    item
-                    md={5}
-                    display="flex"
-                    flexDirection={"column"}
-                    justifyContent="center"
-                    alignItems="flex-start"
-                  >
-                    <Typography
-                      variant="h6"
-                      textAlign="left"
-                      fontWeight={600}
-                      color={"#f9f9f9"}
-                    >
-                      Order placed for ${fromWei(order.deposit)}
-                    </Typography>
-                    <Box
-                      pt={4}
-                      display="flex"
-                      flexDirection={"row"}
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                      >
-                        USDT: <br /> <br />
-                        {fromWei(order.remainingFiat)}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                        px={1}
-                      >
-                        |
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                      >
-                        SLEEP: <br /> <br />
-                        {fromWei(order.tokenBalance)}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                        px={1}
-                      >
-                        |
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                      >
-                        Orders: <br /> <br />
-                        {order.grids}
-                      </Typography>
-
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                        px={1}
-                      >
-                        |
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        textAlign="left"
-                        fontWeight={400}
-                        color={"#c7cad9"}
-                      >
-                        Executed: <br /> <br />
-                        {order.executedGrids}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                <div className="my-2">
+              <img
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/mail-payment-6985921-5691408.png?f=webp"
+                height="100px"
+              />
+              <Typography
+                variant="body2"
+                textAlign="center"
+                fontWeight={400}
+                fontSize={14}
+                pt={2}
+                px={1}
+                color={"#000000"}
+              >
+                Canceling the order will remove you from trading pools, you may
+                loose some juicy profits.
+              </Typography>
+              <Typography
+                mt={3}
+                variant="h6"
+                textAlign="left"
+                fontWeight={600}
+                color={"#212121"}
+              >
+                You will receive
+              </Typography>
+              <Box
+                mt={2}
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="space-between"
+                alignItems="center"
+                gap={2}
+              >
+                <Box className={classes.statsCard}>
                   <Typography
-                    variant="h6"
-                    className={classes.para}
-                    textAlign="center"
-                    fontWeight={400}
-                    fontSize={14}
-                    pt={3}
+                    variant="body3"
+                    fontWeight={300}
+                    fontSize={11}
+                    color={"black"}
                   >
-                    Cancel your strategy and withdraw funds
+                    USDT($)
                   </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    color={"black"}
+                    pt={0.2}
+                  >
+                    {fromWei(order.remainingFiat)} USDT
+                  </Typography>
+                </Box>
+                <Box className={classes.statsCard}>
+                  <Typography
+                    variant="body3"
+                    fontWeight={300}
+                    fontSize={11}
+                    color={"black"}
+                  >
+                    Token
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    color={"black"}
+                    pt={0.2}
+                  >
+                    {fromWei(order.tokenBalance)} ETH
+                  </Typography>
+                </Box>
+              </Box>
+              <div className="h-100 w-100 d-flex flex-column justify-content-between">
+                <Typography
+                  variant="body2"
+                  textAlign="center"
+                  fontWeight={600}
+                  fontSize={14}
+                  pt={3}
+                  color={"#000000"}
+                >
+                  Do you really wanted to cancel this strategy?
+                </Typography>
+                <div className="w-100 d-flex justify-content-center mb-4 mt-3">
+                  <div className="px-2">
+                    <Button
+                      className={classes.cancelButton}
+                      onClick={handleResetPopup}
+                    >
+                      Go back
+                    </Button>
+                  </div>
+                  <div className="px-2">
+                    <Button
+                      className={classes.confirmButton}
+                      onClick={handleConfirmWithdraw}
+                    >
+                      {txCase === 0 && "Confirm"}
+                      {txCase === 1 && "Waiting for confirm..."}
+                      {txCase === 2 && (
+                        <span>
+                          <CircularProgress
+                            size={18}
+                            style={{
+                              color: "white",
+                              marginRight: 5,
+                            }}
+                          />{" "}
+                          Processing...
+                        </span>
+                      )}
+
+                      {txCase === 5 && "Failed!, Try again"}
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div className="w-100 d-flex  justify-content-center mb-4">
-                <Button
-                  className={classes.actionButton}
-                  onClick={handleWithdraw}
+            </>
+          )}
+          {txCase === 4 && (
+            <>
+              <Typography
+                variant="h5"
+                textAlign="center"
+                fontWeight={600}
+                color={"#000000"}
+                mb={2}
+              >
+                Withdraw success
+              </Typography>
+
+              <img
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/withdraw-complete-8327678-6634728.png?f=webp"
+                height="120px"
+              />
+
+              <Typography
+                mt={3}
+                variant="h6"
+                textAlign="left"
+                fontWeight={600}
+                color={"#212121"}
+              >
+                You have received
+              </Typography>
+              <Box
+                mt={2}
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="space-between"
+                alignItems="center"
+                gap={2}
+              >
+                <Box className={classes.statsCard}>
+                  <Typography
+                    variant="body3"
+                    fontWeight={300}
+                    fontSize={11}
+                    color={"black"}
+                  >
+                    USDT($)
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    color={"black"}
+                    pt={0.2}
+                  >
+                    {fromWei(order.remainingFiat)} USDT
+                  </Typography>
+                </Box>
+                <Box className={classes.statsCard}>
+                  <Typography
+                    variant="body3"
+                    fontWeight={300}
+                    fontSize={11}
+                    color={"black"}
+                  >
+                    Token
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    fontSize={14}
+                    color={"black"}
+                    pt={0.2}
+                  >
+                    {fromWei(order.tokenBalance)} ETH
+                  </Typography>
+                </Box>
+              </Box>
+              <div className="h-100 w-100 d-flex flex-column justify-content-between">
+                <Typography
+                  variant="body2"
+                  textAlign="center"
+                  fontWeight={500}
+                  fontSize={14}
+                  pt={3}
+                  color={"#000000"}
                 >
-                  Confirm, Cancel Order
-                </Button>
+                  Invest in top performing strategy pools recommended by <br />
+                  degens and gain high profits.
+                </Typography>
+                <div className="w-100 d-flex justify-content-center mb-4 mt-3">
+                  <div className="px-2">
+                    <Button
+                      className={classes.confirmButton}
+                      onClick={handleResetPopup}
+                    >
+                      Continue to app
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </Dialog>

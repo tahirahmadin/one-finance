@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
 
   actionButton: {
     borderRadius: 8,
-    background: "rgba(130, 71, 229, 0.7)",
+    background: constants.buttonColor,
     padding: "12px 20px 12px 20px",
     color: "white",
     width: "100%",

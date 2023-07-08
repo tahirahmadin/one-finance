@@ -7,21 +7,12 @@ import {
   Backdrop,
   Button,
   Box,
-  Grid,
   IconButton,
   CircularProgress,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { AccessTime, Close } from "@mui/icons-material";
-import TimeAgo from "timeago-react";
-import { fromWei, toDollarPrice } from "../utils/helper";
-import LinearProgressComponent from "./LinearProgressComponent";
+import { Close } from "@mui/icons-material";
 import { STRATEGY_TYPE_ENUM, constants } from "../utils/constants";
-import ethersServiceProvider from "../services/ethersServiceProvider";
-import { useDispatch, useSelector } from "react-redux";
-import { setRefetchValue } from "../reducers/UiReducer";
-import { accumulationInstance, dcaInstance } from "../contracts";
-import web3 from "../web3";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -101,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   statsCard: {
-    width: 120,
+    width: 130,
     border: "1px solid #919191",
     borderRadius: 14,
     padding: 10,
@@ -112,73 +103,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
+const InvestPopup = ({
+  poolTypeProp,
+  open,
+  txCase,
+  isApproved,
+  orderObj,
+  resetPopup,
+  handleApprove,
+  handleStake,
+}) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const store = useSelector((state) => state);
-  const { refetchValue } = store.ui;
-  let accountSC = ethersServiceProvider.currentAccount;
-
-  const [txCase, setTxCase] = useState(0);
-
-  // Write functions
-  const handleConfirmWithdraw = async () => {
-    let selectedOrder = order;
-    setTxCase(1);
-    let userAddress = accountSC;
-    let provider = ethersServiceProvider.web3AuthInstance;
-
-    let contractInstance;
-    if (poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION) {
-      contractInstance = await accumulationInstance(provider.provider);
-    } else {
-      contractInstance = await dcaInstance(provider.provider);
-    }
-
-    if (selectedOrder) {
-      try {
-        let estimateGas = await contractInstance.methods
-          .withdrawByOrderId(selectedOrder?.orderId)
-          .estimateGas({ from: userAddress });
-
-        let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await contractInstance.methods
-          .withdrawByOrderId(selectedOrder?.orderId)
-          .send(
-            {
-              from: userAddress,
-              maxPriorityFeePerGas: "50000000000",
-              gasPrice: parseInt(
-                (parseInt(estimateGasPrice) * 10) / 9
-              ).toString(),
-              gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
-            },
-            async function (error, transactionHash) {
-              if (transactionHash) {
-                setTxCase(2);
-              } else {
-                setTxCase(3);
-              }
-            }
-          )
-          .on("receipt", async function (receipt) {
-            setTxCase(4);
-            dispatch(setRefetchValue(refetchValue + 1));
-          })
-          .on("error", async function (error) {
-            setTxCase(5);
-          });
-      } catch (err) {
-        console.log("withdraw error  ", err);
-        setTxCase(5);
-      }
-    }
-  };
 
   const handleResetPopup = () => {
-    setTxCase(0);
     resetPopup();
   };
+
   return (
     <Dialog
       open={open}
@@ -211,25 +151,14 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                 color={"#000000"}
                 mb={2}
               >
-                Cancel strategy
+                {isApproved ? "Place an order" : "Approve strategy"}
               </Typography>
 
               <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/mail-payment-6985921-5691408.png?f=webp"
+                src="https://cdn-icons-png.flaticon.com/512/4177/4177444.png"
                 height="100px"
               />
-              <Typography
-                variant="body2"
-                textAlign="center"
-                fontWeight={400}
-                fontSize={14}
-                pt={2}
-                px={1}
-                color={"#000000"}
-              >
-                Canceling the order will remove you from trading pools, you may
-                loose some juicy profits.
-              </Typography>
+
               <Typography
                 mt={3}
                 variant="h6"
@@ -237,66 +166,173 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                 fontWeight={600}
                 color={"#212121"}
               >
-                You will receive
+                Order summary
               </Typography>
-              <Box
-                mt={2}
-                display="flex"
-                flexDirection={"row"}
-                justifyContent="space-between"
-                alignItems="center"
-                gap={2}
-              >
-                <Box className={classes.statsCard}>
-                  <Typography
-                    variant="body3"
-                    fontWeight={300}
-                    fontSize={11}
-                    color={"black"}
+              {orderObj && (
+                <Box>
+                  <Box
+                    mt={2}
+                    display="flex"
+                    flexDirection={"row"}
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap={1}
                   >
-                    USDT($)
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={14}
-                    color={"black"}
-                    pt={0.2}
-                  >
-                    {fromWei(order.remainingFiat)} USDT
-                  </Typography>
+                    <Box className={classes.statsCard}>
+                      <Typography
+                        variant="body3"
+                        fontWeight={300}
+                        fontSize={11}
+                        color={"black"}
+                      >
+                        Deposit($)
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={14}
+                        color={"black"}
+                        pt={0.2}
+                      >
+                        {orderObj.amount} USDT
+                      </Typography>
+                    </Box>
+                    <Box className={classes.statsCard}>
+                      <Typography
+                        variant="body3"
+                        fontWeight={300}
+                        fontSize={11}
+                        color={"black"}
+                      >
+                        Token
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        fontSize={14}
+                        color={"black"}
+                        pt={0.2}
+                      >
+                        {orderObj.selectedToken.name}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  {poolTypeProp === STRATEGY_TYPE_ENUM.ACCUMULATION && (
+                    <Box
+                      mt={1}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="space-between"
+                      alignItems="center"
+                      gap={1}
+                    >
+                      <Box className={classes.statsCard}>
+                        <Typography
+                          variant="body3"
+                          fontWeight={300}
+                          fontSize={11}
+                          color={"black"}
+                        >
+                          No of orders
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          fontSize={14}
+                          color={"black"}
+                          pt={0.2}
+                        >
+                          {orderObj.grids}
+                        </Typography>
+                      </Box>
+                      <Box className={classes.statsCard}>
+                        <Typography
+                          variant="body3"
+                          fontWeight={300}
+                          fontSize={11}
+                          color={"black"}
+                        >
+                          Buy on every
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          fontSize={14}
+                          color={"black"}
+                          pt={0.2}
+                        >
+                          {orderObj.percent}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                  {poolTypeProp === STRATEGY_TYPE_ENUM.DCA && (
+                    <Box
+                      mt={1}
+                      display="flex"
+                      flexDirection={"row"}
+                      justifyContent="space-between"
+                      alignItems="center"
+                      gap={1}
+                    >
+                      <Box className={classes.statsCard}>
+                        <Typography
+                          variant="body3"
+                          fontWeight={300}
+                          fontSize={11}
+                          color={"black"}
+                        >
+                          Amount per trade($)
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          fontSize={14}
+                          color={"black"}
+                          pt={0.2}
+                        >
+                          ${orderObj.amountPerTradeState}
+                        </Typography>
+                      </Box>
+                      <Box className={classes.statsCard}>
+                        <Typography
+                          variant="body3"
+                          fontWeight={300}
+                          fontSize={11}
+                          color={"black"}
+                        >
+                          Buy on every (hr)
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          fontSize={14}
+                          color={"black"}
+                          pt={0.2}
+                        >
+                          {orderObj.frequency} Hrs
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
                 </Box>
-                <Box className={classes.statsCard}>
-                  <Typography
-                    variant="body3"
-                    fontWeight={300}
-                    fontSize={11}
-                    color={"black"}
-                  >
-                    Token
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    fontSize={14}
-                    color={"black"}
-                    pt={0.2}
-                  >
-                    {fromWei(order.tokenBalance)} ETH
-                  </Typography>
-                </Box>
-              </Box>
+              )}
+
               <div className="h-100 w-100 d-flex flex-column justify-content-between">
                 <Typography
                   variant="body2"
                   textAlign="center"
-                  fontWeight={600}
+                  fontWeight={400}
                   fontSize={14}
-                  pt={3}
+                  pt={2}
+                  px={1}
                   color={"#000000"}
                 >
-                  Do you really wanted to cancel this strategy?
+                  {isApproved
+                    ? "Confirm to start gaining automated profits"
+                    : "Confirm to approve the strategy"}
                 </Typography>
+
                 <div className="w-100 d-flex justify-content-center mb-4 mt-3">
                   <div className="px-2">
                     <Button
@@ -309,10 +345,10 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                   <div className="px-2">
                     <Button
                       className={classes.confirmButton}
-                      onClick={handleConfirmWithdraw}
+                      onClick={isApproved ? handleStake : handleApprove}
                     >
                       {txCase === 0 && "Confirm"}
-                      {txCase === 1 && "Waiting for confirm..."}
+                      {txCase === 1 && "Waiting for confirmation..."}
                       {txCase === 2 && (
                         <span>
                           <CircularProgress
@@ -326,7 +362,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                         </span>
                       )}
 
-                      {txCase === 5 && "Failed!, Try again"}
+                      {txCase === 3 && "Failed!, Try again"}
                     </Button>
                   </div>
                 </div>
@@ -342,11 +378,11 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                 color={"#000000"}
                 mb={2}
               >
-                Withdraw success
+                Order placed
               </Typography>
 
               <img
-                src="https://cdn3d.iconscout.com/3d/premium/thumb/withdraw-complete-8327678-6634728.png?f=webp"
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/successfully-approve-5331611-4659611.png"
                 height="120px"
               />
 
@@ -357,7 +393,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                 fontWeight={600}
                 color={"#212121"}
               >
-                You have received
+                You have invested
               </Typography>
               <Box
                 mt={2}
@@ -365,7 +401,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                 flexDirection={"row"}
                 justifyContent="space-between"
                 alignItems="center"
-                gap={2}
+                gap={1}
               >
                 <Box className={classes.statsCard}>
                   <Typography
@@ -374,7 +410,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                     fontSize={11}
                     color={"black"}
                   >
-                    USDT($)
+                    Deposit($)
                   </Typography>
                   <Typography
                     variant="body2"
@@ -383,7 +419,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                     color={"black"}
                     pt={0.2}
                   >
-                    {fromWei(order.remainingFiat)} USDT
+                    {orderObj.amount} USDT
                   </Typography>
                 </Box>
                 <Box className={classes.statsCard}>
@@ -402,7 +438,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                     color={"black"}
                     pt={0.2}
                   >
-                    {fromWei(order.tokenBalance)} ETH
+                    {orderObj.selectedToken.name}
                   </Typography>
                 </Box>
               </Box>
@@ -415,8 +451,7 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
                   pt={3}
                   color={"#000000"}
                 >
-                  Invest in top performing strategy pools recommended by <br />
-                  degens and gain high profits.
+                  Go to dashboard and see your strategy in action
                 </Typography>
                 <div className="w-100 d-flex justify-content-center mb-4 mt-3">
                   <div className="px-2">
@@ -437,4 +472,4 @@ const WithdrawPopup = ({ poolTypeProp, open, resetPopup, order }) => {
   );
 };
 
-export default WithdrawPopup;
+export default InvestPopup;

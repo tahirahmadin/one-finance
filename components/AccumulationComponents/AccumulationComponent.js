@@ -40,6 +40,7 @@ import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulationTopHeader from "./AccumulationTopHeader";
 import AccumulationUserOrders from "../resuableComponents/UserPoolOrders";
+import InvestPopup from "../../common/InvestPopup";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -187,7 +188,7 @@ export default function AccumulationComponent() {
   const { accountSC } = useWeb3Auth();
   const { usdtBalance } = store.ui;
 
-  const [amount, setAmount] = useState(1000);
+  const [amount, setAmount] = useState(usdtBalance);
   const [percent, setPercent] = useState(10);
   const [grids, setGrids] = useState(4);
   const [stakeCase, setStakeCase] = useState(0);
@@ -196,6 +197,10 @@ export default function AccumulationComponent() {
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [orderObj, setOrderObj] = useState(null);
+  const [txCase, setTxCase] = useState(0);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -248,9 +253,35 @@ export default function AccumulationComponent() {
     setPercent(value);
   };
 
+  const handleInvestStrategy = () => {
+    setErrorMsg(null);
+    if (amount <= usdtBalance && amount > 0 && percent > 0 && grids > 0) {
+      setOrderObj({
+        amount: amount,
+        percent: percent,
+        selectedToken: selectedToken,
+        grids: grids,
+      });
+      setPopupOpen(true);
+    } else {
+      if (amount > usdtBalance) {
+        setErrorMsg("Amount is exceeding the balance.");
+      }
+      if (grids === 0) {
+        setErrorMsg("Orders should be greater than 0.");
+      }
+      if (amount === 0) {
+        setErrorMsg("Amount should be greater than 0.");
+      }
+      if (percent === 0) {
+        setErrorMsg("percentage should be greater than 0.");
+      }
+    }
+  };
+
   // Approve token
   const handleApprove = async () => {
-    setStakeCase(1);
+    setTxCase(1);
 
     let userAddress = accountSC;
     let accumulation_contract = constants.contracts.accumulation;
@@ -265,6 +296,53 @@ export default function AccumulationComponent() {
       let estimateGasPrice = await web3.eth.getGasPrice();
       const response = await tokenContract.methods
         .approve(accumulation_contract, "100000000000000000000000000")
+        .send(
+          {
+            from: userAddress,
+            maxPriorityFeePerGas: "80000000000",
+            gasPrice: parseInt(
+              (parseInt(estimateGasPrice) * 10) / 6
+            ).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setTxCase(2);
+            } else {
+              setTxCase(3);
+            }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setTxCase(0);
+          setResetFlag(resetFlag + 1);
+        });
+    } catch (err) {
+      console.log(err);
+      setTxCase(3);
+    }
+  };
+
+  // Write functions
+  const handleStake = async () => {
+    let price = tokenPriceData ? parseFloat(tokenPriceData.usd) * 100000000 : 0; // Making it 8 decimal price
+    let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
+    console.log(price);
+    // let ordersData = await calculateOrdersData;
+
+    setStakeCase(1);
+    let userAddress = accountSC;
+    let provider = ethersServiceProvider.web3AuthInstance;
+
+    let accumulateContract = accumulationInstance(provider.provider);
+    try {
+      let estimateGas = await accumulateContract.methods
+        .invest(fiatAmount, grids, percent, price, selectedToken.address)
+        .estimateGas({ from: userAddress });
+
+      let estimateGasPrice = await web3.eth.getGasPrice();
+      const response = await accumulateContract.methods
+        .invest(fiatAmount, grids, percent, price, selectedToken.address)
         .send(
           {
             from: userAddress,
@@ -299,66 +377,9 @@ export default function AccumulationComponent() {
     }
   };
 
-  // Write functions
-  const handleStake = async () => {
-    if (amount > 0 && percent > 0 && grids > 0) {
-      let price = tokenPriceData
-        ? parseFloat(tokenPriceData.usd) * 100000000
-        : 0; // Making it 8 decimal price
-      let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      console.log(price);
-      // let ordersData = await calculateOrdersData;
-
-      setStakeCase(1);
-      let userAddress = accountSC;
-      let provider = ethersServiceProvider.web3AuthInstance;
-
-      let accumulateContract = accumulationInstance(provider.provider);
-      try {
-        let estimateGas = await accumulateContract.methods
-          .invest(fiatAmount, grids, percent, price, selectedToken.address)
-          .estimateGas({ from: userAddress });
-
-        let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await accumulateContract.methods
-          .invest(fiatAmount, grids, percent, price, selectedToken.address)
-          .send(
-            {
-              from: userAddress,
-              maxPriorityFeePerGas: "80000000000",
-              gasPrice: parseInt(
-                (parseInt(estimateGasPrice) * 10) / 6
-              ).toString(),
-              gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
-            },
-            async function (error, transactionHash) {
-              if (transactionHash) {
-                setStakeCase(2);
-              } else {
-                setStakeCase(4);
-              }
-            }
-          )
-          .on("receipt", async function (receipt) {
-            setStakeCase(3);
-            setResetFlag(resetFlag + 1);
-          })
-          .on("error", async function (error) {
-            if (error?.code === 4001) {
-              setStakeCase(4);
-            } else {
-              setStakeCase(4);
-            }
-          });
-      } catch (err) {
-        console.log(err);
-        setStakeCase(4);
-      }
-    }
-  };
-
   const handleClosePopup = () => {
-    setStakeCase(0);
+    setPopupOpen(false);
+    setTxCase(0);
   };
 
   const handleTokenSelected = (token) => {
@@ -387,7 +408,16 @@ export default function AccumulationComponent() {
   };
   return (
     <Box>
-      <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
+      <InvestPopup
+        open={popupOpen}
+        txCase={txCase}
+        resetPopup={handleClosePopup}
+        poolTypeProp={STRATEGY_TYPE_ENUM.ACCUMULATION}
+        isApproved={isApproved}
+        handleApprove={handleApprove}
+        handleStake={handleStake}
+        orderObj={orderObj}
+      />
       {/* Components for create order and top header */}
       <Grid
         container
@@ -573,8 +603,8 @@ export default function AccumulationComponent() {
                       value={grids}
                       type="number"
                       onInput={(event) =>
-                        event.target.value > 0 &&
-                        event.target.value < 10 &&
+                        event.target.value >= 0 &&
+                        event.target.value < amount &&
                         setGrids(parseInt(event.target.value))
                       }
                       fullWidth
@@ -605,14 +635,24 @@ export default function AccumulationComponent() {
                   </Box>
                 </Grid>
               </Grid>
-
+              {errorMsg && (
+                <Typography
+                  variant="small"
+                  textAlign={"left"}
+                  color={"#ef5350"}
+                  lineHeight={1}
+                  mt={1}
+                >
+                  * {errorMsg}
+                </Typography>
+              )}
               <div className="text-center">
                 <Button
                   className={classes.actionButton}
-                  onClick={isApproved ? handleStake : handleApprove}
+                  onClick={handleInvestStrategy}
                   disabled={!accountSC}
                 >
-                  {isApproved ? "Place order" : "Approve Investment"}
+                  Place order
                 </Button>
               </div>
               <Box mt={3}>

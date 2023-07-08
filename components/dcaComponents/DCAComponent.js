@@ -7,7 +7,6 @@ import {
   Typography,
   useTheme,
   Input,
-  Container,
   useMediaQuery,
   Accordion,
   AccordionSummary,
@@ -18,29 +17,22 @@ import {
   getUserUSDTBalance,
 } from "../../actions/smartActions";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import TxPopup from "../../common/TxPopup";
-import ethersServiceProvider from "../../services/ethersServiceProvider";
-import { dcaInstance, tokenInstance } from "../../contracts";
-import web3 from "../../web3";
-import {
-  AvTimer,
-  BorderClear,
-  ExpandMore,
-  SentimentSatisfiedAlt,
-} from "@mui/icons-material";
+
+import { ExpandMore } from "@mui/icons-material";
 import Web3 from "web3";
 import { getTokenPriceStats } from "../../actions/serverActions";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setRefetchValue,
-  setUsdtBalanceOfUser,
-} from "../../reducers/UiReducer";
+import { setRefetchValue } from "../../reducers/UiReducer";
 import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
 import { tokenList } from "../../utils/data";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import DCATopHeader from "./DCATopHeader";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
+import InvestPopup from "../../common/InvestPopup";
+import ethersServiceProvider from "../../services/ethersServiceProvider";
+import { dcaInstance } from "../../contracts";
+import web3 from "../../web3";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -192,13 +184,15 @@ export default function DCAComponent() {
   const [amount, setAmount] = useState(1000);
   const [frequency, setFrequency] = useState(24);
   const [amountPerTradeState, setAmountPerTradeState] = useState(100);
-  const [stakeCase, setStakeCase] = useState(0);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [resetFlag, setResetFlag] = useState(0);
   const [tokenPriceData, setTokenPriceData] = useState(null);
   const [openTokenSelect, setOpenTokenSelect] = useState(false);
   const [selectedToken, setSelectedToken] = useState(tokenList[0]);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [orderObj, setOrderObj] = useState(null);
+  const [txCase, setTxCase] = useState(0);
 
   const sm = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const md = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -244,9 +238,41 @@ export default function DCAComponent() {
     setFrequency(value);
   };
 
+  const handleInvestStrategy = () => {
+    setErrorMsg(null);
+    if (
+      amount <= usdtBalance &&
+      amount > 0 &&
+      amountPerTradeState > 0 &&
+      frequency > 0 &&
+      amount >= amountPerTradeState
+    ) {
+      setOrderObj({
+        amount: amount,
+        frequency: frequency,
+        selectedToken: selectedToken,
+        amountPerTradeState: amountPerTradeState,
+      });
+      setPopupOpen(true);
+    } else {
+      if (amount > usdtBalance) {
+        setErrorMsg("Amount is exceeding the balance.");
+      }
+      if (amountPerTradeState > amount) {
+        setErrorMsg("Amount per trade is exceeding the invested amount.");
+      }
+      if (amount === 0) {
+        setErrorMsg("Amount should be greater than 0.");
+      }
+      if (amountPerTradeState === 0) {
+        setErrorMsg("Amount Amount per trade should be greater than 0.");
+      }
+    }
+  };
+
   // Approve token
   const handleApprove = async () => {
-    setStakeCase(1);
+    setTxCase(1);
 
     let userAddress = accountSC;
     let dca_contract_address = constants.contracts.dca;
@@ -272,121 +298,86 @@ export default function DCAComponent() {
           },
           async function (error, transactionHash) {
             if (transactionHash) {
-              setStakeCase(2);
+              setTxCase(2);
             } else {
-              setStakeCase(4);
+              setTxCase(3);
             }
           }
         )
         .on("receipt", async function (receipt) {
-          setStakeCase(3);
+          setTxCase(0);
           setResetFlag(resetFlag + 1);
-        })
-        .on("error", async function (error) {
-          if (error?.code === 4001) {
-            setStakeCase(4);
-          } else {
-            setStakeCase(4);
-          }
         });
     } catch (err) {
       console.log(err);
-      setStakeCase(4);
+      setTxCase(3);
     }
   };
 
-  // Write functions
+  // Invest functions
   const handleStake = async () => {
-    if (
-      amount <= usdtBalance &&
-      amount > 0 &&
-      amountPerTradeState > 0 &&
-      frequency > 0 &&
-      amount >= amountPerTradeState
-    ) {
-      setErrorMsg(null);
-      let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
-      let amountOfSingleOrder = await Web3.utils.toWei(
-        amountPerTradeState.toString(),
-        "ether"
-      );
+    let fiatAmount = await Web3.utils.toWei(amount.toString(), "ether");
+    let amountOfSingleOrder = await Web3.utils.toWei(
+      amountPerTradeState.toString(),
+      "ether"
+    );
 
-      // Enabling popup
-      setStakeCase(1);
-      let userAddress = accountSC;
-      let provider = ethersServiceProvider.web3AuthInstance;
+    // Enabling popup
+    setTxCase(1);
+    let userAddress = accountSC;
+    let provider = ethersServiceProvider.web3AuthInstance;
 
-      // Instance of DCA Contract
-      let dcaContract = dcaInstance(provider.provider);
-      try {
-        let estimateGas = await dcaContract.methods
-          .invest(
-            fiatAmount,
-            amountOfSingleOrder,
-            frequency,
-            selectedToken.address
-          )
-          .estimateGas({ from: userAddress });
+    // Instance of DCA Contract
+    let dcaContract = dcaInstance(provider.provider);
+    try {
+      let estimateGas = await dcaContract.methods
+        .invest(
+          fiatAmount,
+          amountOfSingleOrder,
+          frequency,
+          selectedToken.address
+        )
+        .estimateGas({ from: userAddress });
 
-        let estimateGasPrice = await web3.eth.getGasPrice();
-        const response = await dcaContract.methods
-          .invest(
-            fiatAmount,
-            amountOfSingleOrder,
-            frequency,
-            selectedToken.address
-          )
-          .send(
-            {
-              from: userAddress,
-              maxPriorityFeePerGas: "80000000000",
-              gasPrice: parseInt(
-                (parseInt(estimateGasPrice) * 10) / 6
-              ).toString(),
-              gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
-            },
-            async function (error, transactionHash) {
-              if (transactionHash) {
-                setStakeCase(2);
-              } else {
-                setStakeCase(4);
-              }
-            }
-          )
-          .on("receipt", async function (receipt) {
-            setStakeCase(3);
-            setResetFlag(resetFlag + 1);
-            dispatch(setRefetchValue(refetchValue + 1));
-          })
-          .on("error", async function (error) {
-            if (error?.code === 4001) {
-              setStakeCase(4);
+      let estimateGasPrice = await web3.eth.getGasPrice();
+      const response = await dcaContract.methods
+        .invest(
+          fiatAmount,
+          amountOfSingleOrder,
+          frequency,
+          selectedToken.address
+        )
+        .send(
+          {
+            from: userAddress,
+            maxPriorityFeePerGas: "80000000000",
+            gasPrice: parseInt(
+              (parseInt(estimateGasPrice) * 10) / 6
+            ).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 6).toString(),
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setTxCase(2);
             } else {
-              setStakeCase(4);
+              setTxCase(3);
             }
-          });
-      } catch (err) {
-        console.log(err);
-        setStakeCase(4);
-      }
-    } else {
-      if (amount > usdtBalance) {
-        setErrorMsg("Amount is exceeding the balance.");
-      }
-      if (amountPerTradeState > amount) {
-        setErrorMsg("Amount per trade is exceeding the invested amount.");
-      }
-      if (amount === 0) {
-        setErrorMsg("Amount should be greater than 0.");
-      }
-      if (amountPerTradeState === 0) {
-        setErrorMsg("Amount Amount per trade should be greater than 0.");
-      }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setTxCase(4);
+          setResetFlag(resetFlag + 1);
+          dispatch(setRefetchValue(refetchValue + 1));
+        });
+    } catch (err) {
+      console.log(err);
+      setTxCase(3);
     }
   };
 
   const handleClosePopup = () => {
-    setStakeCase(0);
+    setPopupOpen(false);
+    setTxCase(0);
   };
 
   const handleTokenSelected = (token) => {
@@ -398,7 +389,16 @@ export default function DCAComponent() {
 
   return (
     <Box>
-      <TxPopup txCase={stakeCase} resetPopup={handleClosePopup} />
+      <InvestPopup
+        open={popupOpen}
+        txCase={txCase}
+        resetPopup={handleClosePopup}
+        poolTypeProp={STRATEGY_TYPE_ENUM.DCA}
+        isApproved={isApproved}
+        handleApprove={handleApprove}
+        handleStake={handleStake}
+        orderObj={orderObj}
+      />
 
       {/* Components for create order and top header */}
       <Grid
@@ -629,10 +629,10 @@ export default function DCAComponent() {
               <div className="text-center">
                 <Button
                   className={classes.actionButton}
-                  onClick={isApproved ? handleStake : handleApprove}
+                  onClick={handleInvestStrategy}
                   disabled={!accountSC}
                 >
-                  {isApproved ? "Place order" : "Approve Investment"}
+                  Place order
                 </Button>
               </div>
               <Box mt={3}>

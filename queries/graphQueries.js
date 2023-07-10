@@ -27,6 +27,21 @@ export const GetPoolUserDataByAddress = gql`
     }
   }
 `;
+
+export const GetUserInvestmentDataByAddress = gql`
+  query GetUserInvestmentDataByAddress($user: String) {
+    userEntities(where: { user: $user }) {
+      id
+      deposit
+      fiatBalance
+      tokenAddress
+      tokenBalance
+      strategyType
+      user
+    }
+  }
+`;
+
 export const GetPoolUserActivityQuery = gql`
   query getPoolUserActivityQuery($user: String, $type: String) {
     userActivities(where: { user: $user, strategyType: $type }) {

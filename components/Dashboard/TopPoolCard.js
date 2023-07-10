@@ -14,7 +14,7 @@ import { Add, LocalConvenienceStore, TrendingUp } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    backgroundColor: constants.baseColorLight,
+    backgroundColor: "#171320",
     marginTop: 20,
     marginBottom: 20,
     paddingTop: 14,
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     maxHeight: 130,
-    border: "1px solid #414141",
+    // border: "1px solid #414141",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: 14,
     "&:hover": {

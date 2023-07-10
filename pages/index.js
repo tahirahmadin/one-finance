@@ -31,7 +31,6 @@ import ArticleCard from "../components/Dashboard/ArticleCard";
 
 const useStyles = makeStyles((theme) => ({
   background: {
-    // backgroundImage: 'url("images/network.png")',
     backgroundPosition: "center center,center center",
     backgroundRepeat: "no-repeat,no-repeat",
     backgroundSize: "cover,contain",
@@ -61,13 +60,14 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
   },
   card1: {
+    backgroundColor: "#171320",
     height: 295,
     marginTop: 15,
     backgroundSize: "cover",
     backgroundImage:
       "url(https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg)",
     width: "100%",
-    border: "1px solid #414141",
+
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: 14,
     "&:hover": {
@@ -207,7 +207,7 @@ const Home = () => {
                 <Grid
                   container
                   spacing={md ? 2 : 4}
-                  style={{ marginBottom: 20 }}
+                  style={{ marginBottom: 20, marginTop: 1 }}
                 >
                   <Grid item md={4} sm={12} xs={12}>
                     <ArticleCard

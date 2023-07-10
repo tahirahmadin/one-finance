@@ -16,7 +16,7 @@ import Header from "../components/resuableComponents/Header";
 import PortfolioTopSection from "../components/portfolioComponents/PortfolioTopSection";
 import { Tweet } from "react-twitter-widgets";
 import MobileBottomBar from "../common/MobileBottomBar";
-import AuthComponentChecker from "../components/resuableComponents/AuthComponentsChecker";
+import ArticleCard from "../components/Dashboard/ArticleCard";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -137,9 +137,17 @@ const Home = () => {
                   </Grid>
                   <Grid item md={4} sm={12} xs={12}>
                     <Hidden mdDown>
-                      <Tweet
-                        tweetId="1675361153138999299"
-                        options={{ theme: "dark" }}
+                      <ArticleCard
+                        title={
+                          "Why trading with indicators is the best way to avoid rist in investment"
+                        }
+                        image="https://en.cryptonomist.ch/wp-content/uploads/2019/06/RSI-indicator-cryptocurrency-trading.jpg"
+                      />
+                      <ArticleCard
+                        title={
+                          "Why trading with indicators is the best way to avoid rist in investment"
+                        }
+                        image="https://en.cryptonomist.ch/wp-content/uploads/2019/06/RSI-indicator-cryptocurrency-trading.jpg"
                       />
                     </Hidden>
                   </Grid>

@@ -204,7 +204,11 @@ const Home = () => {
                 <Typography variant="h6" fontWeight={600} mt={3}>
                   Learning booth
                 </Typography>
-                <Grid container spacing={md ? 2 : 4}>
+                <Grid
+                  container
+                  spacing={md ? 2 : 4}
+                  style={{ marginBottom: 20 }}
+                >
                   <Grid item md={4} sm={12} xs={12}>
                     <ArticleCard
                       title={

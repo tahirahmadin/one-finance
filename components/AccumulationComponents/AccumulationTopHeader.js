@@ -22,7 +22,7 @@ import {
 import LinearProgressComponent from "../../common/LinearProgressComponent";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { useUserInfo } from "../../hooks/useUserInfo";
+import { useUserPoolInfo } from "../../hooks/useUserPoolInfo";
 import { STRATEGY_TYPE_ENUM } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -147,24 +147,15 @@ export default function AccumulationTopHeader() {
   const md = useMediaQuery(theme.breakpoints.down("md"));
   const { accountSC } = useWeb3Auth();
 
-  const [userPoolState, setUserPoolState] = useState(null);
-
+  // To fetch pool info only
   const { poolInfo: poolGraphData, loading } = usePoolInfo(
     STRATEGY_TYPE_ENUM.ACCUMULATION
   );
 
-  useEffect(() => {
-    if (accountSC) {
-      async function asyncFn() {
-        let { userPoolInfo: userPoolGraphData, loading } = useUserInfo(
-          STRATEGY_TYPE_ENUM.ACCUMULATION
-        );
-        console.log(userPoolGraphData);
-        setUserPoolState(userPoolGraphData);
-      }
-      asyncFn();
-    }
-  }, [accountSC]);
+  // To fetch user pool info
+  const { userPoolInfo: userPoolGraphData } = useUserPoolInfo(
+    STRATEGY_TYPE_ENUM.ACCUMULATION
+  );
 
   return (
     <Box className={classes.cardTop}>
@@ -313,8 +304,8 @@ export default function AccumulationTopHeader() {
                 style={{ fontWeight: 600, lineHeight: 1.6 }}
               >
                 ${" "}
-                {poolGraphData && poolGraphData.invested
-                  ? poolGraphData.invested
+                {userPoolGraphData && userPoolGraphData.totalInvestedUSDT
+                  ? userPoolGraphData.totalInvestedUSDT
                   : "-"}
               </Typography>
             </Box>

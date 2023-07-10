@@ -4,7 +4,7 @@ import { GetPoolUserDataByAddress } from "../queries/graphQueries";
 import Web3 from "web3";
 import ethersServiceProvider from "../services/ethersServiceProvider";
 
-export function useUserInfo() {
+export function useUserPoolInfo(strategyType) {
   let accountSC = ethersServiceProvider.currentAccount;
 
   const [userData, setUserData] = useState({
@@ -24,14 +24,18 @@ export function useUserInfo() {
   );
 
   useEffect(() => {
+    console.log("calling");
     if (accountSC) {
       getPoolUserDataQuery({
-        variables: { user: accountSC, type: STRATEGY_TYPE_ENUM.ACCUMULATION },
+        variables: { user: accountSC, type: strategyType },
       });
     }
   }, [accountSC]);
 
   useEffect(() => {
+    console.log("data");
+    console.log(data);
+
     if (!data?.poolUsers) {
       return;
     }

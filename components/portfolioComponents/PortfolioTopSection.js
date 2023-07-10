@@ -17,7 +17,7 @@ import {
 import { constants, STRATEGY_TYPE_ENUM } from "../../utils/constants";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { useUserInfo } from "../../hooks/useUserInfo";
+import { useUserPoolInfo } from "../../hooks/useUserPoolInfo";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -97,7 +97,7 @@ export default function PortfolioTopSection() {
           variant="body2"
           fontWeight={500}
           color="#212121"
-          fontSize={13}
+          fontSize={14}
         >
           Wallet Balance
         </Typography>

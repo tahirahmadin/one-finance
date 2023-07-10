@@ -7,8 +7,7 @@ import { constants } from "../../utils/constants";
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: constants.baseColorLight,
-    marginTop: 20,
-    marginBottom: 20,
+
     maxWidth: 320,
     width: "100%",
     height: "100%",

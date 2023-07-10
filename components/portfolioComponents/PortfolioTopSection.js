@@ -354,7 +354,7 @@ export default function PortfolioTopSection() {
                     color={"#f9f9f9"}
                     fontSize={13}
                   >
-                    {ele.balance} {ele.tokenName}
+                    {ele.balance} {ele.symbol}
                   </Typography>
                   {/* <Typography
                     variant="body2"

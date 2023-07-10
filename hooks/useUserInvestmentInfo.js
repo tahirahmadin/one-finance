@@ -10,15 +10,14 @@ export function useUserInvestmentInfo() {
   const [userData, setUserData] = useState([]);
 
   const [getUserInvestmentDataQuery, { data, loading, error }] = useLazyQuery(
-    GetUserInvestmentDataByAddress,
-    {
-      fetchPolicy: "network-only",
-      pollInterval: 1000,
-    }
+    GetUserInvestmentDataByAddress
+    // {
+    //   fetchPolicy: "network-only",
+    //   pollInterval: 1000,
+    // }
   );
 
   useEffect(() => {
-    console.log("calling");
     if (accountSC) {
       getUserInvestmentDataQuery({
         variables: { user: accountSC },
@@ -27,9 +26,6 @@ export function useUserInvestmentInfo() {
   }, [accountSC]);
 
   useEffect(() => {
-    console.log("data");
-    console.log(data);
-
     if (!data?.userEntities) {
       return;
     }

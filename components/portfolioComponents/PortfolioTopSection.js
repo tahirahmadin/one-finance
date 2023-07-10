@@ -14,10 +14,9 @@ import {
   ContactSupport,
   TrendingUp,
 } from "@mui/icons-material";
-import { constants, STRATEGY_TYPE_ENUM } from "../../utils/constants";
-import { usePoolInfo } from "../../hooks/usePoolInfo";
-import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { useUserPoolInfo } from "../../hooks/useUserPoolInfo";
+import { useUserInvestmentInfo } from "../../hooks/useUserInvestmentInfo";
+import { tokenList } from "../../utils/data";
+import Web3 from "web3";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -90,6 +89,70 @@ export default function PortfolioTopSection() {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
 
+  const [balances, setBalances] = useState([]);
+
+  // To fetch investment info
+  const { userInvestmentInfo: investmentsData, loading } =
+    useUserInvestmentInfo();
+
+  useEffect(() => {
+    if (investmentsData && investmentsData.length > 0) {
+      let tempBalances = [];
+      let tempFiatBalance = 0;
+      tempBalances = investmentsData.map((singleInvest) => {
+        let singleTokenInfo = tokenList.find(
+          (singleToken) =>
+            singleToken.address.toLowerCase() ===
+            singleInvest.tokenAddress.toLowerCase()
+        );
+        if (singleTokenInfo) {
+          tempFiatBalance += parseFloat(
+            Web3.utils.fromWei(singleInvest.fiatBalance, "ether")
+          );
+          let tempTokenBalance = parseFloat(
+            Web3.utils.fromWei(singleInvest.tokenBalance, "ether")
+          );
+          return {
+            tokenName: singleTokenInfo.name,
+            symbol: singleTokenInfo.symbol,
+            image: singleTokenInfo.logoURI,
+            balance: tempTokenBalance,
+            tokenAddress: singleInvest.tokenAddress.toLowerCase(),
+          };
+        }
+      });
+      tempBalances.push({
+        tokenName: "USD TETHER",
+        symbol: "USDT",
+        image: "https://static.crypto.com/token/icons/tether/color_icon.png",
+        balance: tempFiatBalance,
+        tokenAddress: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
+      });
+
+      let mergedData = [];
+      tempBalances.map((ele) => {
+        let duplicateEntryIndex = mergedData.findIndex(
+          (uniqueSingle) => uniqueSingle.symbol === ele.symbol
+        );
+        // if data is already inside the result array
+        if (duplicateEntryIndex >= 0) {
+          mergedData[duplicateEntryIndex] = {
+            balance: mergedData[duplicateEntryIndex].balance + ele.balance,
+            ...mergedData[duplicateEntryIndex],
+          };
+        } else {
+          // if data is not inside the result array
+          mergedData.push(ele);
+        }
+      });
+
+      console.log(mergedData);
+
+      setBalances(mergedData);
+      // console.log(investmentsData);
+      // console.log(tokenList);
+    }
+  }, [investmentsData]);
   return (
     <Box className={classes.card}>
       <Box className={classes.balanceCard}>
@@ -237,209 +300,75 @@ export default function PortfolioTopSection() {
         >
           My assets
         </Typography>
-        <Box
-          mt={1}
-          display={"flex"}
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ borderBottom: "0.5px solid #212121" }}
-        >
-          <Box
-            display={"flex"}
-            alignItems="center"
-            justifyContent="flex-start"
-            py={1}
-          >
-            <Box
-              mr={2}
-              style={{
-                backgroundColor: "#f9f9f9",
-                height: 30,
-                width: 30,
-                borderRadius: "36%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
-                alt="ETH"
-                height="18px"
-              />
-            </Box>
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              Ethereum
-            </Typography>
-          </Box>
+        {balances &&
+          balances.map((ele) => {
+            return (
+              <Box
+                mt={1}
+                display={"flex"}
+                alignItems="center"
+                justifyContent="space-between"
+                style={{ borderBottom: "0.5px solid #212121" }}
+              >
+                <Box
+                  display={"flex"}
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  py={1}
+                >
+                  <Box
+                    mr={2}
+                    style={{
+                      backgroundColor: "#171320",
+                      height: 32,
+                      width: 32,
+                      borderRadius: "36%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img src={ele.image} alt="ETH" height="30px" />
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    textAlign="right"
+                    fontWeight={600}
+                    color={"#f9f9f9"}
+                    fontSize={13}
+                  >
+                    {ele.tokenName}
+                  </Typography>
+                </Box>
 
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-end"
-            alignItems="flex-end"
-          >
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              1.25 Eth
-            </Typography>
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#bdbdbd"}
-              fontSize={11}
-            >
-              $12,382
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          mt={1}
-          display={"flex"}
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ borderBottom: "0.5px solid #212121" }}
-        >
-          <Box
-            display={"flex"}
-            alignItems="center"
-            justifyContent="flex-start"
-            py={1}
-          >
-            <Box
-              mr={2}
-              style={{
-                backgroundColor: "#f9f9f9",
-                height: 30,
-                width: 30,
-                borderRadius: "36%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
-                alt="ETH"
-                height="18px"
-              />
-            </Box>
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              Ethereum
-            </Typography>
-          </Box>
-
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-end"
-            alignItems="flex-end"
-          >
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              1.25 Eth
-            </Typography>
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#bdbdbd"}
-              fontSize={11}
-            >
-              $12,382
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          mt={1}
-          display={"flex"}
-          alignItems="center"
-          justifyContent="space-between"
-          style={{ borderBottom: "0.5px solid #212121" }}
-        >
-          <Box
-            display={"flex"}
-            alignItems="center"
-            justifyContent="flex-start"
-            py={1}
-          >
-            <Box
-              mr={2}
-              style={{
-                backgroundColor: "#212121",
-                height: 30,
-                width: 30,
-                borderRadius: "36%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Binance-coin-bnb-logo.png/1024px-Binance-coin-bnb-logo.png"
-                alt="ETH"
-                height="18px"
-              />
-            </Box>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              Binance Token
-            </Typography>
-          </Box>
-
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            justifyContent="flex-end"
-            alignItems="flex-end"
-          >
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#f9f9f9"}
-              fontSize={13}
-            >
-              1.25 BNB
-            </Typography>
-            <Typography
-              variant="body2"
-              textAlign="right"
-              fontWeight={600}
-              color={"#bdbdbd"}
-              fontSize={11}
-            >
-              $12,382
-            </Typography>
-          </Box>
-        </Box>
+                <Box
+                  display="flex"
+                  flexDirection={"column"}
+                  justifyContent="flex-end"
+                  alignItems="flex-end"
+                >
+                  <Typography
+                    variant="body2"
+                    textAlign="right"
+                    fontWeight={600}
+                    color={"#f9f9f9"}
+                    fontSize={13}
+                  >
+                    {ele.balance} {ele.tokenName}
+                  </Typography>
+                  {/* <Typography
+                    variant="body2"
+                    textAlign="right"
+                    fontWeight={600}
+                    color={"#bdbdbd"}
+                    fontSize={11}
+                  >
+                    $12,382
+                  </Typography> */}
+                </Box>
+              </Box>
+            );
+          })}
       </Box>
     </Box>
   );

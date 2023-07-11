@@ -215,6 +215,15 @@ export default function DCAComponent() {
     asyncFn();
   }, [resetFlag, accountSC, selectedToken]);
 
+  // To update neccessary state values on load
+  useEffect(() => {
+    if (accountSC && usdtBalance) {
+      setAmount(usdtBalance > 1000 ? 1000 : usdtBalance);
+      setAmountPerTradeState(usdtBalance > 1000 ? 100 : usdtBalance / 4);
+      setFrequency(24);
+    }
+  }, [accountSC, usdtBalance]);
+
   // Check isApproved
   useEffect(() => {
     if (accountSC) {
@@ -647,16 +656,13 @@ export default function DCAComponent() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  fontWeight={300}
+                  fontWeight={400}
                   fontSize={12}
-                  color={"#e5e5e5"}
+                  color={"#bdbdbd"}
                 >
                   Strategy will buy tokens for amount{" "}
-                  <strong style={{ color: "white" }}>
-                    {amountPerTradeState} USDT{" "}
-                  </strong>{" "}
-                  on every{" "}
-                  <strong style={{ color: "white" }}>{frequency}</strong> hours.
+                  <strong>{amountPerTradeState} USDT </strong> on every{" "}
+                  <strong>{frequency}</strong> hours.
                 </Typography>
               </Box>
               <Typography
@@ -665,14 +671,15 @@ export default function DCAComponent() {
                 fontWeight={500}
                 fontSize={13}
                 color={"white"}
+                mb={1}
               >
                 Expected results:
               </Typography>
               <Typography
                 variant="body2"
-                fontWeight={300}
+                fontWeight={400}
                 fontSize={12}
-                color={"#e5e5e5"}
+                color={"#bdbdbd"}
               >
                 You will accumulate your favourite tokens with average price.
               </Typography>

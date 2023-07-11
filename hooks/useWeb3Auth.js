@@ -135,6 +135,7 @@ export const useWeb3Auth = () => {
         await dispatch(setWalletStatus(walletStatus + 1));
         setAddress(null);
         setWeb3Auth(instance);
+        window.location.reload();
       }
     }
   };

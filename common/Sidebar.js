@@ -248,7 +248,7 @@ const SideBar = ({}) => {
             );
           })}
 
-          <Link href="/" style={{ textDecoration: "none" }}>
+          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
             <Paper
               onClick={() => dispatch(setMenuIndex(5))}
               key={5}
@@ -277,8 +277,8 @@ const SideBar = ({}) => {
                 Community
               </Typography>
             </Paper>
-          </Link>
-          <Link href="/" style={{ textDecoration: "none" }}>
+          </a>
+          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
             {" "}
             <Paper
               onClick={() => dispatch(setMenuIndex(6))}
@@ -307,7 +307,7 @@ const SideBar = ({}) => {
                 Academy
               </Typography>
             </Paper>
-          </Link>
+          </a>
           <Paper
             onClick={disconnect}
             key={0}

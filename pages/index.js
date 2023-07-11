@@ -21,6 +21,7 @@ import {
   AccessTime,
   Architecture,
   LockClock,
+  NightsStayTwoTone,
   Pix,
   Savings,
   ShoppingBasket,
@@ -28,6 +29,8 @@ import {
   TrendingUp,
 } from "@mui/icons-material";
 import ArticleCard from "../components/Dashboard/ArticleCard";
+import { useTopPoolInfo } from "../hooks/useTopPoolsInfo";
+import Web3 from "web3";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -62,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   card1: {
     backgroundColor: "#171320",
     height: 295,
-    marginTop: 15,
+
     backgroundSize: "cover",
     backgroundImage:
       "url(https://ninjapromo.io/wp-content/uploads/2022/11/best-crypto-ad-networks.jpg)",
@@ -75,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     [theme.breakpoints.down("md")]: {
-      height: 200,
+      height: 295,
       paddingTop: 5,
       paddingBottom: 5,
       paddingLeft: 5,
@@ -106,6 +109,9 @@ const Home = () => {
   const md = useMediaQuery(theme.breakpoints.down("md"));
   const [pageLoaded, setPageLoaded] = useState(false);
 
+  // To fetch pools info
+  const { poolsInfo: topPoolsData, loading } = useTopPoolInfo();
+
   useEffect(() => setPageLoaded(true), []);
 
   const images = [
@@ -127,6 +133,7 @@ const Home = () => {
         keywords="sleepswap"
         image="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/990/708/datas/gallery.jpg"
       />
+
       {pageLoaded && (
         <Grid container>
           <Hidden mdDown>
@@ -144,7 +151,7 @@ const Home = () => {
                   </Typography>
                 </Hidden>
                 <Grid container spacing={2} mb={md ? 5 : 6}>
-                  <Grid item md={8} sm={12} xs={12}>
+                  <Grid item md={8} sm={12} xs={12} mt={2}>
                     {/* <Box style={{ height: 100, borderRadius: 100 }}>
                       <ReactImageGallery
                         items={images}
@@ -159,7 +166,7 @@ const Home = () => {
                     </Box> */}
                     <Box className={classes.card1}></Box>
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
+                  <Grid item md={4} sm={12} xs={12} mt={2}>
                     <WalletSummary />
                   </Grid>
                 </Grid>
@@ -167,36 +174,37 @@ const Home = () => {
                 <Typography variant="h6" fontWeight={600}>
                   Top pools this week
                 </Typography>
-                <Grid container spacing={md ? 0 : 2} mb={md ? 5 : 6}>
-                  <Grid item md={3} sm={12} xs={12}>
-                    <TopPoolCard
-                      title={"Accumulation"}
-                      invested={"112,324"}
-                      change={"12.32"}
-                      icon={<ShoppingBasket />}
-                    />
-                  </Grid>
-                  <Grid item md={3} sm={12} xs={12}>
-                    <TopPoolCard
-                      title={"RSI"}
-                      invested={"93,324"}
-                      change={"9.32"}
-                      icon={<Train />}
-                    />
-                  </Grid>
-                  <Grid item md={3} sm={12} xs={12}>
+                <Grid container spacing={md ? 1 : 2} mb={md ? 5 : 6}>
+                  {topPoolsData &&
+                    topPoolsData.map((singlePool) => {
+                      return (
+                        <Grid item md={3} sm={6} xs={12}>
+                          <TopPoolCard
+                            title={singlePool.id}
+                            invested={Web3.utils.fromWei(
+                              singlePool.deposit,
+                              "ether"
+                            )}
+                            count={singlePool.ordersCount}
+                            icon={<NightsStayTwoTone />}
+                          />
+                        </Grid>
+                      );
+                    })}
+
+                  <Grid item md={3} sm={6} xs={12}>
                     <TopPoolCard
                       title={"Spot Grid"}
-                      invested={"73,324"}
-                      change={"7.11"}
+                      invested={"7,324"}
+                      count={"11"}
                       icon={<LockClock />}
                     />
                   </Grid>
-                  <Grid item md={3} sm={12} xs={12}>
+                  <Grid item md={3} sm={6} xs={12}>
                     <TopPoolCard
-                      title={"DCA"}
-                      invested={"53,324"}
-                      change={"6.32"}
+                      title={"RSI"}
+                      invested={"3,324"}
+                      count={"22"}
                       icon={<LockClock />}
                     />
                   </Grid>
@@ -209,7 +217,7 @@ const Home = () => {
                   spacing={md ? 2 : 4}
                   style={{ marginBottom: 20, marginTop: 1 }}
                 >
-                  <Grid item md={4} sm={12} xs={12}>
+                  <Grid item md={4} sm={6} xs={12}>
                     <ArticleCard
                       title={
                         "Why Dollar Cost Averaging is the best bet to accumulate your favourite crypto for long term"
@@ -217,7 +225,7 @@ const Home = () => {
                       image="https://zebpay.com/in/wp-content/uploads/2022/09/Dollar-Cost-Average.jpg"
                     />
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
+                  <Grid item md={4} sm={6} xs={12}>
                     <ArticleCard
                       title={
                         "How accumulation strategy works, and give returns in one bull cycle"
@@ -227,7 +235,7 @@ const Home = () => {
                       }
                     />
                   </Grid>
-                  <Grid item md={4} sm={12} xs={12}>
+                  <Grid item md={4} sm={6} xs={12}>
                     <ArticleCard
                       title={
                         "Why trading with indicators is the best way to avoid rist in investment"

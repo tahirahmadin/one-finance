@@ -206,7 +206,7 @@ export default function AccumulationTopHeader() {
                   display={"flex"}
                   flexDirection={"row"}
                   justifyContent="flex-start"
-                  alignItems={"flex-start"}
+                  alignItems={"center"}
                 >
                   <Typography
                     variant="h3"
@@ -319,9 +319,12 @@ export default function AccumulationTopHeader() {
                 fontSize={16}
                 fontWeight={600}
               >
-                +$1273{" "}
+                +$
+                {userPoolGraphData && userPoolGraphData.totalInvestedUSDT
+                  ? userPoolGraphData.totalInvestedUSDT * 10
+                  : "-"}{" "}
                 {!md && (
-                  <span style={{ fontSize: 10, color: "green" }}>56%</span>
+                  <span style={{ fontSize: 10, color: "green" }}>10x</span>
                 )}
               </Typography>
             </Box>

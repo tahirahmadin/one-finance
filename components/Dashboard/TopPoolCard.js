@@ -9,8 +9,15 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { constants } from "../../utils/constants";
-import { Add, LocalConvenienceStore, TrendingUp } from "@mui/icons-material";
+import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
+import {
+  Add,
+  AlarmOnTwoTone,
+  LocalConvenienceStore,
+  NightsStayTwoTone,
+  TrendingUp,
+} from "@mui/icons-material";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -43,78 +50,90 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopPoolCard({ title, invested, change, icon }) {
+export default function TopPoolCard({ title, invested, count, icon }) {
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box pt={0} className={classes.card}>
-      <Box>
-        <Box display={"flex"} justifyContent={"space-between"}>
-          <Box>
-            <Typography
-              variant="body2"
-              mb={1}
-              fontWeight={500}
-              fontSize={md ? 14 : 12}
-              color={"#bdbdbd"}
+      <Link
+        href={`/pools/${title.toLowerCase()}`}
+        style={{ textDecoration: "none" }}
+      >
+        <Box>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Box>
+              <Typography
+                style={{ textTransform: "capitalize" }}
+                variant="body2"
+                mb={1}
+                fontWeight={500}
+                fontSize={md ? 14 : 12}
+                color={"#bdbdbd"}
+              >
+                {title.toLowerCase()}
+              </Typography>
+              <Typography
+                variant="h2"
+                mb={1}
+                fontWeight={600}
+                fontSize={md ? 233 : 180}
+                color={"#f9f9f9"}
+              >
+                ${invested}
+              </Typography>
+            </Box>
+
+            <IconButton
+              style={{
+                backgroundColor: constants.highlighColorDark,
+                height: 40,
+                width: 40,
+                color: "white",
+              }}
             >
-              {title}
-            </Typography>
-            <Typography
-              variant="h4"
-              mb={1}
-              fontWeight={600}
-              fontSize={md ? 22 : 17}
-              color={"#f9f9f9"}
-            >
-              ${invested}
-            </Typography>
+              {title === STRATEGY_TYPE_ENUM.ACCUMULATION && (
+                <NightsStayTwoTone />
+              )}
+              {title === STRATEGY_TYPE_ENUM.DCA && <AlarmOnTwoTone />}
+              {title != STRATEGY_TYPE_ENUM.ACCUMULATION &&
+                title != STRATEGY_TYPE_ENUM.DCA &&
+                icon}
+            </IconButton>
           </Box>
 
-          <IconButton
-            style={{
-              backgroundColor: constants.highlighColorDark,
-              height: 40,
-              width: 40,
-              color: "white",
-            }}
-          >
-            {icon}
-          </IconButton>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography
+              mt={1}
+              variant="body2"
+              textAlign="left"
+              fontWeight={500}
+              color={"#6ec046"}
+              fontSize={md ? 17 : 14}
+            >
+              {count}{" "}
+              <span style={{ lineHeight: 1.4, fontSize: 11, color: "white" }}>
+                people participated
+              </span>
+            </Typography>
+            <Button
+              style={{
+                color: constants.highlighColorDark,
+                textTransform: "lowercase",
+                // borderColor: constants.highlighColorDark,
+                // borderStyle: "solid",
+                // borderWidth: 1,
+                borderRadius: 14,
+                height: 30,
+                fontSize: 13,
+              }}
+            >
+              + Invest now
+            </Button>
+          </Box>
         </Box>
-
-        <Box display={"flex"} justifyContent={"space-between"}>
-          <Typography
-            mt={1}
-            variant="body2"
-            textAlign="left"
-            fontWeight={500}
-            color={"#6ec046"}
-            fontSize={md ? 17 : 14}
-          >
-            +{change}%{" "}
-            <span style={{ lineHeight: 1.4, fontSize: 11, color: "white" }}>
-              this week
-            </span>
-          </Typography>
-          <Button
-            style={{
-              color: constants.highlighColorDark,
-              textTransform: "lowercase",
-              // borderColor: constants.highlighColorDark,
-              // borderStyle: "solid",
-              // borderWidth: 1,
-              borderRadius: 14,
-              height: 30,
-              fontSize: 13,
-            }}
-          >
-            + Invest now
-          </Button>
-        </Box>
-      </Box>
+      </Link>
     </Box>
   );
 }

@@ -13,6 +13,19 @@ export const GetPoolDataById = gql`
     }
   }
 `;
+export const GetPoolsDataQuery = gql`
+  query GetPoolsDataQuery($id: String) {
+    pools(id: $id, orderBy: deposit, orderDirection: desc) {
+      id
+      strategyType
+      usersCount
+      ordersCount
+      deposit
+      fiatBalance
+      tokenBalance
+    }
+  }
+`;
 
 export const GetPoolUserDataByAddress = gql`
   query GetPoolUserDataByAddress($user: String, $type: String) {

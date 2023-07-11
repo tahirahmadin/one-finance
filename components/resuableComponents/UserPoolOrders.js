@@ -86,7 +86,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
             color: "#bdbdbd",
             paddingBottom: 10,
             fontSize: 13,
-            borderRadius: 14,
+            borderRadius: 10,
             marginTop: 10,
             backgroundColor: "#15171c",
             paddingBottom: 20,

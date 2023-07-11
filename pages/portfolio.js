@@ -17,6 +17,7 @@ import PortfolioTopSection from "../components/portfolioComponents/PortfolioTopS
 import { Tweet } from "react-twitter-widgets";
 import MobileBottomBar from "../common/MobileBottomBar";
 import ArticleCard from "../components/Dashboard/ArticleCard";
+import WalletSummary from "../components/Dashboard/WalletSummary";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -136,6 +137,11 @@ const Home = () => {
                     <PortfolioTopSection />
                   </Grid>
                   <Grid item md={4} sm={12} xs={12}>
+                    <Hidden mdDown>
+                      <Box mb={3}>
+                        <WalletSummary />
+                      </Box>
+                    </Hidden>
                     <Hidden mdDown>
                       <ArticleCard
                         title={

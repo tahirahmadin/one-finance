@@ -2,10 +2,15 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { constants } from "../../utils/constants";
-import { LockClock, ShoppingBasket, TramRounded } from "@mui/icons-material";
+import {
+  AlarmOnTwoTone,
+  LockClock,
+  ShoppingBasket,
+  TramRounded,
+} from "@mui/icons-material";
 import { useUserInvestmentInfo } from "../../hooks/useUserInvestmentInfo";
 import Web3 from "web3";
-
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: "#171320",
@@ -78,6 +83,8 @@ export default function WalletSummary() {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
 
+  const { accountSC } = useWeb3Auth();
+
   // To fetch investment info
   const { userInvestmentInfo: investmentsData, loading } =
     useUserInvestmentInfo();
@@ -95,98 +102,134 @@ export default function WalletSummary() {
     }
   };
   return (
-    <Box pt={0} className={classes.card} mt={md ? 0 : 2}>
-      <Box>
-        <Typography variant="body2" color="#bdbdbd" fontSize={12}>
-          My Investments
-        </Typography>
-        <Typography
-          variant="h2"
-          style={{ fontWeight: 600, lineHeight: 1.6 }}
-          fontSize={21}
-        >
-          ${getTotalInvestedOfUser()}
-        </Typography>
-      </Box>
-
-      <Box>
-        {investmentsData &&
-          investmentsData.map((singleInvest) => {
-            return (
-              <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                mt={1}
-                style={{
-                  border: "1px solid rgba(106, 85, 234,0.1)",
-                  padding: "7px 7px 7px 7px",
-                  borderRadius: 10,
-                  backgroundColor: "rgba(106, 85, 234,0.03)",
-                }}
-              >
+    <Box pt={0} className={classes.card}>
+      {accountSC && (
+        <Box>
+          <Typography variant="body2" color="#bdbdbd" fontSize={12}>
+            My Investments
+          </Typography>
+          <Typography
+            variant="h2"
+            style={{ fontWeight: 600, lineHeight: 1.6 }}
+            fontSize={21}
+          >
+            ${getTotalInvestedOfUser()}
+          </Typography>
+        </Box>
+      )}
+      {accountSC && (
+        <Box>
+          {investmentsData &&
+            investmentsData.map((singleInvest) => {
+              return (
                 <Box
                   display={"flex"}
                   justifyContent={"space-between"}
-                  alignItems={"center"}
+                  mt={1}
+                  style={{
+                    border: "1px solid rgba(106, 85, 234,0.1)",
+                    padding: "7px 7px 7px 7px",
+                    borderRadius: 10,
+                    backgroundColor: "rgba(106, 85, 234,0.03)",
+                  }}
                 >
-                  <ShoppingBasket style={{ color: "#e5e5e5" }} />
                   <Box
-                    ml={1}
                     display={"flex"}
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems={"flex-start"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
                   >
-                    <Typography
-                      variant="body2"
-                      color={"#ffffff"}
-                      style={{ lineHeight: 1.4, textTransaform: "lowercase" }}
-                      fontSize={13}
+                    <AlarmOnTwoTone style={{ color: "#e5e5e5" }} />
+                    <Box
+                      ml={1}
+                      display={"flex"}
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems={"flex-start"}
                     >
-                      {singleInvest.strategyType}
-                    </Typography>
+                      <Typography
+                        variant="body2"
+                        color={"#ffffff"}
+                        style={{ lineHeight: 1.4, textTransaform: "lowercase" }}
+                        fontSize={13}
+                      >
+                        {singleInvest.strategyType}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box display={"flex"} justifyContent={"space-between"}>
+                    <Box
+                      ml={1}
+                      display={"flex"}
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems={"flex-end"}
+                    >
+                      <Typography
+                        variant="body2"
+                        color={"#ffffff"}
+                        style={{ lineHeight: 1.4 }}
+                      >
+                        $
+                        {singleInvest.fiatBalance &&
+                          Web3.utils.fromWei(
+                            singleInvest.fiatBalance.toString(),
+                            "ether"
+                          )}
+                      </Typography>
+                      <Typography
+                        variant="verysmall"
+                        textAlign="left"
+                        fontWeight={500}
+                        color={"#757575"}
+                        style={{ lineHeight: 1.4 }}
+                      >
+                        Deposit: $
+                        {singleInvest.deposit &&
+                          Web3.utils.fromWei(
+                            singleInvest.deposit.toString(),
+                            "ether"
+                          )}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
-                <Box display={"flex"} justifyContent={"space-between"}>
-                  <Box
-                    ml={1}
-                    display={"flex"}
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems={"flex-end"}
-                  >
-                    <Typography
-                      variant="body2"
-                      color={"#ffffff"}
-                      style={{ lineHeight: 1.4 }}
-                    >
-                      $
-                      {singleInvest.fiatBalance &&
-                        Web3.utils.fromWei(
-                          singleInvest.fiatBalance.toString(),
-                          "ether"
-                        )}
-                    </Typography>
-                    <Typography
-                      variant="verysmall"
-                      textAlign="left"
-                      fontWeight={500}
-                      color={"#757575"}
-                      style={{ lineHeight: 1.4 }}
-                    >
-                      Deposit: $
-                      {singleInvest.deposit &&
-                        Web3.utils.fromWei(
-                          singleInvest.deposit.toString(),
-                          "ether"
-                        )}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            );
-          })}
-      </Box>
+              );
+            })}
+        </Box>
+      )}
+      {!accountSC && (
+        <Box>
+          <div className="text-center mt-5">
+            <img
+              src="finance.png"
+              height="60px"
+              style={{ opacity: 0.8 }}
+              textAlign="center"
+            />
+          </div>
+          <Typography
+            pt={3}
+            variant="h6"
+            color="#e5e5e5"
+            fontWeight={600}
+            fontSize={13}
+            textAlign="center"
+          >
+            No investment found
+          </Typography>
+          <Typography
+            pt={1}
+            variant="body2"
+            color="#bdbdbd"
+            fontSize={13}
+            fontWeight={400}
+            textAlign="center"
+            px={3}
+          >
+            Login to see your investment preview here
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }

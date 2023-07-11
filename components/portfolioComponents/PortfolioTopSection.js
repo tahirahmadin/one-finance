@@ -17,6 +17,7 @@ import {
 import { useUserInvestmentInfo } from "../../hooks/useUserInvestmentInfo";
 import { tokenList } from "../../utils/data";
 import Web3 from "web3";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -221,28 +222,30 @@ export default function PortfolioTopSection() {
             alignItems={"flex-start"}
             mt={1}
           >
-            <Box
-              display={"flex"}
-              flexDirection="column"
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <IconButton
-                style={{ backgroundColor: "black", height: 36, width: 36 }}
+            <Link href="/pools" style={{ textDecoration: "none" }}>
+              <Box
+                display={"flex"}
+                flexDirection="column"
+                justifyContent={"center"}
+                alignItems={"center"}
               >
-                <ArrowOutward style={{ fontSize: 16, color: "white" }} />
-              </IconButton>
-              <Typography
-                mt={0.5}
-                variant="body2"
-                fontWeight={500}
-                color="#000000"
-                fontSize={10}
-                textAlign={"center"}
-              >
-                Invest
-              </Typography>
-            </Box>
+                <IconButton
+                  style={{ backgroundColor: "black", height: 36, width: 36 }}
+                >
+                  <ArrowOutward style={{ fontSize: 16, color: "white" }} />
+                </IconButton>
+                <Typography
+                  mt={0.5}
+                  variant="body2"
+                  fontWeight={500}
+                  color="#000000"
+                  fontSize={10}
+                  textAlign={"center"}
+                >
+                  Invest
+                </Typography>
+              </Box>
+            </Link>
             <Box
               display={"flex"}
               flexDirection="column"

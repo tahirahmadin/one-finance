@@ -7,6 +7,7 @@ import { GetUserAllActivities } from "../../queries/graphQueries";
 import { useLazyQuery } from "@apollo/client";
 import { fromWei, toDollarPrice } from "../../utils/helper";
 import { getTokenStaticDataByAddress } from "../../utils/helper";
+import web3 from "../../web3";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -179,15 +180,18 @@ export default function AllUserActivities() {
               container
               p={2}
               style={{
-                borderRadius: 20,
+                borderRadius: 10,
                 marginTop: 10,
                 backgroundColor: "#000000",
               }}
               key={index}
             >
+              {console.log(activity)}
               <Grid item md={2}>
                 <img
-                  src="https://cdn3d.iconscout.com/3d/free/thumb/squigly-globe-3494833-2926648@0.png"
+                  src={
+                    getTokenStaticDataByAddress(activity.tokenAddress)?.logoURI
+                  }
                   alt="Token"
                   height="24px"
                 />
@@ -241,7 +245,7 @@ export default function AllUserActivities() {
                       variant="body2"
                       textAlign="left"
                       fontWeight={400}
-                      color={"#bdbdbd"}
+                      color={"#f9f9f9"}
                       fontSize={12}
                     >
                       ${toDollarPrice(activity.price)}
@@ -267,7 +271,7 @@ export default function AllUserActivities() {
                     variant="body2"
                     textAlign="left"
                     fontWeight={400}
-                    color={"#bdbdbd"}
+                    color={"#f9f9f9"}
                     fontSize={12}
                   >
                     {activity.strategyType}
@@ -293,10 +297,10 @@ export default function AllUserActivities() {
                     variant="body2"
                     textAlign="left"
                     fontWeight={400}
-                    color={"#bdbdbd"}
+                    color={"#f9f9f9"}
                     fontSize={12}
                   >
-                    $0.73
+                    $ {fromWei(activity.amount)}
                   </Typography>
                 </Box>
               </Grid>
@@ -318,7 +322,7 @@ export default function AllUserActivities() {
                     variant="body2"
                     textAlign="left"
                     fontWeight={400}
-                    color={"#bdbdbd"}
+                    color={"#f9f9f9"}
                     fontSize={12}
                   >
                     <TimeAgo datetime={parseInt(activity.timestamp) * 1000} />

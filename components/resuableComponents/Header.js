@@ -139,7 +139,7 @@ const Header = () => {
               alignItems="center"
               justifyContent={"space-between"}
             >
-              <Hidden smUp>
+              <Hidden mdUp>
                 <Box>
                   <Typography variant="body2" pb={1} style={{ color: "white" }}>
                     <img
@@ -247,9 +247,12 @@ const Header = () => {
                     <Button
                       color="primary"
                       style={{
-                        fontWeight: "bold",
-                        minWidth: 100,
+                        fontWeight: 600,
+                        minWidth: 120,
                         borderRadius: 14,
+                        paddingLeft: 14,
+                        paddingRight: 14,
+                        textTransform: "capitalize",
                       }}
                       onClick={loginWallet}
                       className={classes.buttonConnect}
@@ -264,6 +267,7 @@ const Header = () => {
                         border: "1px solid #17191A",
                         boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
                         minWidth: matches ? 150 : 100,
+                        borderRadius: 14,
                       }}
                       className={classes.buttonConnect}
                     >
@@ -284,7 +288,7 @@ const Header = () => {
                       gap: "5px",
                       height: 40,
                       border: "2px solid" + theme.palette.secondary.main,
-                      borderRadius: "20px",
+                      borderRadius: 4,
                       marginRight: 1,
                       fontWeight: 500,
                     }}
@@ -295,7 +299,7 @@ const Header = () => {
                         marginLeft: 10,
                         marginRight: 5,
                         marginTop: 15,
-                        fontWeight: 500,
+                        fontWeight: 600,
                         fontSize: matches ? 14 : 12,
                       }}
                     >
@@ -306,8 +310,8 @@ const Header = () => {
                     <Button
                       color="secondary"
                       style={{
-                        borderTopRightRadius: "20px",
-                        borderBottomRightRadius: "20px",
+                        borderTopRightRadius: 14,
+                        borderBottomRightRadius: 14,
                       }}
                       className={classes.buttonConnect}
                     >

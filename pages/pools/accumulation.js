@@ -95,7 +95,16 @@ export default function Acculumation() {
                     Home
                   </Link>{" "}
                   <KeyboardArrowRight style={{ fontSize: 18 }} />
-                  Pools
+                  <Link
+                    href="/pools"
+                    style={{
+                      textDecoration: "none",
+                      color: "#bdbdbd",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Pools
+                  </Link>
                   <KeyboardArrowRight style={{ fontSize: 18 }} />
                   <span style={{ color: "#f9f9f9" }}>
                     Accumulation Strategy

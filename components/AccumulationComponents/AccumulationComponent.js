@@ -189,7 +189,7 @@ export default function AccumulationComponent() {
   const { usdtBalance } = store.ui;
 
   const [amount, setAmount] = useState(usdtBalance);
-  const [percent, setPercent] = useState(10);
+  const [percent, setPercent] = useState(5);
   const [grids, setGrids] = useState(4);
   const [stakeCase, setStakeCase] = useState(0);
   const [isApproved, setIsApproved] = useState(false);
@@ -231,6 +231,15 @@ export default function AccumulationComponent() {
     }
     asyncFn();
   }, [resetFlag, accountSC, selectedToken]);
+
+  // To update neccessary state values on load
+  useEffect(() => {
+    if (accountSC && usdtBalance) {
+      setAmount(usdtBalance > 1000 ? 1000 : usdtBalance);
+      setPercent(5);
+      setGrids(4);
+    }
+  }, [accountSC, usdtBalance]);
 
   // Check isApproved
   useEffect(() => {

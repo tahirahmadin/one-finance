@@ -78,7 +78,7 @@ export default function TopPoolCard({ title, invested, count, icon }) {
                 variant="h2"
                 mb={1}
                 fontWeight={600}
-                fontSize={md ? 233 : 180}
+                fontSize={md ? 23 : 18}
                 color={"#f9f9f9"}
               >
                 ${invested}

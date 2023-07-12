@@ -1,16 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { constants } from "../../utils/constants";
-import {
-  AlarmOnTwoTone,
-  LockClock,
-  ShoppingBasket,
-  TramRounded,
-} from "@mui/icons-material";
+import { AlarmOnTwoTone } from "@mui/icons-material";
 import { useUserInvestmentInfo } from "../../hooks/useUserInvestmentInfo";
 import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import { fromWei } from "../../utils/helper";
+
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: "#171320",
@@ -81,13 +77,48 @@ const useStyles = makeStyles((theme) => ({
 export default function WalletSummary() {
   const classes = useStyles();
   const theme = useTheme();
-  const md = useMediaQuery(theme.breakpoints.down("md"));
-
   const { accountSC } = useWeb3Auth();
+  const md = useMediaQuery(theme.breakpoints.down("md"));
+  const [strategyToInvestment, setStrategyToInvestment] = useState([]);
 
   // To fetch investment info
   const { userInvestmentInfo: investmentsData, loading } =
     useUserInvestmentInfo();
+
+  useEffect(() => {
+    if (investmentsData && investmentsData.length > 0) {
+      let mergedData = [];
+      investmentsData.map((ele) => {
+        let duplicateEntryIndex = mergedData.findIndex(
+          (uniqueSingle) => uniqueSingle.strategyType === ele.strategyType
+        );
+
+        // if data is already inside the result array
+        if (duplicateEntryIndex >= 0) {
+          mergedData[duplicateEntryIndex] = {
+            balance:
+              mergedData[duplicateEntryIndex].balance +
+              parseFloat(fromWei(ele.fiatBalance)),
+            strategyType: ele.strategyType,
+            deposit:
+              mergedData[duplicateEntryIndex].deposit +
+              parseFloat(fromWei(ele.deposit)),
+          };
+        } else {
+          // if data is not inside the result array
+          mergedData.push({
+            balance: parseFloat(fromWei(ele.fiatBalance)),
+            strategyType: ele.strategyType,
+            deposit: parseFloat(fromWei(ele.deposit)),
+          });
+        }
+      });
+
+      console.log(mergedData);
+
+      setStrategyToInvestment(mergedData);
+    }
+  }, [investmentsData]);
 
   const getTotalInvestedOfUser = () => {
     if (!investmentsData) {
@@ -119,8 +150,8 @@ export default function WalletSummary() {
       )}
       {accountSC && (
         <Box>
-          {investmentsData &&
-            investmentsData.map((singleInvest) => {
+          {strategyToInvestment &&
+            strategyToInvestment.map((singleInvest) => {
               return (
                 <Box
                   display={"flex"}
@@ -169,12 +200,7 @@ export default function WalletSummary() {
                         color={"#ffffff"}
                         style={{ lineHeight: 1.4 }}
                       >
-                        $
-                        {singleInvest.fiatBalance &&
-                          Web3.utils.fromWei(
-                            singleInvest.fiatBalance.toString(),
-                            "ether"
-                          )}
+                        ${singleInvest.balance}
                       </Typography>
                       <Typography
                         variant="verysmall"
@@ -183,12 +209,7 @@ export default function WalletSummary() {
                         color={"#757575"}
                         style={{ lineHeight: 1.4 }}
                       >
-                        Deposit: $
-                        {singleInvest.deposit &&
-                          Web3.utils.fromWei(
-                            singleInvest.deposit.toString(),
-                            "ether"
-                          )}
+                        Deposit: ${singleInvest.deposit}
                       </Typography>
                     </Box>
                   </Box>

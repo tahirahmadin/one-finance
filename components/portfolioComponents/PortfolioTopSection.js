@@ -15,7 +15,7 @@ import {
   TrendingUp,
 } from "@mui/icons-material";
 import { useUserInvestmentInfo } from "../../hooks/useUserInvestmentInfo";
-import { tokenList } from "../../utils/data";
+import { tokenList } from "../../utils/tokenData";
 import Web3 from "web3";
 import Link from "next/link";
 

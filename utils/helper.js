@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { tokenList } from "./data";
+import { tokenList } from "./tokenData";
 
 export const fromWei = (tokens, decimals = 18) => {
   try {

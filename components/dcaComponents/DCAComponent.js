@@ -25,7 +25,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setRefetchValue } from "../../reducers/UiReducer";
 import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
-import { tokenList } from "../../utils/data";
+import { tokenList } from "../../utils/tokenData";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import DCATopHeader from "./DCATopHeader";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";

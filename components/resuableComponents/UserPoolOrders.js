@@ -13,6 +13,7 @@ import { useOrders } from "../../hooks/useOrders";
 import { STRATEGY_TYPE_ENUM, constants } from "../../utils/constants";
 import { setRefetchValue } from "../../reducers/UiReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { tokenList } from "../../utils/tokenData";
 
 const useStyles = makeStyles((theme) => ({
   boxCard: {
@@ -67,6 +68,13 @@ export default function UserPoolOrders({ poolTypeProp }) {
     setShowWithdraw(true);
   };
 
+  const getTokenDetailsByAddress = (tokenAddress) => {
+    let singleTokenInfo = tokenList.find(
+      (singleToken) =>
+        singleToken.address.toLowerCase() === tokenAddress.toLowerCase()
+    );
+    return singleTokenInfo;
+  };
   return (
     <Box className={classes.boxCard}>
       <WithdrawPopup
@@ -97,6 +105,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
         </Box>
       )}
       {allOrders?.map((singleOrder, index) => {
+        let tokenData = getTokenDetailsByAddress(singleOrder.tokenAddress);
         return (
           <Grid
             container
@@ -117,11 +126,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
               alignItems="center"
             >
               <Box>
-                <img
-                  src="https://www.sleepswap.io/SleepSwap_Plain.png"
-                  alt="Token"
-                  height="28px"
-                />
+                <img src={tokenData.logoURI} alt="Token" height="28px" />
               </Box>
               <Box>
                 <Typography
@@ -133,7 +138,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
                   lineHeight={1}
                   fontSize={13}
                 >
-                  SLEEPT
+                  {tokenData.symbol}
                 </Typography>
                 <Typography
                   fontSize={11}
@@ -236,7 +241,7 @@ export default function UserPoolOrders({ poolTypeProp }) {
                     color={"#c7cad9"}
                     fontSize={11}
                   >
-                    Amount: {singleOrder.grids}
+                    Orders: {singleOrder.grids}
                   </Typography>
                 )}
 

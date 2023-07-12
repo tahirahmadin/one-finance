@@ -222,7 +222,7 @@ const Home = () => {
                       title={
                         "Why Dollar Cost Averaging is the best bet to accumulate your favourite crypto for long term"
                       }
-                      image="https://zebpay.com/in/wp-content/uploads/2022/09/Dollar-Cost-Average.jpg"
+                      image="https://blog.investingnote.com/wp-content/uploads/2017/02/dollar-cost-averaging.jpg"
                     />
                   </Grid>
                   <Grid item md={4} sm={6} xs={12}>

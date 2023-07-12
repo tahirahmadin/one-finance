@@ -122,6 +122,6 @@ export const tokenList = [
     id: "polkabridge",
     address: "0x0d6ae2a429df13e44a07cd2969e085e4833f64a0",
     decimals: 18,
-    logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/8320.png",
+    logoURI: "https://d235dzzkn2ryki.cloudfront.net/polkabridge_large.png",
   },
 ];

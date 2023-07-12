@@ -35,7 +35,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 import { constants, STRATEGY_TYPE_ENUM } from "../../utils/constants";
 import "react-circular-progressbar/dist/styles.css";
-import { tokenList } from "../../utils/data";
+import { tokenList } from "../../utils/tokenData";
 import UserPoolOrders from "../resuableComponents/UserPoolOrders";
 import SelectTokenDialog from "../../common/SelectToken/SelectTokenDialog";
 import AccumulationTopHeader from "./AccumulationTopHeader";
@@ -256,9 +256,12 @@ export default function AccumulationComponent() {
 
   const handlePercentage = (event) => {
     let { value } = event.target;
-    let min = 0;
-    let max = 50;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    if (value) {
+      let min = 0;
+      let max = 50;
+      value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+      setPercent(value);
+    }
     setPercent(value);
   };
 
@@ -339,7 +342,7 @@ export default function AccumulationComponent() {
     console.log(price);
     // let ordersData = await calculateOrdersData;
 
-    setStakeCase(1);
+    setTxCase(1);
     let userAddress = accountSC;
     let provider = ethersServiceProvider.web3AuthInstance;
 
@@ -363,26 +366,22 @@ export default function AccumulationComponent() {
           },
           async function (error, transactionHash) {
             if (transactionHash) {
-              setStakeCase(2);
+              setTxCase(2);
             } else {
-              setStakeCase(4);
+              setTxCase(3);
             }
           }
         )
         .on("receipt", async function (receipt) {
-          setStakeCase(3);
+          setTxCase(4);
           setResetFlag(resetFlag + 1);
         })
         .on("error", async function (error) {
-          if (error?.code === 4001) {
-            setStakeCase(4);
-          } else {
-            setStakeCase(4);
-          }
+          setTxCase(3);
         });
     } catch (err) {
       console.log(err);
-      setStakeCase(4);
+      setTxCase(3);
     }
   };
 

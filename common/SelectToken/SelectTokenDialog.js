@@ -1,84 +1,108 @@
 import React, { useCallback, useMemo, useState } from "react";
 
 import TokenList from "./TokenList";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
   Box,
   Button,
-  Checkbox,
   Dialog,
   Divider,
   IconButton,
+  Slide,
+  Backdrop,
+  Typography,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
-import { tokenList } from "../../utils/data";
+import { tokenList } from "../../utils/tokenData";
+import { constants } from "../../utils/constants";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   background: {
-    backgroundColor: "#1C1F23",
-    color: theme.palette.primary.iconColor,
+    position: "fixed",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 10,
+    display: "grid",
+    placeItems: "center",
+    background: "rgba(0,0,0,0.2)",
+  },
+  container: {
+    width: "100%",
+    minHeight: 400,
+    maxWidth: 420,
+    padding: 21,
+    backgroundColor: "#ffffff",
+    borderRadius: "1rem",
+    display: "flex",
+    alignItems: "center",
+    zIndex: 11,
+    borderRadius: 21,
+    position: "relative",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "space-around",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    width: 400,
-    height: 500,
-    [theme.breakpoints.down("sm")]: {
-      width: "80vw",
-      height: "100%",
-      maxHeight: "80vh",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      maxWidth: "95%",
+      height: 350,
     },
-  },
-  heading: {
-    fontSize: 18,
-    fontWeight: 400,
-    textAlign: "left",
-
-    color: "#f9f9f9",
     [theme.breakpoints.down("sm")]: {
-      fontSize: 20,
+      height: "max-content",
     },
   },
 
   input: {
-    backgroundColor: "transparent",
-    height: 50,
-    border: "1px solid rgba(224, 224, 224,0.1)",
-    borderRadius: 15,
-    fontSize: 16,
-    width: "90%",
-    color: "#f9f9f9",
+    backgroundColor: "#e5e5e5",
+    color: "#bdbdbd",
+    borderRadius: 12,
     padding: 10,
+    border: "none",
+    width: "100%",
+    minWidth: 280,
     outline: "none",
-    [theme.breakpoints.down("sm")]: {
-      height: 45,
-      fontSize: 15,
-    },
   },
-  buttons: {
-    marginBottom: 7,
-  },
-
-  closeIcon: {
-    color: "#6E67B6",
-    fontSize: 24,
-    [theme.breakpoints.down("sm")]: {
-      fontSize: 20,
+  confirmButton: {
+    borderRadius: 14,
+    background: constants.highlighColorDark,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "10px 40px 10px 40px",
+    color: "white",
+    width: "100%",
+    textTransform: "capitalize",
+    maxWidth: 260,
+    fontWeight: 600,
+    fontSize: 16,
+    "&:hover": {
+      background: "rgba(130, 71, 229, 0.9)",
     },
   },
   cancelButton: {
-    backgroundColor: "#4369B0",
-    color: "#4369B0",
+    color: "black",
+    padding: "10px 20px 10px 20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
-    textTransform: "none",
-    fontSize: 17,
-    borderRadius: 20,
-    padding: "8px 50px 8px 50px",
-
-    [theme.breakpoints.down("sm")]: {
-      fontSize: 16,
+    textTransform: "capitalize",
+    maxWidth: "fit-content",
+    fontWeight: 600,
+    borderRadius: 14,
+    fontSize: 16,
+    "&:hover": {
+      color: "rgba(130, 71, 229, 0.9)",
     },
   },
 }));
@@ -150,100 +174,85 @@ const SelectTokenDialog = ({
     resetInputState();
   };
 
-  // const dispatch = useDispatch();
-
-  // const handleListOptionChange = useCallback(() => {
-  //   setStockSelected(!stockSelected);
-  //   localStorage.selectedList = !stockSelected;
-
-  //   dispatch(getTokenList(localStorage.selectedList === "true"));
-  // }, [stockSelected, setStockSelected]);
-
   return (
     <Dialog
-      onClose={onClose}
       open={open}
-      disableBackdropClick
-      className={classes.dialog}
-      color="transparent"
-      PaperProps={{
-        style: { borderRadius: 20, backgroundColor: "#121827" },
+      onClose={onClose}
+      TransitionComponent={Transition}
+      keepMounted={false}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
       }}
+      maxWidth="lg"
+      fullWidth={false}
     >
       <div className={classes.background}>
-        <div
-          className="d-flex justify-content-between"
-          style={{ width: "90%", paddingTop: 20, paddingBottom: 15 }}
-        >
-          <div className={classes.heading}>Select a token</div>
-          <div>
-            <IconButton style={{ margin: 0, padding: 0 }}>
-              <Close onClick={onClose} className={classes.closeIcon}></Close>
-            </IconButton>
-          </div>
-        </div>
-
-        <input
-          type="text"
-          className={classes.input}
-          value={filterInput}
-          placeholder="Search...."
-          onChange={({ target: { value } }) => handleTokenFilter(value)}
-        />
-        <Divider
-          style={{
-            width: "100%",
-            borderTop: "1px solid #616161",
-            marginTop: 15,
-          }}
-        />
-
-        {/* <div className="d-flex">
-          <div className={classes.heading}>
-            Platts{" "}
-            <Checkbox
-              checked={!stockSelected}
-              onChange={handleListOptionChange}
-            />
-          </div>
-          <div className={classes.heading}>
-            {" "}
-            Stocks{" "}
-            <Checkbox
-              checked={stockSelected}
-              onChange={handleListOptionChange}
-            />
-          </div>
-        </div> */}
-        <TokenList
-          handleItemSelected={onTokenSelect}
-          tokens={filteredTokenList}
-          disableToken={disableToken}
-        />
-
-        <Divider
-          style={{
-            width: "100%",
-            borderTop: "1px solid #616161",
-            marginTop: 15,
-            marginBottom: 10,
-          }}
-        />
-        <div>
-          <Button
+        <div className={classes.container}>
+          <IconButton
+            style={{ position: "absolute", right: 10, top: 10 }}
             onClick={onClose}
-            style={{
-              backgroundColor: "#6E67B6",
-              color: "#f9f9f9",
-              width: "100%",
-              textTransform: "none",
-              fontSize: 15,
-              borderRadius: 10,
-              padding: "10px 50px 10px 50px",
-            }}
           >
-            Cancel
-          </Button>
+            <Close style={{ cursor: "pointer", color: "black" }} />
+          </IconButton>
+
+          <Box width={"100%"}>
+            <Typography
+              variant="h5"
+              textAlign="left"
+              fontWeight={600}
+              color={"#000000"}
+              mb={2}
+            >
+              Select a token
+            </Typography>
+            <input
+              type="text"
+              className={classes.input}
+              value={filterInput}
+              placeholder="Search...."
+              onChange={({ target: { value } }) => handleTokenFilter(value)}
+            />
+            <Divider
+              style={{
+                width: "100%",
+                borderTop: "1px solid #616161",
+                marginTop: 15,
+              }}
+            />
+            <TokenList
+              handleItemSelected={onTokenSelect}
+              tokens={filteredTokenList}
+              disableToken={disableToken}
+            />
+
+            <Divider
+              style={{
+                width: "100%",
+                borderTop: "1px solid #616161",
+                marginTop: 15,
+                marginBottom: 10,
+              }}
+            />
+            <div className="d-flex justify-content-center">
+              <Button
+                onClick={onClose}
+                className={classes.confirmButton}
+                // style={{
+                //   backgroundColor: "#6E67B6",
+                //   color: "#f9f9f9",
+                //   width: "100%",
+                //   textTransform: "none",
+                //   fontSize: 15,
+                //   borderRadius: 10,
+                //   padding: "10px 50px 10px 50px",
+                // }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </Box>
         </div>
       </div>
     </Dialog>

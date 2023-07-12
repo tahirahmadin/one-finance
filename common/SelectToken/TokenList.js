@@ -2,37 +2,39 @@ import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import TokenIcon from "../TokenIcon";
+import { constants } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: 360,
+    maxWidth: 400,
     position: "relative",
     overflowY: "auto",
-    maxHeight: 380,
-    padding: 5,
+    maxHeight: 450,
   },
   tokenIcon: {
-    height: "100%",
-    width: 40,
-    padding: 3,
+    height: 36,
+    width: 36,
+    padding: 0,
     borderRadius: "50%",
-    backgroundColor: theme.palette.primary.tokenBack,
+    backgroundColor: "#000000",
     [theme.breakpoints.down("sm")]: {
       height: 32,
+      width: 32,
     },
   },
   tokenTitle: {
     padding: 0,
     margin: 0,
-    color: "#f9f9f9",
-    fontSize: 14,
+    color: "#000000",
+    fontSize: 13,
+    fontWeight: 600,
     [theme.breakpoints.down("sm")]: {
       fontSize: 15,
     },
   },
   tokenSubtitle: {
-    color: "#e5e5e5",
+    color: "#616161",
     fontWeight: 400,
     fontSize: 12,
     [theme.breakpoints.down("sm")]: {
@@ -40,12 +42,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   listItem: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 3,
+    marginBottom: 3,
+    borderRadius: 14,
     "&:hover": {
-      background: "rgba(0, 0, 0, 0.9)",
-      borderRadius: 3,
+      background: "#f5f5f5",
+      borderRadius: 14,
     },
+  },
+  selectedListItem: {
+    marginTop: 3,
+    marginBottom: 3,
+    background: "#f5f5f5",
+    borderRadius: 14,
   },
 }));
 
@@ -56,14 +65,15 @@ const TokenList = ({ handleItemSelected, tokens, disableToken }) => {
     <List className={classes.root}>
       {tokens.map((token, index) => (
         <ListItem
-          style={{ height: 65 }}
+          style={{ height: 60 }}
           button
           key={index}
-          className={classes.listItem}
-          onClick={() => handleItemSelected(token)}
-          disabled={
-            !disableToken ? false : token.symbol === disableToken.symbol
+          className={
+            token.symbol === disableToken.symbol
+              ? classes.selectedListItem
+              : classes.listItem
           }
+          onClick={() => handleItemSelected(token)}
         >
           <ListItemAvatar>
             <TokenIcon path={token?.logoURI} className={classes.tokenIcon} />

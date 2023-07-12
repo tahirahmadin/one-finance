@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: "#171320",
 
-    maxWidth: 320,
+    // maxWidth: 320,
     width: "100%",
     height: "100%",
     maxHeight: 310,

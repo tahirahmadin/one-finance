@@ -23,6 +23,7 @@ export const constants = {
 export const STRATEGY_TYPE_ENUM = {
   ACCUMULATION: "ACCUMULATION",
   DCA: "DCA",
+  RSI: "RSI",
 };
 
 export const graphQueryUrl =

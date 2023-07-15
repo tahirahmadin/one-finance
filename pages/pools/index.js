@@ -15,6 +15,7 @@ import SideBar from "../../common/Sidebar";
 import Header from "../../components/resuableComponents/Header";
 import MobileBottomBar from "../../common/MobileBottomBar";
 import { STRATEGY_TYPE_ENUM } from "./../../utils/constants";
+import ETFCard from "../../components/Pools/ETFCard";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -35,8 +36,12 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     fontWeight: 600,
+    fontSize: 24,
     color: "#f9f9f9",
     textAlign: "left",
+    [theme.breakpoints.down("md")]: {
+      fontSize: 18,
+    },
   },
 
   pageSubtitle: {
@@ -61,6 +66,7 @@ export default function Pools() {
       url: "pools/accumulation",
       contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
       type: STRATEGY_TYPE_ENUM.ACCUMULATION,
+      active: true,
     },
     {
       title: "DCA Strategy",
@@ -70,6 +76,7 @@ export default function Pools() {
       url: "pools/dca",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
       type: STRATEGY_TYPE_ENUM.DCA,
+      active: true,
     },
     {
       title: "RSI Indicator Strategy",
@@ -78,7 +85,38 @@ export default function Pools() {
       icon: "https://cdn3d.iconscout.com/3d/premium/thumb/growth-chart-3943015-3273369.png",
       url: "accumulation",
       contractAddress: "0xbfEE21a8af83089d31432cF67B57D22046215592",
-      type: STRATEGY_TYPE_ENUM.DCA,
+      type: STRATEGY_TYPE_ENUM.RSI,
+      active: false,
+    },
+  ];
+
+  let etfPoolsData = [
+    {
+      title: "100X Gems Pool",
+      description:
+        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool instantly.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+      url: "pools/accumulation",
+      contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
+      active: false,
+    },
+    {
+      title: "20X Growth Funds",
+      description:
+        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool instantly.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+      url: "pools/accumulation",
+      contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
+      active: false,
+    },
+    {
+      title: "Long-term Growth Funds",
+      description:
+        "Buy your desired tokens on successive price drops automatically by placing the strategy in the pool instantly.",
+      icon: "https://cdn3d.iconscout.com/3d/premium/thumb/dollar-coin-in-winner-cup-5493527-4581314.png",
+      url: "pools/accumulation",
+      contractAddress: "0xEF8bfB001801Dfee3dc421aB31398C2d1fdB2bd4",
+      active: false,
     },
   ];
 
@@ -117,6 +155,23 @@ export default function Pools() {
                     {poolsData.map((singlePool, index) => (
                       <Grid item md={4} xs={12} sm={12} key={index}>
                         <PoolCard poolStaticData={singlePool} index={index} />
+                      </Grid>
+                    ))}
+                  </Grid>
+
+                  <Typography variant="h6" fontWeight={600} mt={5}>
+                    Curated Growth buckets
+                  </Typography>
+
+                  <Grid
+                    container
+                    display={"flex"}
+                    justifyContent="space-between"
+                    spacing={md ? 2 : 6}
+                  >
+                    {etfPoolsData.map((singlePool, index) => (
+                      <Grid item md={4} xs={12} sm={12} key={index}>
+                        <ETFCard poolStaticData={singlePool} index={index} />
                       </Grid>
                     ))}
                   </Grid>

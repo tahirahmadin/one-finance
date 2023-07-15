@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useLazyQuery } from "@apollo/client";
-import { GetPoolUserDataByAddress } from "./../../queries/graphQueries";
+import { GetPoolUserDataByAddress } from "../../queries/graphQueries";
 import Web3 from "web3";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import { usePoolInfo } from "../../hooks/usePoolInfo";
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PoolCard({ poolStaticData, index }) {
+export default function ETFCard({ poolStaticData, index }) {
   const classes = useStyles();
   const theme = useTheme();
   const { accountSC } = useWeb3Auth();
@@ -161,11 +161,11 @@ export default function PoolCard({ poolStaticData, index }) {
         style={{
           backgroundColor: "#000000",
           borderRadius: 10,
-          padding: "4%",
+          padding: "6%",
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           alignItems: "center",
         }}
       >
@@ -178,12 +178,13 @@ export default function PoolCard({ poolStaticData, index }) {
           }}
         >
           <Typography variant="body3" className={classes.field}>
-            Invested($)
+            Total Invested($)
           </Typography>
           <Typography variant="body2" className={classes.value} fontSize={15}>
-            {poolGraphData.invested ? "$" + poolGraphData.invested : "-"}
+            $12,746
           </Typography>
         </Box>
+
         <Box
           style={{
             display: "flex",
@@ -193,25 +194,10 @@ export default function PoolCard({ poolStaticData, index }) {
           }}
         >
           <Typography variant="body3" className={classes.field}>
-            Volume($)
+            Total Users
           </Typography>
           <Typography variant="body2" className={classes.value} fontSize={15}>
-            {poolGraphData.allTimeVol ? "$" + poolGraphData.allTimeVol : "-"}
-          </Typography>
-        </Box>
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="body3" className={classes.field}>
-            Users
-          </Typography>
-          <Typography variant="body2" className={classes.value} fontSize={15}>
-            {poolGraphData.totalOrders ? poolGraphData.totalOrders : "-"}
+            32
           </Typography>
         </Box>
       </Box>
@@ -234,7 +220,7 @@ export default function PoolCard({ poolStaticData, index }) {
             ml={1}
             fontSize={13}
           >
-            Your stake
+            Your invested
           </Typography>
           <Typography
             variant="body2"
@@ -243,48 +229,7 @@ export default function PoolCard({ poolStaticData, index }) {
             fontWeight={700}
             mr={1}
           >
-            $
-            {poolUserGraphData
-              ? Web3.utils.fromWei(
-                  poolUserGraphData.deposit.toString(),
-                  "ether"
-                )
-              : "0"}
-          </Typography>
-        </Box>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          mt={2}
-          style={{
-            border: "1px solid rgba(106, 85, 234,0.1)",
-            padding: "10px 10px 10px 10px",
-            borderRadius: 10,
-            backgroundColor: "rgba(106, 85, 234,0.03)",
-          }}
-        >
-          <Typography
-            variant="body2"
-            className={classes.field}
-            ml={1}
-            fontSize={13}
-          >
-            In order
-          </Typography>
-          <Typography
-            variant="body2"
-            className={classes.value}
-            textAlign="center"
-            fontWeight={700}
-            mr={1}
-          >
-            $
-            {poolUserGraphData
-              ? Web3.utils.fromWei(
-                  poolUserGraphData.fiatBalance.toString(),
-                  "ether"
-                )
-              : "0"}
+            $0
           </Typography>
         </Box>
       </Box>
@@ -298,7 +243,7 @@ export default function PoolCard({ poolStaticData, index }) {
       >
         <Box className={classes.infoCard}>
           <Typography variant="body2" color="white" fontSize={12}>
-            <TrendingUp style={{ fontSize: 18, color: "yellow" }} /> Trending
+            <TrendingUp style={{ fontSize: 18, color: "yellow" }} /> Popular
             tokens
           </Typography>
           <Typography variant="small" className={classes.value}>
@@ -310,7 +255,7 @@ export default function PoolCard({ poolStaticData, index }) {
             />
             <img
               src={
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png"
+                "https://altcoinsbox.com/wp-content/uploads/2023/01/dogecoin-logo.png"
               }
               alt={"TokenLogo"}
               height="28px"
@@ -323,7 +268,7 @@ export default function PoolCard({ poolStaticData, index }) {
               alt={"TokenLogo"}
               height="28px"
             />{" "}
-            + 3 more
+            +7 more
           </Typography>
         </Box>
       </Box>

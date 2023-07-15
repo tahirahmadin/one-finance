@@ -220,9 +220,25 @@ const Home = () => {
                   <Grid item md={4} sm={6} xs={12}>
                     <ArticleCard
                       title={
-                        "Why Dollar Cost Averaging is the best bet to accumulate your favourite crypto for long term"
+                        "Maximizing Returns and Reducing Risk: The Benefits of Dollar Cost Averaging (DCA)"
                       }
-                      image="https://blog.investingnote.com/wp-content/uploads/2017/02/dollar-cost-averaging.jpg"
+                      image="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VX0bdMKGn64QuEX9ZCuz5A.png"
+                      url={
+                        "https://sleepswapio.medium.com/maximizing-returns-and-reducing-risk-the-benefits-of-dollar-cost-averaging-dca-d8d84bf94ec7"
+                      }
+                    />
+                  </Grid>
+                  <Grid item md={4} sm={6} xs={12}>
+                    <ArticleCard
+                      title={
+                        "Mastering the RSI Indicator: A Game-Changer for Trading Success"
+                      }
+                      image={
+                        "https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ti2fXOp9iFTn04pLsGQ9AA.png"
+                      }
+                      url={
+                        "https://sleepswapio.medium.com/mastering-the-rsi-indicator-a-game-changer-for-trading-success-23411d303642"
+                      }
                     />
                   </Grid>
                   <Grid item md={4} sm={6} xs={12}>
@@ -233,14 +249,9 @@ const Home = () => {
                       image={
                         "https://public.bnbstatic.com/static/academy/uploads-original/db73faaafcff40a19b1d8e952d75562b.png"
                       }
-                    />
-                  </Grid>
-                  <Grid item md={4} sm={6} xs={12}>
-                    <ArticleCard
-                      title={
-                        "Why trading with indicators is the best way to avoid rist in investment"
+                      url={
+                        "https://sleepswapio.medium.com/mastering-the-rsi-indicator-a-game-changer-for-trading-success-23411d303642"
                       }
-                      image="https://en.cryptonomist.ch/wp-content/uploads/2019/06/RSI-indicator-cryptocurrency-trading.jpg"
                     />
                   </Grid>
                 </Grid>

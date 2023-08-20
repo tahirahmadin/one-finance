@@ -89,7 +89,7 @@ const SideBar = ({}) => {
       ),
     },
     {
-      title: "Strategy pools",
+      title: "Tax",
       url: "/pools",
       icon: (
         <EmojiEvents
@@ -101,7 +101,7 @@ const SideBar = ({}) => {
       ),
     },
     {
-      title: "Activities",
+      title: "Zakaat",
       url: "/activities",
       icon: (
         <BarChart
@@ -113,7 +113,7 @@ const SideBar = ({}) => {
       ),
     },
     {
-      title: "Portfolio",
+      title: "Settings",
       url: "/portfolio",
       icon: (
         <Wallet
@@ -142,10 +142,11 @@ const SideBar = ({}) => {
         <Box py={2}>
           <Typography variant="body2" pb={1} style={{ color: "white" }}>
             <img
-              src="https://www.sleepswap.io/SleepSwap_Plain.png"
-              height="45px"
+              src="https://static.vecteezy.com/system/resources/previews/008/525/783/original/3d-business-and-finance-icon-money-bag-used-for-web-app-etc-png.png"
+              height="35px"
+              style={{ marginRight: 5 }}
             />
-            <strong>Sleep</strong>Swap
+            <strong>1Finance</strong>
           </Typography>
         </Box>
         <Link href="/portfolio" style={{ textDecoration: "none" }}>
@@ -247,92 +248,6 @@ const SideBar = ({}) => {
               </Link>
             );
           })}
-
-          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
-            <Paper
-              onClick={() => dispatch(setMenuIndex(5))}
-              key={5}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 5 ? constants.highlighColor : "transparent",
-              }}
-            >
-              <Telegram
-                style={{
-                  marginRight: 10,
-                  color: "white",
-                  color: menuIndex === 5 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 5
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Community
-              </Typography>
-            </Paper>
-          </a>
-          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
-            {" "}
-            <Paper
-              onClick={() => dispatch(setMenuIndex(6))}
-              key={6}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 6 ? constants.highlighColor : "transparent",
-              }}
-            >
-              <YouTube
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 6 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 6
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Academy
-              </Typography>
-            </Paper>
-          </a>
-          <Paper
-            onClick={disconnect}
-            key={0}
-            className={classes.selectedPaper}
-            sx={{
-              boxShadow: 0,
-              bgcolor:
-                menuIndex === 7 ? constants.highlighColor : "transparent",
-            }}
-          >
-            <Logout
-              style={{
-                marginRight: 10,
-                color: menuIndex === 7 ? "white" : "#bdbdbd",
-              }}
-            />
-            <Typography
-              variant="title1"
-              className={
-                menuIndex === 7 ? classes.selectedMenuTitle : classes.menuTitle
-              }
-            >
-              Logout
-            </Typography>
-          </Paper>
         </Box>
       </Box>
     </Box>

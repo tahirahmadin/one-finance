@@ -3,7 +3,6 @@ import { constants } from "../utils/constants";
 
 // Update user profile data
 let baseUrl = constants.backend_dev;
-let foodTruckBaseUrl = "https://foodtruck.onerare.io";
 
 export const getUserData = async (address) => {
   let url = `${baseUrl}/user/${address}`;
@@ -42,12 +41,4 @@ export const updateUserData = async (userData) => {
       return false;
     });
   return response;
-};
-
-// Price of Orare
-export const getTokenPriceStats = async (name) => {
-  let url = `https://api.coingecko.com/api/v3/simple/price?ids=${name.toLowerCase()}&vs_currencies=usd`;
-  let response = await axios.get(url);
-
-  return response.data;
 };

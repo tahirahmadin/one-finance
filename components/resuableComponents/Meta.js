@@ -12,10 +12,9 @@ const Meta = ({ title, description, keywords }) => {
 };
 
 Meta.defaultProps = {
-  title: "OneRare NFT - Play to Earn",
-  description:
-    "Claim your favourite recipes by collecting ingredients and combining them. Every recipe is unique and handcrafted.",
-  keywords: "play to earn, NFT gaming, blockchain, food NFT, giphy,",
+  title: "1Finance - One Place For Finance",
+  description: "1Finance - One Place For Finance",
+  keywords: "1Finance",
 };
 
 export default Meta;
